@@ -1,0 +1,9 @@
+---
+description: Prism Publication Editorial & Copy Rules - AdTech, Developer SDK, and Contextual Sandbox Focus
+globs: *.html, *.js, *.md
+---
+# Prism Editorial Standards
+- **Core Focus:** Contextual ad-matching, developer SDK integration, and interactive ad sandbox monetization for AI chat streams.
+- **Tone:** Sharp, developer-friendly, authoritative for media agencies and technical leads.
+- **Strict Exclusion:** Do NOT mix in customer support bot signal-monitoring or crisis-language escalation metrics (those belong to a separate product line).
+- **Metrics to Highlight:** Sub-120ms latency, semantic cosine similarity matching (>= 0.65).

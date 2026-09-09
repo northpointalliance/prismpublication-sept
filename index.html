@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Chat ad SDK and prompt matcher | Prism Publication</title>
+    <meta
+      name="description"
+      content="Prism matches a labelled chat ad to the live user prompt with cosine similarity at or above 0.65. Server-side SDK. Sub-120ms matching budget. Card or null."
+    />
+    <link rel="canonical" href="https://prismpublication.com/" />
+    <meta name="author" content="Daniel Rosenthal" />
+    <meta name="robots" content="index,follow" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://prismpublication.com/#org",
+            "name": "Prism Publication",
+            "url": "https://prismpublication.com/",
+            "email": "info@prismpublication.com"
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://prismpublication.com/#website",
+            "url": "https://prismpublication.com/",
+            "name": "Prism Publication",
+            "publisher": { "@id": "https://prismpublication.com/#org" }
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://prismpublication.com/#webpage",
+            "url": "https://prismpublication.com/",
+            "name": "Chat ad SDK and prompt matcher | Prism Publication",
+            "isPartOf": { "@id": "https://prismpublication.com/#website" },
+            "datePublished": "2026-09-09",
+            "dateModified": "2026-09-09",
+            "author": { "@type": "Person", "name": "Daniel Rosenthal" },
+            "publisher": { "@id": "https://prismpublication.com/#org" },
+            "description": "Prism matches a labelled chat ad to the live user prompt with cosine similarity at or above 0.65."
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "How does the prompt matcher decide to fill a slot?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "It vectorizes the user prompt and each in-niche creative, then scores cosine similarity. A card serves only when the top score is at least 0.65. Below that, the SDK returns null."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How fast is matching supposed to be?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Matching is budgeted under 120ms so it stays a rounding error after the model reply. Timeouts fail closed to null."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Where does the SDK key live?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "On the server. Call displayAd after the assistant answers. The browser only renders the labelled card HTML you already trust."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site">
+      <div class="container">
+        <a class="brand" href="https://prismpublication.com/">Prism Publication</a>
+        <nav class="primary" aria-label="Primary">
+          <a href="#sandbox">Sandbox</a>
+          <a href="#niches">Niches</a>
+          <a href="#sdk">SDK</a>
+          <a href="mailto:info@prismpublication.com">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <div class="container">
+          <h1>Native ads for AI chat streams</h1>
+          <p class="subhead">
+            <strong>Match the live prompt. Serve a labelled card, or return null.</strong>
+            Prism is a contextual ad SDK for independent chatbots. Cosine similarity at or above 0.65. Matching budget under 120ms. Key stays on your server.
+          </p>
+          <div class="cta-group">
+            <a class="btn primary" href="#sandbox">Open the prompt matcher</a>
+            <a class="btn secondary" href="#sdk">Read the SDK contract</a>
+          </div>
+          <p class="meta">
+            By Daniel Rosenthal.
+            Published <time datetime="2026-09-09">9 September 2026</time>.
+            Last updated <time datetime="2026-09-09">9 September 2026</time>.
+          </p>
+        </div>
+      </section>
+
+      <section class="sandbox-section" id="sandbox">
+        <div class="container">
+          <h2>How does the prompt matcher pick a card?</h2>
+          <p>
+            Choose a niche, paste a user prompt, run the local catalog. The script scores cosine similarity against in-niche creatives. A fill requires 0.65 or higher. The sandbox does not call the live API.
+          </p>
+          <form id="sandbox-form" class="sandbox-container">
+            <div class="controls">
+              <label for="sandbox-niche">Niche</label>
+              <select id="sandbox-niche" name="niche">
+                <option value="fitness">Fitness</option>
+                <option value="sleep">Sleep tools</option>
+                <option value="productivity">Productivity</option>
+              </select>
+              <label for="sandbox-input">User prompt</label>
+              <input id="sandbox-input" name="prompt" type="text" maxlength="240" value="any protein powder recommendations for lifting?" />
+              <button class="btn primary" type="submit">Match prompt</button>
+              <button class="btn secondary" type="button" data-sample="fitness">Fitness fill</button>
+              <button class="btn secondary" type="button" data-sample="sleep">Sleep fill</button>
+              <button class="btn secondary" type="button" data-sample="productivity">Productivity fill</button>
+              <button class="btn secondary" type="button" data-sample="miss">Below 0.65</button>
+            </div>
+            <div class="output-panel" id="sandbox-output" aria-live="polite">
+              <p class="placeholder-text">Run a prompt to score the catalog.</p>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section class="niches" id="niches">
+        <div class="container">
+          <h2>Which chat niches does the sandbox cover?</h2>
+          <div class="grid">
+            <article class="card">
+              <h3>Fitness</h3>
+              <p>
+                Training, protein, bands, and running gear when the prompt is already about the workout. High commercial intent, short messages, easy tags for cosine overlap.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Sleep tools</h3>
+              <p>
+                Sound machines and masks when the user asks for a practical sleep aid. Adjacent wellness products only. Not a clinical claim and not a diagnosis.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Productivity</h3>
+              <p>
+                Notes, docs, and workspace tools for developer and knowledge-work bots. The Notion sample is how a software creative should look next to an assistant reply.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="aeo" id="sdk">
+        <div class="container">
+          <h2>How do you wire the SDK without putting a key in the browser?</h2>
+          <p>
+            Keep the key on the server. After the assistant finishes a complete thought, call <code>displayAd</code> with <code>botId</code>, <code>format: "card"</code>, and <code>context.topic</code> set to the user prompt. Serialize title, description, URL, and the Sponsored via Prism label. If the score is below 0.65 or the call times out, send the reply alone.
+          </p>
+          <p>
+            The matcher is not an ad tag. There is no third-party script in the chat widget. The browser only draws HTML you already trust. Import the harvested client from
+            <a href="sdk/prismClient.js"><code>sdk/prismClient.js</code></a>
+            in Node or a Worker. Email <a href="mailto:info@prismpublication.com">info@prismpublication.com</a> for a key.
+          </p>
+
+          <h2>What numbers should media and product leads actually quote?</h2>
+          <p>
+            <strong>Serve when cosine similarity is at least 0.65. Budget matching under 120ms.</strong>
+            Those are the two public floors. Fill rate is not a vanity metric here. Null is a valid auction outcome. The local sandbox reports both score and elapsed time on every run so you can see the contract without a live bid.
+          </p>
+          <table>
+            <caption>Public matching contract</caption>
+            <thead>
+              <tr>
+                <th>Signal</th>
+                <th>Floor</th>
+                <th>If missed</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Cosine similarity (prompt vs creative)</td>
+                <td>0.65</td>
+                <td>Return null</td>
+              </tr>
+              <tr>
+                <td>Match latency</td>
+                <td>Under 120ms</td>
+                <td>Fail closed to null</td>
+              </tr>
+              <tr>
+                <td>Disclosure</td>
+                <td>Sponsored via Prism on the card</td>
+                <td>Creative fails review</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-grid">
+        <div>
+          <p>&copy; 2026 Prism Publication.</p>
+          <p>As an Amazon Associate, Prism Publication earns from qualifying purchases. Sandbox links use tag prismpublicat-20.</p>
+          <p>Chat ads are labelled sponsored placements. The matcher on this page is a local simulator, not a live auction.</p>
+        </div>
+        <ul>
+          <li><a href="https://prismpublication.com/">Home</a></li>
+          <li><a href="#sandbox">Sandbox</a></li>
+          <li><a href="docs/ad-submission.md">Ad submission</a></li>
+          <li><a href="sdk/prismClient.js">SDK client</a></li>
+          <li><a href="mailto:info@prismpublication.com">info@prismpublication.com</a></li>
+        </ul>
+      </div>
+    </footer>
+    <script src="js/sandbox.js" defer></script>
+  </body>
+</html>

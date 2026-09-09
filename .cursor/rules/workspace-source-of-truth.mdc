@@ -1,0 +1,30 @@
+---
+description: Define active repository as the single source of truth and prevent legacy path bleeding.
+alwaysApply: true
+---
+
+# Workspace Source of Truth
+
+- **Active repository:** `C:\Sources\prismpublication_sept`
+- All edits, script executions, file generation, and imports stay inside this directory.
+- Treat this directory as the isolated production root. Do not mix in files from other clones.
+
+## Forbidden paths
+
+Never reference, read, write, copy from, or import:
+
+- `C:\Users\dan72\Desktop\repo`
+- `_site-kit` outside this repo
+- Old harvest folders or other Prism clones
+
+## Examples
+
+```text
+❌ BAD  Read C:\Users\dan72\Desktop\repo\apps\...
+❌ BAD  cd C:\Users\dan72\Desktop\repo && npm run ...
+❌ BAD  Copy a harvest from an old folder into this tree
+✅ GOOD Edit C:\Sources\prismpublication_sept\...
+✅ GOOD Run scripts with cwd C:\Sources\prismpublication_sept
+```
+
+If a path is outside this root, stop and use the in-repo equivalent instead.
