@@ -12,7 +12,7 @@ Advertisers, agencies, and publishers wiring the SDK. If a category is not liste
 - One offer per turn. Frequency is a publisher setting.
 - Destination URLs are https. Amazon Associates links use tag `prismpublicat-20` and `rel="sponsored"`.
 - Topic text describes the product. Do not encode a user demographic into tags.
-- Daily and lifetime budgets are required. Exhausted ads leave the pool.
+- Daily and lifetime budgets are required. Exhausted ads leave the pool. Commercial motion and billable units: [pricing.md](pricing.md) (intercept active AI campaign buyers; null is not billable).
 
 ## Matching floors (quote these)
 
