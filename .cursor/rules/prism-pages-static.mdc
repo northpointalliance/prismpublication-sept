@@ -1,0 +1,30 @@
+---
+description: Enforce pure static Cloudflare Pages deployment rules and prevent wrangler worker script regressions
+alwaysApply: true
+---
+
+# Prism Publication Deployment Architecture
+
+## Critical Hosting Constraints
+
+- **Platform:** Cloudflare Pages (pure static site), not a Cloudflare Worker service.
+- **Build command:** Must always be `echo "Building static site"`. Never use `none` literally. Never invoke `npx wrangler deploy`.
+- **Deploy command:** Must be `true` (or left blank if the interface permits). Never invoke wrangler deployment scripts.
+- **Output structure:** Raw static HTML/JS/CSS served from the repository root (`/`).
+
+## Do not
+
+- Add `wrangler.toml`, `[assets]`, Worker `main` entrypoints, or `npx wrangler deploy` scripts.
+- Convert this repo into a Worker, Pages Function, or hybrid Workers+Assets project.
+- Move the site behind a `/dist` or `/public` build output unless Pages is reconfigured to match (default is repo root).
+
+## Examples
+
+```text
+❌ BAD  npx wrangler deploy
+❌ BAD  Build command: none
+❌ BAD  wrangler.toml with main = "src/index.ts"
+✅ GOOD Build command: echo "Building static site"
+✅ GOOD Deploy command: true
+✅ GOOD index.html, CSS, and JS at repo root
+```
