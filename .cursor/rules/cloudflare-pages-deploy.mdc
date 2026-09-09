@@ -1,0 +1,19 @@
+---
+description: Instructions for deploying a web project to Cloudflare Pages via GitHub, avoiding the Workers UI navigation trap.
+alwaysApply: true
+---
+
+# Cloudflare Pages Deployment Skill
+
+## Overview
+When setting up or troubleshooting Cloudflare Pages deployments linked to a GitHub repository, avoid the default Workers creation flow. Cloudflare houses Workers and Pages under the same dashboard, but direct Git integration is exclusive to the Pages tab.
+
+## Navigation & Setup Protocol
+1. **Navigate:** Go to **Workers & Pages** in the Cloudflare dashboard.
+2. **Initialize:** Click **Create** (top right).
+3. **Switch Tabs:** In the creation modal, click the **Pages** tab (second tab, next to "Workers"). Do *not* select a Workers template.
+4. **Connect Git:** Under "Connect to Git", click **Connect to GitHub** (this option does not exist in the Workers flow).
+5. **Configure:**
+   - Authorize the GitHub account (e.g., `northpointalliance`).
+   - Select the target repository.
+   - Define the production branch and build settings.

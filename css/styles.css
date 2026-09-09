@@ -108,7 +108,7 @@ nav.primary a:hover {
 .hero .subhead {
     font-size: 1.2rem;
     color: var(--text-muted);
-    max-width: 750px;
+    max-width: 44rem;
     margin: 0 auto 2rem auto;
 }
 
@@ -116,6 +116,49 @@ nav.primary a:hover {
     display: flex;
     gap: 1rem;
     justify-content: center;
+    flex-wrap: wrap;
+}
+
+.highlights-kicker {
+    margin: 2.5rem 0 1rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.hero .highlights {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    text-align: left;
+    margin-top: 0;
+}
+
+.hero .highlights .card {
+    padding: 1.25rem;
+}
+
+.hero .highlights h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+}
+
+.hero .highlights p {
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+@media (max-width: 900px) {
+    .hero .highlights {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .hero .highlights {
+        grid-template-columns: 1fr;
+    }
 }
 
 .btn {

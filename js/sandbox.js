@@ -210,13 +210,6 @@
       '" target="_blank">' +
       escapeHtml(result.ad.ctaText) +
       "</a></p>" +
-      "<small>Cosine " +
-      escapeHtml(scoreLabel) +
-      " · " +
-      escapeHtml(result.ad.advertiser) +
-      " · " +
-      escapeHtml(msLabel) +
-      "</small>" +
       "</article>";
   }
 
