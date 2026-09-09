@@ -318,7 +318,49 @@ nav.primary a:hover {
 
 .niches h2 {
     text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: 0.75rem;
+}
+
+.niches .section-lead {
+    text-align: center;
+    color: var(--text-muted);
+    max-width: 44rem;
+    margin: 0 auto 2.5rem;
+}
+
+.advertisers {
+    padding: 4rem 0;
+    background: var(--card-bg);
+    border-top: 1px solid var(--border-color);
+}
+
+.advertisers h2,
+.developers h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+    max-width: 36rem;
+}
+
+.advertisers p,
+.developers p {
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    max-width: 44rem;
+}
+
+.advertisers p strong,
+.developers p strong,
+.niches .section-lead strong {
+    color: var(--text-main);
+}
+
+.audience-kicker {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
 }
 
 .grid {
@@ -359,7 +401,7 @@ nav.primary a:hover {
 .aeo h2 {
     font-size: 1.5rem;
     margin-bottom: 0.75rem;
-    max-width: 28ch;
+    max-width: 36rem;
 }
 
 .aeo p {
@@ -374,7 +416,7 @@ nav.primary a:hover {
 
 .aeo table {
     width: 100%;
-    max-width: 44rem;
+    max-width: 56rem;
     border-collapse: collapse;
     margin: 1.25rem 0 0;
     font-size: 0.95rem;

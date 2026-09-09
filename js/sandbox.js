@@ -175,20 +175,13 @@
   function render(result) {
     var panel = document.getElementById("sandbox-output");
     if (!panel) return;
-    var msLabel = result.ms < 120 ? result.ms.toFixed(2) + " ms (under 120 ms)" : result.ms.toFixed(2) + " ms";
-    var scoreLabel = result.score.toFixed(2);
 
     if (!result.ad) {
       panel.innerHTML =
         '<div class="match-card null">' +
-        '<span class="badge">No fill</span>' +
-        "<h4>null</h4>" +
-        "<p>Cosine " +
-        escapeHtml(scoreLabel) +
-        " is below the 0.65 floor. The assistant reply still ships. No house ad.</p>" +
-        "<small>Match time " +
-        escapeHtml(msLabel) +
-        "</small>" +
+        '<span class="badge">No ad this turn</span>' +
+        "<h4>We stay silent</h4>" +
+        "<p>The question was not close enough to an approved product. The assistant reply still ships. You would not be billed for this turn.</p>" +
         "</div>";
       return;
     }
