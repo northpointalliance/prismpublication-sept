@@ -189,7 +189,9 @@
     var rel = result.ad.affiliate ? "sponsored noopener noreferrer" : "noopener noreferrer";
     panel.innerHTML =
       '<article class="match-card">' +
-      '<span class="badge">Sponsored via Prism</span>' +
+      '<span class="badge">Sponsored · ' +
+      escapeHtml(result.ad.advertiser) +
+      "</span>" +
       "<h4>" +
       escapeHtml(result.ad.title) +
       "</h4>" +

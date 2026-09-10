@@ -37,7 +37,7 @@
             "name": "Chat ads on independent AI chatbots | Prism Publication",
             "isPartOf": { "@id": "https://prismpublication.com/#website" },
             "datePublished": "2026-09-09",
-            "dateModified": "2026-09-09",
+            "dateModified": "2026-09-10",
             "author": { "@type": "Person", "name": "Daniel Rosenthal" },
             "publisher": { "@id": "https://prismpublication.com/#org" },
             "description": "Labeled product cards beside independent chatbot replies, only when the user is already asking about that product."
@@ -96,7 +96,7 @@
           <h1>Chat ads on independent AI chatbots</h1>
           <p class="subhead">
             <strong>Buy labeled product cards next to the assistant reply, only when the user is already asking about that product.</strong>
-            Independent chatbots are not ChatGPT's wall. Your offer shows as Sponsored via Prism. If the question is off-topic, we stay out of the transcript and you are not billed for that turn.
+            Independent chatbots are not ChatGPT's wall. The card is labeled sponsored and shows your brand or product, not Prism. If the question is off-topic, we stay out of the transcript and you are not billed for that turn.
           </p>
           <div class="cta-group">
             <a class="btn primary" href="#sandbox">See a sample card</a>
@@ -118,13 +118,13 @@
             </article>
             <article class="card">
               <h3>Always labeled</h3>
-              <p>Every card says Sponsored via Prism. The assistant reply still has to make sense if the card is removed.</p>
+              <p>Every card is marked sponsored and carries the advertiser's brand or product name. The assistant reply still has to make sense if the card is removed.</p>
             </article>
           </div>
           <p class="meta">
             By Daniel Rosenthal.
             Published <time datetime="2026-09-09">9 September 2026</time>.
-            Last updated <time datetime="2026-09-09">9 September 2026</time>.
+            Last updated <time datetime="2026-09-10">10 September 2026</time>.
           </p>
         </div>
       </section>
@@ -217,7 +217,7 @@
             in Node or a Worker. Email <a href="mailto:info@prismpublication.com">info@prismpublication.com</a> for a publisher key.
           </p>
           <p>
-            Call <code>displayAd</code> with <code>botId</code>, <code>format: "card"</code>, and <code>context.topic</code> set to the user question. Return title, description, URL, and the Sponsored via Prism label. Those field names are the integration contract. They are not the pitch to a media buyer.
+            Call <code>displayAd</code> with <code>botId</code>, <code>format: "card"</code>, and <code>context.topic</code> set to the user question. Return title, description, URL, and a sponsored label that uses the advertiser's brand or product name. Those field names are the integration contract. They are not the pitch to a media buyer.
           </p>
 
           <h2>What should a developer quote, and how does a buyer hear it?</h2>
@@ -249,9 +249,9 @@
                 <td>No card, no bill</td>
               </tr>
               <tr>
-                <td>The user can tell it is an ad</td>
+                <td>The user can tell it is an ad from that brand</td>
                 <td>Disclosure copy on the card</td>
-                <td>Sponsored via Prism</td>
+                <td>Sponsored, plus advertiser brand or product name</td>
                 <td>Creative does not run</td>
               </tr>
             </tbody>

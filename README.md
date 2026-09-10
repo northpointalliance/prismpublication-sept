@@ -20,7 +20,7 @@ This repository is the **single-product** static site and server-side SDK client
 |---|---|---|
 | Cosine similarity (prompt vs creative) | 0.65 | Return `null` |
 | Match latency | Under 120ms | Fail closed to `null` |
-| Disclosure | Sponsored via Prism | Creative fails review |
+| Disclosure | Sponsored, advertiser brand on the card | Creative fails review |
 
 Do not invent fill rate or visitor counts on the homepage.
 

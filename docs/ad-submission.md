@@ -8,7 +8,7 @@ Advertisers, agencies, and publishers wiring the SDK. If a category is not liste
 
 ## Creative rules
 
-- Label every card **Sponsored via Prism**. The assistant reply must still make sense if the card is removed.
+- Label every card as **sponsored** with the **advertiser's brand or product name**, not Prism. The assistant reply must still make sense if the card is removed.
 - One offer per turn. Frequency is a publisher setting.
 - Destination URLs are https. Amazon Associates links use tag `prismpublicat-20` and `rel="sponsored"`.
 - Topic text describes the product. Do not encode a user demographic into tags.

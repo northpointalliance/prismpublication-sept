@@ -10,7 +10,7 @@ Handoff for [northpointalliance/prismpublication-sept](https://github.com/northp
 | Host | Cloudflare Pages, static root, no Wrangler Worker |
 | Default branch on remote | `main` at initial clean release `1d415df` |
 | Working branch | `add-pages-static-deploy-rule` (pushed; includes Pages rules + hero copy) |
-| Public floors | Cosine 0.65, match under 120ms, Sponsored via Prism |
+| Public floors | Cosine 0.65, match under 120ms, sponsored label with advertiser brand |
 | Billing model (operator) | Intercept active AI campaign buyers; null not billable |
 
 Remote after the hero push: `02c2172` on `origin/add-pages-static-deploy-rule`.
@@ -60,7 +60,7 @@ Production Pages project should track the branch Cloudflare already uses. If pro
 ## Test plan (human)
 
 1. Open `/`. Hero reads as benefits, not cosine jargon.
-2. Sandbox Fitness fill: protein card, **Sponsored via Prism**, Shop on Amazon, **no** cosine/ms footer.
+2. Sandbox Fitness fill: protein card, **Sponsored · Amazon**, Shop on Amazon, **no** cosine/ms footer.
 3. Below 0.65: null / no fill. Assistant-reply-still-ships copy is allowed here.
 4. View-source: hero, niches, SDK Q&A, JSON-LD present without running the sandbox.
 5. Confirm `sdk/prismClient.js` is not loaded by `index.html`.
