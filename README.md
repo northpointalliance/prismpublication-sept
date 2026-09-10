@@ -11,7 +11,7 @@ This repository is the **single-product** static site and server-side SDK client
 
 - **Site:** Cloudflare Pages, files at repo root (`index.html`, `css/`, `js/`).
 - **Sandbox:** in-browser prompt matcher (`js/sandbox.js`). Cosine floor **0.65**. Matching budget **under 120ms**. Local catalog only.
-- **SDK:** `sdk/prismClient.js`. Call `displayAd` from Node or a Worker after the assistant answers. Optional Google Ad Manager fan-out via `sdk/gamClient.js`. Bearer key never goes in the chat widget.
+- **SDK:** `sdk/prismClient.js`. Call `displayAd` from Node or a Worker after the assistant answers. It reads `sdk/catalog.json` on this Pages host. Optional Google Ad Manager fan-out via `sdk/gamClient.js`. No Prism-hosted secret key.
 - **Money:** intercept buyers who already run AI campaigns. Bill served labeled cards only. Operator detail: [docs/pricing.md](docs/pricing.md).
 
 ## Public contract (quote these)
@@ -30,12 +30,14 @@ Do not invent fill rate or visitor counts on the homepage.
 index.html              Product page + JSON-LD
 css/styles.css          Layout and sandbox card
 js/sandbox.js           Local matcher
-sdk/prismClient.js      Server client (displayAd, track)
+sdk/prismClient.js      Server matcher against sdk/catalog.json
+sdk/catalog.json        Public creatives on Pages
 docs/architecture.md    System design and diagrams
 docs/handoff.md         9 September 2026 GitHub handoff
 docs/pricing.md         Intercept pricing (operator)
 docs/ad-submission.md   Creative and brand-safety rules
 docs/aeo-strategy.md    Canonicals and crawler rules
+docs/publisher-key.md   Publisher key request path, smoke test, failures
 ```
 
 `scripts/build-static.js` and `components/editor.js` are leftover kit. Pages does not run them.

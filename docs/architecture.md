@@ -19,11 +19,11 @@ Single-product static site plus a server-side chat-ad client. One commercial int
 | Public site | `index.html`, `css/styles.css`, `js/sandbox.js` at repo root | No `wrangler.toml`, no Pages Functions, no `/dist` output |
 | Host | Cloudflare Pages, Git from GitHub | Not Workers, not Vercel |
 | Build | `echo "Building static site"` | Not `npx wrangler deploy`, not `scripts/build-static.js` |
-| Live ads | `sdk/prismClient.js` fans out to Prism and optional GAM on the publisher **server** | Never bundled into the chat widget; no googletag in the browser |
+| Live ads | `sdk/prismClient.js` matches `sdk/catalog.json` on the publisher **server** (static file on Pages). Optional GAM fan-out. | Never bundled into the chat widget; no googletag; no Supabase; no Pages Functions |
 | Sandbox | Local token cosine in the browser | No API key, not a live auction |
-| Auth for live API | Bearer key (master or per-bot) | HMAC optional and not sent by this client |
+| Auth | None on this host. Catalog is public JSON. | No Bearer key store; HMAC not used |
 
-Default live API base: `PRISM_API_BASE_URL` or `https://botnabfogcjrkpmdjgpr.supabase.co/functions/v1/api`.
+Default catalog: `PRISM_CATALOG_URL` or `https://prismpublication.com/sdk/catalog.json`. Third-party wiring and smoke results: [publisher-key.md](publisher-key.md).
 
 ## Entrypoint
 
@@ -99,16 +99,16 @@ User     Chat UI     Publisher server     prismClient      Ads API / GAM
   │         │◄──────────────│                  │              │
   │         │               │ displayAd(topic) │              │
   │         │               │─────────────────►│ fan-out      │
-  │         │               │                  │──Prism /ads─►│
+  │         │               │                  │──GET catalog─►│
   │         │               │                  │──GAM fill───►│
   │         │               │  card or null    │◄─────────────│
   │         │               │◄─────────────────│  GAM wins    │
   │  HTML   │◄──────────────│  if both fill    │              │
-  │  card?  │  browser      │  key never in    │              │
+  │  card?  │  browser      │  client never in │              │
   │         │               │  the widget      │              │
 ```
 
-Impression and click tracking are separate POSTs (`/track/impression`, `/track/click`) after the card is actually in the transcript.
+Impression and click helpers on the Pages path return `{ ok: true }` with no remote POST. GAM tracking stays on the GAM stack.
 
 ## Money path (operator, not public rates)
 
@@ -121,8 +121,10 @@ See [pricing.md](pricing.md). Buyer is an **active AI campaign** owner. Bill ren
 | `index.html` | Product page, JSON-LD, hero, sandbox markup, SDK Q&A |
 | `css/styles.css` | Light-blue marketing tokens, hero highlights, sandbox card |
 | `js/sandbox.js` | Local cosine catalog (fitness, sleep, productivity) |
-| `sdk/prismClient.js` | Server `displayAd` fan-out / track |
+| `sdk/prismClient.js` | Server `displayAd` against static `sdk/catalog.json` |
+| `sdk/catalog.json` | Public creatives on Pages |
 | `sdk/gamClient.js` | GAM demand leg (fill URL, network, ad unit) |
+| `docs/publisher-key.md` | Third-party wiring and smoke test |
 | `docs/ad-submission.md` | Creative rules and 0.65 / 120ms floors |
 | `docs/pricing.md` | Intercept pricing model |
 | `docs/aeo-strategy.md` | Canonical and crawler rules |

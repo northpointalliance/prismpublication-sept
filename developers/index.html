@@ -6,7 +6,7 @@
     <title>Wire a chatbot to Prism ads | Prism Publication</title>
     <meta
       name="description"
-      content="Keep the API key on your server. After the assistant replies, call displayAd. Render a labeled card with the advertiser's brand, or send the reply alone."
+      content="Call displayAd from your server after the assistant replies. The matcher reads a static catalog on Cloudflare Pages. There is no Prism-hosted secret key."
     />
     <link rel="canonical" href="https://prismpublication.com/developers/" />
     <meta name="author" content="Daniel Rosenthal" />
@@ -32,17 +32,17 @@
             "dateModified": "2026-09-10",
             "author": { "@type": "Person", "name": "Daniel Rosenthal" },
             "publisher": { "@id": "https://prismpublication.com/#org" },
-            "description": "How a publisher attaches an independent chatbot to Prism without putting a key in the browser."
+            "description": "How a publisher attaches an independent chatbot to Prism on Cloudflare Pages, with no secret key server."
           },
           {
             "@type": "FAQPage",
             "mainEntity": [
               {
                 "@type": "Question",
-                "name": "Where does the API key live?",
+                "name": "Do you need a Prism API key?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "On your server. Call displayAd from Node or a Worker after the assistant reply is ready. Do not load the client in the chat widget."
+                  "text": "No. This site is static Cloudflare Pages. There is no key server. Call displayAd from Node or a Worker after the assistant reply. It reads https://prismpublication.com/sdk/catalog.json. Do not load the client in the chat widget."
                 }
               },
               {
@@ -63,10 +63,10 @@
               },
               {
                 "@type": "Question",
-                "name": "How do you get a publisher key?",
+                "name": "How do you start wiring a bot?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Email info@prismpublication.com. Keys are issued by email until a billing desk exists."
+                  "text": "Import displayAd, pass the user question as topic, and render a labeled card if one comes back. Email info@prismpublication.com if you want a campaign or GAM on that bot. There is no publisher key to wait for."
                 }
               }
             ]
@@ -94,13 +94,13 @@
       <section class="hero page-hero">
         <div class="container">
           <p class="audience-kicker">For publishers wiring a bot</p>
-          <h1>How do you attach Prism without putting a key in the browser?</h1>
+          <h1>How do you attach Prism on Cloudflare Pages?</h1>
           <p class="subhead">
-            <strong>Keep the key on your server. After the bot finishes a reply, ask Prism for a card. The chat widget only draws HTML you already trust.</strong>
-            This page is the human guide. The JavaScript module is a file your server imports. It is not a landing page.
+            <strong>There is no Prism-hosted secret key. This site is static Pages, not a Worker and not a database.</strong>
+            After the bot finishes a reply, call displayAd from your server. It reads the public catalog on this host. The chat widget only draws HTML you already trust.
           </p>
           <div class="cta-group">
-            <a class="btn primary" href="mailto:info@prismpublication.com?subject=Publisher%20SDK%20key">Ask for a publisher key</a>
+            <a class="btn primary" href="mailto:info@prismpublication.com?subject=Wire%20a%20chatbot">Email to wire a bot</a>
             <a class="btn secondary" href="https://prismpublication.com/demo/">See a sample card</a>
           </div>
           <p class="meta">
@@ -116,14 +116,14 @@
           <h2>What does your server do?</h2>
           <p>
             <strong>Call <code>displayAd</code> from Node or a Worker. Never bundle it into the chat widget.</strong>
-            Pass <code>botId</code>, <code>format: "card"</code>, and the user question as <code>topic</code>. If you get a card, render title, description, destination URL, and a sponsored label that uses the advertiser's brand or product name. If you get nothing, send the assistant reply alone. Matching must finish under 120 milliseconds or you also send the reply alone. Google Ad Manager is available as a second demand leg on that same call.
+            Pass the user question as <code>topic</code>. If you get a card, render title, description, destination URL, and a sponsored label that uses the advertiser's brand or product name. If you get nothing, send the assistant reply alone. Matching must finish under 120 milliseconds or you also send the reply alone. Google Ad Manager is available as a second demand leg on that same call.
           </p>
           <p>
             Email
             <a href="mailto:info@prismpublication.com">info@prismpublication.com</a>
-            for a key. Advertisers submit creatives on
+            if you are putting this on a live bot. Advertisers submit creatives on
             <a href="https://prismpublication.com/ad-submission/">ad submission</a>.
-            Do not paste the key into frontend code, and do not treat the module URL as a page to send a media buyer.
+            Do not treat the module URL as a page to send a media buyer.
           </p>
         </div>
       </section>
@@ -133,13 +133,11 @@
           <h2>What does a fill look like in code?</h2>
           <p>
             <strong>Import the client on the server, wait for the assistant, then decide card or silence.</strong>
-            Copy this shape. Put your key in an environment variable. The widget never sees it.
+            Copy this shape. The widget never calls Pages for a secret. The catalog is a public JSON file on this site.
           </p>
           <pre><code>import { displayAd } from "./prismClient.js";
 
 const card = await displayAd({
-  apiKey: process.env.PRISM_API_KEY,
-  botId: "your-bot-id",
   topic: userQuestion,
   format: "card",
   gam: {
@@ -155,12 +153,14 @@ if (!card) {
           <p>
             The module file lives at
             <a href="https://prismpublication.com/sdk/prismClient.js"><code>/sdk/prismClient.js</code></a>
-            for servers that import by URL. Open that link only if you are wiring an integration. It is source, not a product page. <code>sdk/gamClient.js</code> is the GAM fan-out leg. Omit <code>gam</code> and the call stays Prism-only.
+            for servers that import by URL. The catalog is
+            <a href="https://prismpublication.com/sdk/catalog.json"><code>/sdk/catalog.json</code></a>.
+            Open those links only if you are wiring an integration. Omit <code>gam</code> and the call stays on the Pages catalog. <code>sdk/gamClient.js</code> is the GAM fan-out leg.
           </p>
 
           <h2>How does Google Ad Manager fan-out work?</h2>
           <p>
-            <strong>Google Ad Manager is available. Both legs fire on the server in parallel. Neither key belongs in the chat widget.</strong>
+            <strong>Google Ad Manager is available. Both legs fire on the server in parallel. Neither GAM credential belongs in the chat widget.</strong>
             Set fill URL, network code, and ad unit in environment variables or on the <code>gam</code> object. Each leg has 120 milliseconds. A miss or timeout on one leg is null, not a stall. If GAM and Prism both return a card, the GAM card is the one you render. Track Prism fills with <code>trackImpression</code> / <code>trackClick</code>. GAM fills stay on the GAM stack.
           </p>
           <p>

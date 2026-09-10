@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "host": "https://prismpublication.com/",
+  "threshold": 0.65,
+  "ads": [
+    {
+      "id": "ad_amazon_protein",
+      "niche": "fitness",
+      "title": "Protein powder for a training week",
+      "description": "Whey and plant protein when someone asks what to buy this week.",
+      "ctaText": "Shop on Amazon",
+      "clickUrl": "https://www.amazon.com/s?k=whey%20protein%20powder&tag=prismpublicat-20",
+      "advertiser": "Amazon",
+      "affiliate": true,
+      "tokens": "protein powder whey plant training fitness workout gym lifting scoop supplement"
+    },
+    {
+      "id": "ad_amazon_bands",
+      "niche": "fitness",
+      "title": "Resistance bands for home sessions",
+      "description": "A simple set for progressive overload at home.",
+      "ctaText": "Shop on Amazon",
+      "clickUrl": "https://www.amazon.com/s?k=resistance%20bands%20set&tag=prismpublicat-20",
+      "advertiser": "Amazon",
+      "affiliate": true,
+      "tokens": "resistance bands home gym training workout strength overload fitness"
+    },
+    {
+      "id": "ad_amazon_watch",
+      "niche": "fitness",
+      "title": "GPS running watch",
+      "description": "Pace and heart rate for people already talking about training.",
+      "ctaText": "Shop on Amazon",
+      "clickUrl": "https://www.amazon.com/s?k=gps%20running%20watch&tag=prismpublicat-20",
+      "advertiser": "Amazon",
+      "affiliate": true,
+      "tokens": "gps running watch pace cardio heart rate training run fitness"
+    },
+    {
+      "id": "ad_amazon_sleep",
+      "niche": "sleep",
+      "title": "A quieter night",
+      "description": "Sleep masks and sound machines when someone asks for practical sleep tools.",
+      "ctaText": "Shop on Amazon",
+      "clickUrl": "https://www.amazon.com/s?k=sleep%20sound%20machine&tag=prismpublicat-20",
+      "advertiser": "Amazon",
+      "affiliate": true,
+      "tokens": "sleep night rest sound machine mask quieter insomnia bedtime"
+    },
+    {
+      "id": "ad_notion",
+      "niche": "productivity",
+      "title": "Try Notion AI, your second brain",
+      "description": "Summarize notes, draft emails, and find anything in a workspace.",
+      "ctaText": "Start free trial",
+      "clickUrl": "https://www.notion.so/product/ai",
+      "advertiser": "Notion",
+      "affiliate": false,
+      "tokens": "notion notes ai productivity organize docs workspace draft email second brain"
+    },
+    {
+      "id": "ad_travel_cubes",
+      "niche": "travel",
+      "title": "Packing cubes for a carry-on week",
+      "description": "Compress a short trip without checking a bag.",
+      "ctaText": "Shop on Amazon",
+      "clickUrl": "https://www.amazon.com/s?k=packing%20cubes%20carry%20on&tag=prismpublicat-20",
+      "advertiser": "Amazon",
+      "affiliate": true,
+      "tokens": "packing cubes carry luggage suitcase trip flight travel bag organize"
+    },
+    {
+      "id": "ad_travel_adapter",
+      "niche": "travel",
+      "title": "Universal travel adapter",
+      "description": "One plug for hotel rooms when you already asked about the trip.",
+      "ctaText": "Shop on Amazon",
+      "clickUrl": "https://www.amazon.com/s?k=universal%20travel%20adapter&tag=prismpublicat-20",
+      "advertiser": "Amazon",
+      "affiliate": true,
+      "tokens": "travel adapter plug hotel outlet trip abroad charger flight"
+    }
+  ]
+}

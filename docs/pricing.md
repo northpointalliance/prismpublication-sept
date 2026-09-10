@@ -41,7 +41,7 @@ Prism’s cut is a **share of billed fill**, agreed on the IO. Publishers earn t
 
 ## What stays free and what stays out of scope?
 
-The homepage sandbox, cosine floor (0.65), and 120ms matching budget are **contract proof**, not a paid SKU. Keys for publishers remain issued by email ([info@prismpublication.com](mailto:info@prismpublication.com)) until a live billing desk exists.
+The homepage sandbox, cosine floor (0.65), and 120ms matching budget are **contract proof**, not a paid SKU. This Pages site does not issue publisher API keys. Contact [info@prismpublication.com](mailto:info@prismpublication.com) for an IO or GAM, not a Bearer token.
 
 Out of scope for this model: support-bot scoring, crisis language products, and any fee that fires when the SDK returns null. Political campaigning and the other rejects in ad-submission stay unsellable.
 

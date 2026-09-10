@@ -63,10 +63,10 @@
               },
               {
                 "@type": "Question",
-                "name": "How do engineers attach a bot without putting a key in the browser?",
+                "name": "How do engineers attach a bot on Cloudflare Pages?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Keep the key on the server. After the assistant reply is ready, call displayAd. The chat widget only draws labeled HTML you already trust. Matching must finish under 120ms or return no card."
+                  "text": "Import displayAd on your server after the assistant reply. The matcher reads a static catalog on Cloudflare Pages. There is no Prism-hosted secret key. Matching must finish under 120ms or return no card."
                 }
               }
             ]
@@ -210,15 +210,15 @@
       <section class="aeo developers" id="sdk">
         <div class="container">
           <p class="audience-kicker">For engineers wiring a bot</p>
-          <h2>How do you attach a bot without putting a key in the browser?</h2>
+          <h2>How do you attach a bot on Cloudflare Pages?</h2>
           <p>
-            <strong>Keep the key on your server. After the bot has an answer, ask Prism for a card. The chat widget only draws HTML you already trust.</strong>
-            There is no third-party ad tag in the transcript. If matching is too slow, or the question is not close enough, send the reply alone. The
+            <strong>There is no Prism-hosted secret key. After the bot has an answer, call displayAd from your server. The chat widget only draws HTML you already trust.</strong>
+            The matcher reads a static catalog on this Pages site. If matching is too slow, or the question is not close enough, send the reply alone. The
             <a href="https://prismpublication.com/developers/">developer guide</a>
-            has the server call. Email <a href="mailto:info@prismpublication.com">info@prismpublication.com</a> for a publisher key.
+            has the server call. Email <a href="mailto:info@prismpublication.com">info@prismpublication.com</a> if you are wiring a live bot.
           </p>
           <p>
-            Call <code>displayAd</code> with <code>botId</code>, <code>format: "card"</code>, and the user's question as the topic. You get back a title, description, URL, and a sponsored label that uses the advertiser's brand. That is for the engineer wiring the bot, not for the media brief.
+            Call <code>displayAd</code> with the user's question as the topic. You get back a title, description, URL, and a sponsored label that uses the advertiser's brand. That is for the engineer wiring the bot, not for the media brief.
           </p>
 
           <h2>What should a developer quote, and how does a buyer hear it?</h2>
