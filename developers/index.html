@@ -55,6 +55,14 @@
               },
               {
                 "@type": "Question",
+                "name": "Is Google Ad Manager available?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. displayAd can fan out to Google Ad Manager and Prism on the server in the same 120ms budget. Configure GAM fill URL, network code, and ad unit on the server. Do not load googletag in the chat widget. A GAM card wins if both sources fill."
+                }
+              },
+              {
+                "@type": "Question",
                 "name": "How do you get a publisher key?",
                 "acceptedAnswer": {
                   "@type": "Answer",
@@ -74,7 +82,7 @@
         <a class="brand" href="https://prismpublication.com/">Prism Publication</a>
         <nav class="primary" aria-label="Primary">
           <a href="https://prismpublication.com/#advertisers">Run ads</a>
-          <a href="https://prismpublication.com/#sandbox">See a card</a>
+          <a href="https://prismpublication.com/demo/">Demo</a>
           <a href="https://prismpublication.com/ad-submission/">Ad submission</a>
           <a href="https://prismpublication.com/developers/">Developers</a>
           <a href="mailto:info@prismpublication.com">Contact</a>
@@ -93,7 +101,7 @@
           </p>
           <div class="cta-group">
             <a class="btn primary" href="mailto:info@prismpublication.com?subject=Publisher%20SDK%20key">Ask for a publisher key</a>
-            <a class="btn secondary" href="https://prismpublication.com/#sandbox">See a sample card</a>
+            <a class="btn secondary" href="https://prismpublication.com/demo/">See a sample card</a>
           </div>
           <p class="meta">
             By Daniel Rosenthal.
@@ -108,7 +116,7 @@
           <h2>What does your server do?</h2>
           <p>
             <strong>Call <code>displayAd</code> from Node or a Worker. Never bundle it into the chat widget.</strong>
-            Pass <code>botId</code>, <code>format: "card"</code>, and the user question as <code>topic</code>. If you get a card, render title, description, destination URL, and a sponsored label that uses the advertiser's brand or product name. If you get nothing, send the assistant reply alone. Matching must finish under 120 milliseconds or you also send the reply alone.
+            Pass <code>botId</code>, <code>format: "card"</code>, and the user question as <code>topic</code>. If you get a card, render title, description, destination URL, and a sponsored label that uses the advertiser's brand or product name. If you get nothing, send the assistant reply alone. Matching must finish under 120 milliseconds or you also send the reply alone. Google Ad Manager is available as a second demand leg on that same call.
           </p>
           <p>
             Email
@@ -134,6 +142,11 @@ const card = await displayAd({
   botId: "your-bot-id",
   topic: userQuestion,
   format: "card",
+  gam: {
+    fillUrl: process.env.GAM_FILL_URL,
+    networkCode: process.env.GAM_NETWORK_CODE,
+    adUnitCode: process.env.GAM_AD_UNIT_CODE,
+  },
 });
 
 if (!card) {
@@ -142,7 +155,17 @@ if (!card) {
           <p>
             The module file lives at
             <a href="https://prismpublication.com/sdk/prismClient.js"><code>/sdk/prismClient.js</code></a>
-            for servers that import by URL. Open that link only if you are wiring an integration. It is source, not a product page.
+            for servers that import by URL. Open that link only if you are wiring an integration. It is source, not a product page. <code>sdk/gamClient.js</code> is the GAM fan-out leg. Omit <code>gam</code> and the call stays Prism-only.
+          </p>
+
+          <h2>How does Google Ad Manager fan-out work?</h2>
+          <p>
+            <strong>Google Ad Manager is available. Both legs fire on the server in parallel. Neither key belongs in the chat widget.</strong>
+            Set fill URL, network code, and ad unit in environment variables or on the <code>gam</code> object. Each leg has 120 milliseconds. A miss or timeout on one leg is null, not a stall. If GAM and Prism both return a card, the GAM card is the one you render. Track Prism fills with <code>trackImpression</code> / <code>trackClick</code>. GAM fills stay on the GAM stack.
+          </p>
+          <p>
+            Do not load googletag in the transcript. Ad ops copy for buyers is on
+            <a href="https://prismpublication.com/ad-submission/">ad submission</a>.
           </p>
 
           <h2>What floors should you quote internally?</h2>

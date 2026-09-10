@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Chat ad demo | Prism Publication</title>
+    <meta
+      name="description"
+      content="Play a travel, health and wellness, or persona chatbot. A labeled card appears only when the question is already about that product. Local demo, not a live auction."
+    />
+    <link rel="canonical" href="https://prismpublication.com/demo/" />
+    <meta name="author" content="Daniel Rosenthal" />
+    <meta name="robots" content="index,follow" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebPage",
+            "@id": "https://prismpublication.com/demo/#webpage",
+            "url": "https://prismpublication.com/demo/",
+            "name": "Chat ad demo | Prism Publication",
+            "datePublished": "2026-09-10",
+            "dateModified": "2026-09-10",
+            "author": { "@type": "Person", "name": "Daniel Rosenthal" },
+            "publisher": { "@id": "https://prismpublication.com/#org" },
+            "description": "Three chatbot niches: travel, health and wellness, and persona. Play a script or type. Cards are labeled with the advertiser brand."
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Which chatbot niches does this demo use?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Three distinct niches: travel, health and wellness, and persona. Persona is an 18+ conversation demo. The matcher is local. It is not a live auction."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "When does a card show in the transcript?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Only when the user line is already about an approved product in that niche. Off-topic lines still get an assistant reply and no card. You would not be billed for that turn."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site">
+      <div class="container">
+        <a class="brand" href="https://prismpublication.com/">Prism Publication</a>
+        <nav class="primary" aria-label="Primary">
+          <a href="https://prismpublication.com/#advertisers">Run ads</a>
+          <a href="https://prismpublication.com/demo/">Demo</a>
+          <a href="https://prismpublication.com/ad-submission/">Ad submission</a>
+          <a href="https://prismpublication.com/developers/">Developers</a>
+          <a href="mailto:info@prismpublication.com">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero page-hero demo-hero">
+        <div class="container">
+          <p class="audience-kicker">Live demo, three chatbot niches</p>
+          <h1>See how your chatbot turns conversations into ad revenue.</h1>
+          <p class="subhead">
+            <strong>Travel, health and wellness, and persona.</strong>
+            Play a script or type after playback. A labeled card sits in the same slot when the question is already about that product. Silence when it is not. This page is a local simulator, not a live auction.
+          </p>
+        </div>
+      </section>
+
+      <section class="demo-board">
+        <div class="container demo-layout">
+          <div class="demo-controls">
+            <article class="card demo-scenario">
+              <p class="audience-kicker">The scenario</p>
+              <p data-demo-scenario></p>
+              <p>Watch a labeled offer inline. No banners. No popups. Amazon links use tag prismpublicat-20.</p>
+            </article>
+            <div class="demo-tabs" role="tablist" aria-label="Chatbot niches" data-demo-tabs>
+              <button type="button" role="tab" aria-selected="true" data-niche="travel">Travel</button>
+              <button type="button" role="tab" aria-selected="false" data-niche="health-wellness">Health and wellness</button>
+              <button type="button" role="tab" aria-selected="false" data-niche="persona">Persona</button>
+            </div>
+            <div class="demo-actions">
+              <button class="btn primary" type="button" data-demo-play>Play</button>
+              <button class="btn secondary" type="button" data-demo-reset>Reset</button>
+            </div>
+            <p class="demo-hint">Play a script, or type after playback. Same slot either way.</p>
+            <div class="demo-stats">
+              <article class="card">
+                <h3 data-stat-messages>0</h3>
+                <p>Messages</p>
+              </article>
+              <article class="card">
+                <h3 data-stat-ads>0</h3>
+                <p>Ads served</p>
+              </article>
+              <article class="card">
+                <h3>4.2%</h3>
+                <p>CTR est. Illustrative only.</p>
+              </article>
+            </div>
+          </div>
+
+          <div class="demo-chat">
+            <header class="demo-chat-head">
+              <div>
+                <h2 data-demo-title>Travel assistant</h2>
+                <p data-demo-subtitle>Trips, packing, carry-on</p>
+              </div>
+              <p class="demo-live">Live</p>
+              <p class="demo-age" data-demo-age hidden></p>
+            </header>
+            <div class="demo-log" data-chat-log aria-live="polite"></div>
+            <form class="demo-composer">
+              <label class="skip" for="demo-input">Message</label>
+              <input id="demo-input" data-demo-input type="text" maxlength="240" placeholder="Ask about packing, carry-on, or a trip" />
+              <button class="btn primary" type="submit" data-demo-send>Send</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section class="aeo">
+        <div class="container">
+          <h2>Which chatbot niches does this demo use?</h2>
+          <p>
+            <strong>Three distinct niches: travel, health and wellness, and persona.</strong>
+            Travel is packing and trips. Health and wellness is training, protein, sleep, and winding down, not a clinical claim. Persona is an 18+ social conversation bot. Cards use the advertiser brand on the sponsored label, not Prism.
+          </p>
+          <p>
+            Google Ad Manager is available on the live SDK fan-out for publishers who already traffic GAM. This page does not call GAM. See
+            <a href="https://prismpublication.com/developers/">developers</a>
+            and
+            <a href="https://prismpublication.com/ad-submission/">ad submission</a>.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-grid">
+        <div>
+          <p>&copy; 2026 Prism Publication.</p>
+          <p>As an Amazon Associate, Prism Publication earns from qualifying purchases. Demo links use tag prismpublicat-20.</p>
+          <p>Chat ads are labelled sponsored placements. This demo is a local simulator, not a live auction.</p>
+        </div>
+        <ul>
+          <li><a href="https://prismpublication.com/">Home</a></li>
+          <li><a href="https://prismpublication.com/demo/">Demo</a></li>
+          <li><a href="https://prismpublication.com/ad-submission/">Ad submission</a></li>
+          <li><a href="https://prismpublication.com/developers/">Developers</a></li>
+          <li><a href="mailto:info@prismpublication.com">info@prismpublication.com</a></li>
+        </ul>
+      </div>
+    </footer>
+    <script src="../js/demo.js" defer></script>
+  </body>
+</html>

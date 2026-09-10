@@ -32,7 +32,7 @@ Confirm with `git status` before you merge. As of this handoff these lived on di
 | `docs/ad-submission.md` | Link to pricing; budgets still required. |
 | `js/sandbox.js` | Sponsored card no longer prints cosine, Amazon, or ms. |
 | `docs/architecture.md`, `docs/handoff.md`, `README.md` | This documentation set. |
-| `.cursor/skills/prism-gam.skill` | Untracked skill blob. Do not treat as product source. |
+| `.cursor/skills/prism-gam.skill` | Product skill: talk to GAM / Google Ad Manager ad ops without treating Prism as a GAM replacement. Track this file. |
 
 If those files are still unstaged, commit them on `add-pages-static-deploy-rule` (or a docs branch) before calling the day closed.
 

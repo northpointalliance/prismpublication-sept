@@ -492,6 +492,151 @@ footer {
     justify-content: flex-start;
 }
 
+.demo-hero h1 {
+    max-width: 18ch;
+}
+
+.demo-board {
+    padding: 0 0 4rem;
+}
+
+.demo-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+@media (max-width: 900px) {
+    .demo-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+.demo-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.demo-tabs button {
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    color: var(--text-main);
+    border-radius: 999px;
+    padding: 0.45rem 0.9rem;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.demo-tabs button[aria-selected="true"] {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+}
+
+.demo-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.demo-hint {
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+}
+
+.demo-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+}
+
+.demo-stats h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.demo-chat {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    min-height: 28rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.demo-chat-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: var(--section);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.demo-chat-head h2 {
+    font-size: 1.15rem;
+    margin: 0;
+}
+
+.demo-live {
+    color: var(--success);
+    font-weight: 700;
+    margin: 0;
+}
+
+.demo-age {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.demo-log {
+    flex: 1;
+    padding: 1rem 1.25rem;
+    overflow-y: auto;
+    max-height: 22rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.bubble {
+    max-width: 85%;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    background: var(--section);
+    color: var(--text-main);
+}
+
+.bubble.user {
+    align-self: flex-end;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+}
+
+.demo-composer {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.85rem 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.demo-composer input {
+    flex: 1;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    font-size: 1rem;
+}
+
+.demo-log .match-card {
+    max-width: 85%;
+}
+
 pre {
     max-width: 44rem;
     overflow-x: auto;
