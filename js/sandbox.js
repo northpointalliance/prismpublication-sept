@@ -70,9 +70,9 @@
   ];
 
   var SAMPLES = {
-    fitness: { niche: "fitness", prompt: "any protein powder recommendations for lifting?" },
+    fitness: { niche: "fitness", prompt: "what's a good protein powder for my workout routine this week?" },
     sleep: { niche: "sleep", prompt: "I need a sound machine so I can sleep through street noise" },
-    productivity: { niche: "productivity", prompt: "help me organize notes and draft emails faster" },
+    productivity: { niche: "productivity", prompt: "help me keep a daily planner and draft emails faster" },
     miss: { niche: "fitness", prompt: "what is the weather in lisbon tomorrow" }
   };
 
