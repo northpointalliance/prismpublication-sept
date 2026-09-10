@@ -2,7 +2,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://prismpublication.com/</loc>
-    <lastmod>2026-09-09</lastmod>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://prismpublication.com/ad-submission/</loc>
+    <lastmod>2026-09-10</lastmod>
     <changefreq>monthly</changefreq>
   </url>
 </urlset>

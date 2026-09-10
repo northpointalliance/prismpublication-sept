@@ -1,6 +1,8 @@
 # Ad submission: allowed categories and compliance
 
-Operator guide for creatives in the Prism chat-ad catalog. The homepage sandbox uses a smaller static slice: fitness, sleep tools, productivity.
+Operator guide. The public page for brands and agencies is [https://prismpublication.com/ad-submission/](https://prismpublication.com/ad-submission/). Do not link this markdown file from the live footer.
+
+The homepage sandbox uses a smaller static slice: fitness, sleep tools, productivity.
 
 ## Who this is for
 
