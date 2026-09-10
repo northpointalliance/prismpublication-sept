@@ -76,14 +76,14 @@
       label: "Travel",
       title: "Travel assistant",
       subtitle: "Trips, packing, carry-on",
-      scenario: "A travel chatbot. The user asks about packing a carry-on and a plug for the hotel. Prism shows a labeled partner card when the topic matches.",
-      greeting: "Ask about packing, a trip, or a carry-on. Play the script, or type your own line.",
+      scenario: "Someone is packing a carry-on and asking about the hotel plug. When the topic matches, a labeled partner card shows up in the thread.",
+      greeting: "Ask about packing, a trip, or a carry-on. Hit Play, or type your own line.",
       placeholder: "Ask about packing, carry-on, or a trip",
       ageGate: "",
       replies: [
         "Pack the outfit you will actually wear twice. Leave the just-in-case pile at home.",
         "A carry-on week is packing cubes, one pair of shoes that walk, and a charger that fits the seat.",
-        "If the hotel outlet is the unknown, a single adapter beats a bag of cables.",
+        "If you don't know the hotel outlet, one adapter beats a bag of cables.",
         "Build the bag around the first 24 hours. Everything else is optional."
       ],
       script: [
@@ -91,7 +91,7 @@
         { role: "bot", content: "A carry-on week is packing cubes, one pair of shoes that walk, and a charger that fits the seat." },
         { role: "ad", topic: "I need packing cubes for a carry-on trip" },
         { role: "user", content: "What about the hotel plug? I never remember the adapter." },
-        { role: "bot", content: "If the hotel outlet is the unknown, a single adapter beats a bag of cables." },
+        { role: "bot", content: "If you don't know the hotel outlet, one adapter beats a bag of cables." },
         { role: "ad", topic: "universal travel adapter for the hotel" }
       ]
     },
@@ -100,22 +100,22 @@
       label: "Health and wellness",
       title: "Health and wellness assistant",
       subtitle: "Training, protein, sleep",
-      scenario: "A health and wellness chatbot. The user asks about protein and sleep. A labeled card shows when the topic matches. It stays out of clinical claims.",
-      greeting: "Ask about training, protein, or sleep. Play the script, or type your own line.",
+      scenario: "Someone asks about protein and sleep. A labeled card can show when that matches. We stay out of clinical claims.",
+      greeting: "Ask about training, protein, or sleep. Hit Play, or type your own line.",
       placeholder: "Ask about protein, rest days, or sleep",
       ageGate: "",
       replies: [
         "Consistency beats intensity. Three solid sessions a week beat five you cannot sustain.",
         "Protein is the thing most people underdo. Eggs, Greek yogurt, chicken, cottage cheese add up fast.",
-        "Sleep is the highest-leverage habit. Dim lights an hour before bed.",
+        "Sleep is the habit most people skip. Dim the lights an hour before bed.",
         "Recovery is where the gains happen. Do not skip rest days."
       ],
       script: [
         { role: "user", content: "Any protein powder recommendations for lifting?" },
-        { role: "bot", content: "Protein is the thing most people underdo. Simple sources add up fast. A powder is one way to hit the week." },
+        { role: "bot", content: "Protein is the thing most people underdo. Eggs, yogurt, chicken. A powder is one way to hit the week." },
         { role: "ad", topic: "protein powder for lifting" },
         { role: "user", content: "I have been struggling to sleep lately." },
-        { role: "bot", content: "Sleep is the highest-leverage wellness habit you have. Dim lights an hour before bed. Keep it practical, not a diagnosis." },
+        { role: "bot", content: "Sleep is the habit most people skip. Dim the lights an hour before bed. Keep it practical, not a diagnosis." },
         { role: "ad", topic: "sleep sound machine for winding down" }
       ]
     },
@@ -124,19 +124,19 @@
       label: "Persona",
       title: "Persona chat",
       subtitle: "Social and dating conversation",
-      scenario: "A persona chatbot people already talk to. A partner offer only when the topic matches, with a clear label. This demo is 18+.",
-      greeting: "This demo is 18+. Ask about first conversations. Play the script, or type your own line.",
+      scenario: "A persona bot people already talk to. A partner offer only when the topic matches, with a clear label. This demo is 18+.",
+      greeting: "This demo is 18+. Ask about first conversations. Hit Play, or type your own line.",
       placeholder: "Ask about first dates or what to say",
       ageGate: "18+ demo",
       replies: [
         "Stay curious. Ask questions and listen. People remember how they felt more than the exact words.",
-        "Ask what someone is excited about right now. People open up when they talk about something they care about.",
+        "Ask what they're excited about right now. People open up when they talk about something they care about.",
         "Confidence often looks like being comfortable with silence.",
         "First impressions are overrated. Most real connections take more than one awkward start."
       ],
       script: [
         { role: "user", content: "I freeze on first dates. What do I even ask?" },
-        { role: "bot", content: "Stay curious. Ask what someone is excited about right now. People open up when they talk about something they care about." },
+        { role: "bot", content: "Ask what they're excited about right now. People open up when they talk about something they care about." },
         { role: "ad", topic: "conversation cards for a first meeting" },
         { role: "user", content: "I try too hard to be impressive and it falls flat." },
         { role: "bot", content: "Being yourself holds up longer than performing. Light, honest talk lands better than a speech." },
