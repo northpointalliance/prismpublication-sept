@@ -11,7 +11,7 @@ This repository is the **single-product** static site and server-side SDK client
 
 - **Site:** Cloudflare Pages, files at repo root (`index.html`, `css/`, `js/`).
 - **Sandbox:** in-browser prompt matcher (`js/sandbox.js`). Cosine floor **0.65**. Matching budget **under 120ms**. Local catalog only.
-- **SDK:** `sdk/prismClient.js`. Call `displayAd` from Node or a Worker after the assistant answers. Bearer key never goes in the chat widget.
+- **SDK:** `sdk/prismClient.js`. Call `displayAd` from Node or a Worker after the assistant answers. Optional Google Ad Manager fan-out via `sdk/gamClient.js`. Bearer key never goes in the chat widget.
 - **Money:** intercept buyers who already run AI campaigns. Bill served labeled cards only. Operator detail: [docs/pricing.md](docs/pricing.md).
 
 ## Public contract (quote these)
