@@ -1,7 +1,7 @@
 // sdk/prismClient.js
 // Server-side client for Prism on Cloudflare Pages (static catalog).
 // Optional GAM fan-out. Do not import this file in a browser bundle.
-// There is no Supabase host and no Pages Function. No Prism-issued secret key.
+// This host is Cloudflare Pages. Static catalog. No key server. No Pages Function.
 
 import { fillFromGam, hasGamDemand } from "./gamClient.js";
 

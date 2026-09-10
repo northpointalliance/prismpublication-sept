@@ -89,7 +89,7 @@ Visitor          index.html       sandbox.js         Catalog
 ## Sequence: live publisher fill
 
 ```
-User     Chat UI     Publisher server     prismClient      Ads API / GAM
+User     Chat UI     Publisher server     prismClient      Pages catalog / GAM
   │         │               │                  │              │
   │ prompt  │               │                  │              │
   │────────►│               │                  │              │

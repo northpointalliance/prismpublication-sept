@@ -47,11 +47,11 @@ Public floors to print: cosine similarity **0.65**, matching budget **under 120m
 
 ## Deploy
 
-Static files at repo root. Cloudflare Pages or Workers static assets. No Vercel. No client-side fetch of the article body.
+Static files at repo root on **Cloudflare Pages**. Not Vercel. Not Workers static assets for this repo. No client-side fetch of the article body.
 
 ## Related public URLs
 
 - https://prismpublication.com/
-- https://prismpublication.com/publishers
-- https://prismpublication.com/demo
-- https://v1.prismpublication.com/ (legacy IA; canonicals still point at the hub)
+- https://prismpublication.com/demo/
+- https://prismpublication.com/developers/
+- https://prismpublication.com/ad-submission/

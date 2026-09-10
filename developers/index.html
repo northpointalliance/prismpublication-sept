@@ -39,10 +39,10 @@
             "mainEntity": [
               {
                 "@type": "Question",
-                "name": "Do you need a Prism API key?",
+                "name": "Where does matching run on Cloudflare Pages?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "No. This site is static Cloudflare Pages. There is no key server. Call displayAd from Node or a Worker after the assistant reply. It reads https://prismpublication.com/sdk/catalog.json. Do not load the client in the chat widget."
+                  "text": "On the publisher's server. displayAd reads https://prismpublication.com/sdk/catalog.json, a static file on this Pages site. There is no key server and no database on this host. Do not load the client in the chat widget."
                 }
               },
               {
@@ -58,7 +58,7 @@
                 "name": "Is Google Ad Manager available?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Yes. displayAd can fan out to Google Ad Manager and Prism on the server in the same 120ms budget. Configure GAM fill URL, network code, and ad unit on the server. Do not load googletag in the chat widget. A GAM card wins if both sources fill."
+                  "text": "Yes. displayAd can fan out to Google Ad Manager and the Pages catalog on the publisher server in the same 120ms budget. Configure GAM fill URL, network code, and ad unit on their server. Do not load googletag in the chat widget. A GAM card wins if both fill."
                 }
               },
               {
@@ -130,6 +130,13 @@
 
       <section class="aeo">
         <div class="container">
+          <h2>Where does matching run on Cloudflare Pages?</h2>
+          <p>
+            <strong>On the publisher's server. displayAd reads a static catalog on this Pages site. There is no key server and no database on this host.</strong>
+            Call it after the assistant reply. Do not load the client in the chat widget. The file is
+            <a href="https://prismpublication.com/sdk/catalog.json"><code>/sdk/catalog.json</code></a>.
+          </p>
+
           <h2>What does a fill look like in code?</h2>
           <p>
             <strong>Import the client on the server, wait for the assistant, then decide card or silence.</strong>
@@ -161,7 +168,7 @@ if (!card) {
           <h2>How does Google Ad Manager fan-out work?</h2>
           <p>
             <strong>Google Ad Manager is available. Both legs fire on the server in parallel. Neither GAM credential belongs in the chat widget.</strong>
-            Set fill URL, network code, and ad unit in environment variables or on the <code>gam</code> object. Each leg has 120 milliseconds. A miss or timeout on one leg is null, not a stall. If GAM and Prism both return a card, the GAM card is the one you render. Track Prism fills with <code>trackImpression</code> / <code>trackClick</code>. GAM fills stay on the GAM stack.
+            Set fill URL, network code, and ad unit in environment variables or on the <code>gam</code> object. Each leg has 120 milliseconds. A miss or timeout on one leg is null, not a stall. If GAM and the Pages catalog both return a card, the GAM card is the one you render. Track helpers on the Pages path return ok with no remote POST. GAM fills stay on the GAM stack.
           </p>
           <p>
             Do not load googletag in the transcript. Ad ops copy for buyers is on

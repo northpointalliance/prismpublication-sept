@@ -16,6 +16,7 @@ alwaysApply: true
 
 - Add `wrangler.toml`, `[assets]`, Worker `main` entrypoints, or `npx wrangler deploy` scripts.
 - Convert this repo into a Worker, Pages Function, or hybrid Workers+Assets project.
+- Add Supabase, Vercel, or a Prism-hosted Bearer key API. Fill is `sdk/catalog.json` on Pages.
 - Move the site behind a `/dist` or `/public` build output unless Pages is reconfigured to match (default is repo root).
 
 ## Examples
@@ -24,6 +25,7 @@ alwaysApply: true
 ❌ BAD  npx wrangler deploy
 ❌ BAD  Build command: none
 ❌ BAD  wrangler.toml with main = "src/index.ts"
+❌ BAD  supabase.co ads API or Vercel deploy
 ✅ GOOD Build command: echo "Building static site"
 ✅ GOOD Deploy command: true
 ✅ GOOD index.html, CSS, and JS at repo root

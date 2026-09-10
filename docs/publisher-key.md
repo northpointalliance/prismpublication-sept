@@ -2,7 +2,7 @@
 
 Operator doc. Updated **10 September 2026**. Not a public page.
 
-This host is **Cloudflare Pages, static files only**. There is no Supabase project, no Pages Function, no Worker in this repo, and **no Prism-issued secret key**. A third party does not wait for a Bearer token.
+This host is **Cloudflare Pages, static files only**. There is no database, no Pages Function, no Worker in this repo, and **no Prism-issued secret key**. A third party does not wait for a Bearer token. Do not send fill traffic to Vercel or to any leftover Edge Function host.
 
 ## What happens when a third party wants to wire a bot
 
@@ -32,7 +32,7 @@ Optional: they pass `gam` credentials for **their** Google Ad Manager fill URL. 
 | Piece | Role |
 |---|---|
 | `sdk/catalog.json` | Public creatives. Served as a static file on Pages. |
-| `sdk/prismClient.js` | Server matcher. Fetches that JSON (or a passed-in catalog). Does not POST to Supabase. |
+| `sdk/prismClient.js` | Server matcher. Fetches that JSON (or a passed-in catalog). No remote ads POST. |
 | `/demo/` and homepage sandbox | Same cosine idea in the browser. Still not a live auction. |
 | Email | Human contact for an IO or GAM. Not a key mint. |
 
@@ -50,7 +50,15 @@ Do not add `functions/`, `wrangler.toml`, or `npx wrangler deploy`. A secret key
 
 Live `GET https://prismpublication.com/sdk/catalog.json` will 404 until this file is on `main` and Pages has rebuilt. After deploy, expect 200 JSON with an `ads` array.
 
-Old leftover: `POST https://botnabfogcjrkpmdjgpr.supabase.co/functions/v1/api/ads` still answered `401 Unauthorized SDK key` in the earlier probe. **Do not use it.** This repo no longer points there.
+## Prompts that are wrong for this repo
+
+Do not answer as if this product still has:
+
+- A publisher API key, Bearer token, or signup/login
+- A Supabase or Vercel backend
+- Pages Functions or `npx wrangler deploy`
+
+Correct answers: matching is `displayAd` plus `sdk/catalog.json` on Cloudflare Pages. Email is for an IO or GAM, not a key.
 
 ## Failures still to watch
 
