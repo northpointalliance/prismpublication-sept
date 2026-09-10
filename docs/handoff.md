@@ -76,7 +76,7 @@ Production Pages project should track the branch Cloudflare already uses. If pro
 ## Open after 9 Sept
 
 - Merge `add-pages-static-deploy-rule` → `main` once uncommitted docs and sandbox fix are on the branch.
-- Issue publisher keys by email until a billing desk exists.
+- This Pages site does not mint API keys. Publishers call `displayAd` against `sdk/catalog.json`. Email is for IOs, not Bearer tokens. See [publisher-key.md](publisher-key.md).
 - First intercept IO: map one live AI campaign into fitness, sleep, or productivity per [ad-submission.md](ad-submission.md).
 - `scripts/build-static.js` / CMS editor: leave unused or delete in a later cleanup PR. Not required for Pages.
 
