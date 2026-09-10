@@ -1,5 +1,5 @@
 /**
- * Chat transcript demo. Local catalog only. Niches: travel, health and wellness, persona.
+ * Phone-sized travel chat demo. Local catalog only.
  * Fill when cosine >= 0.65. Do not import in a production chat widget.
  */
 (function () {
@@ -15,7 +15,6 @@
   var CATALOG = [
     {
       id: "ad_travel_cubes",
-      niche: "travel",
       title: "Packing cubes for a carry-on week",
       description: "Compress a short trip without checking a bag.",
       ctaText: "Shop on Amazon",
@@ -26,7 +25,6 @@
     },
     {
       id: "ad_travel_adapter",
-      niche: "travel",
       title: "Universal travel adapter",
       description: "One plug for hotel rooms when you already asked about the trip.",
       ctaText: "Shop on Amazon",
@@ -34,115 +32,23 @@
       advertiser: "Amazon",
       affiliate: true,
       tokens: "travel adapter plug hotel outlet trip abroad charger flight"
-    },
-    {
-      id: "ad_hw_protein",
-      niche: "health-wellness",
-      title: "Protein powder for a training week",
-      description: "Whey and plant protein when someone asks what to buy this week.",
-      ctaText: "Shop on Amazon",
-      clickUrl: amazonSearchUrl("whey protein powder"),
-      advertiser: "Amazon",
-      affiliate: true,
-      tokens: "protein powder whey plant training fitness workout gym lifting sleep recovery"
-    },
-    {
-      id: "ad_hw_sleep",
-      niche: "health-wellness",
-      title: "A quieter night",
-      description: "Sleep masks and sound machines when someone asks for a practical sleep aid.",
-      ctaText: "Shop on Amazon",
-      clickUrl: amazonSearchUrl("sleep sound machine"),
-      advertiser: "Amazon",
-      affiliate: true,
-      tokens: "sleep night rest sound machine mask quieter bedtime wellness pause"
-    },
-    {
-      id: "ad_persona_prompts",
-      niche: "persona",
-      title: "Conversation cards for a first meeting",
-      description: "Prompt cards when someone is already asking what to say in person.",
-      ctaText: "Shop on Amazon",
-      clickUrl: amazonSearchUrl("conversation starter cards adults"),
-      advertiser: "Amazon",
-      affiliate: true,
-      tokens: "conversation date talk questions icebreaker first meeting social persona chat"
     }
   ];
 
-  var NICHES = [
-    {
-      id: "travel",
-      label: "Travel",
-      title: "Travel assistant",
-      subtitle: "Trips, packing, carry-on",
-      scenario: "Someone is packing a carry-on and asking about the hotel plug. When the topic matches, a labeled partner card shows up in the thread.",
-      greeting: "Ask about packing, a trip, or a carry-on. Hit Play, or type your own line.",
-      placeholder: "Ask about packing, carry-on, or a trip",
-      ageGate: "",
-      replies: [
-        "Pack the outfit you will actually wear twice. Leave the just-in-case pile at home.",
-        "A carry-on week is packing cubes, one pair of shoes that walk, and a charger that fits the seat.",
-        "If you don't know the hotel outlet, one adapter beats a bag of cables.",
-        "Build the bag around the first 24 hours. Everything else is optional."
-      ],
-      script: [
-        { role: "user", content: "I have a four-day trip and I refuse to check a bag." },
-        { role: "bot", content: "A carry-on week is packing cubes, one pair of shoes that walk, and a charger that fits the seat." },
-        { role: "ad", topic: "I need packing cubes for a carry-on trip" },
-        { role: "user", content: "What about the hotel plug? I never remember the adapter." },
-        { role: "bot", content: "If you don't know the hotel outlet, one adapter beats a bag of cables." },
-        { role: "ad", topic: "universal travel adapter for the hotel" }
-      ]
-    },
-    {
-      id: "health-wellness",
-      label: "Health and wellness",
-      title: "Health and wellness assistant",
-      subtitle: "Training, protein, sleep",
-      scenario: "Someone asks about protein and sleep. A labeled card can show when that matches. We stay out of clinical claims.",
-      greeting: "Ask about training, protein, or sleep. Hit Play, or type your own line.",
-      placeholder: "Ask about protein, rest days, or sleep",
-      ageGate: "",
-      replies: [
-        "Consistency beats intensity. Three solid sessions a week beat five you cannot sustain.",
-        "Protein is the thing most people underdo. Eggs, Greek yogurt, chicken, cottage cheese add up fast.",
-        "Sleep is the habit most people skip. Dim the lights an hour before bed.",
-        "Recovery is where the gains happen. Do not skip rest days."
-      ],
-      script: [
-        { role: "user", content: "Any protein powder recommendations for lifting?" },
-        { role: "bot", content: "Protein is the thing most people underdo. Eggs, yogurt, chicken. A powder is one way to hit the week." },
-        { role: "ad", topic: "protein powder for lifting" },
-        { role: "user", content: "I have been struggling to sleep lately." },
-        { role: "bot", content: "Sleep is the habit most people skip. Dim the lights an hour before bed. Keep it practical, not a diagnosis." },
-        { role: "ad", topic: "sleep sound machine for winding down" }
-      ]
-    },
-    {
-      id: "persona",
-      label: "Persona",
-      title: "Persona chat",
-      subtitle: "Social and dating conversation",
-      scenario: "A persona bot people already talk to. A partner offer only when the topic matches, with a clear label. This demo is 18+.",
-      greeting: "This demo is 18+. Ask about first conversations. Hit Play, or type your own line.",
-      placeholder: "Ask about first dates or what to say",
-      ageGate: "18+ demo",
-      replies: [
-        "Stay curious. Ask questions and listen. People remember how they felt more than the exact words.",
-        "Ask what they're excited about right now. People open up when they talk about something they care about.",
-        "Confidence often looks like being comfortable with silence.",
-        "First impressions are overrated. Most real connections take more than one awkward start."
-      ],
-      script: [
-        { role: "user", content: "I freeze on first dates. What do I even ask?" },
-        { role: "bot", content: "Ask what they're excited about right now. People open up when they talk about something they care about." },
-        { role: "ad", topic: "conversation cards for a first meeting" },
-        { role: "user", content: "I try too hard to be impressive and it falls flat." },
-        { role: "bot", content: "Being yourself holds up longer than performing. Light, honest talk lands better than a speech." },
-        { role: "ad", topic: "conversation starter questions for adults" }
-      ]
-    }
+  var GREETING = "Ask about packing, a trip, or a carry-on. Hit Play, or type your own line.";
+  var REPLIES = [
+    "Pack the outfit you will actually wear twice. Leave the just-in-case pile at home.",
+    "A carry-on week is packing cubes, one pair of shoes that walk, and a charger that fits the seat.",
+    "If you don't know the hotel outlet, one adapter beats a bag of cables.",
+    "Build the bag around the first 24 hours. Everything else is optional."
+  ];
+  var SCRIPT = [
+    { role: "user", content: "I have a four-day trip and I refuse to check a bag." },
+    { role: "bot", content: "A carry-on week is packing cubes, one pair of shoes that walk, and a charger that fits the seat." },
+    { role: "ad", topic: "I need packing cubes for a carry-on trip" },
+    { role: "user", content: "What about the hotel plug? I never remember the adapter." },
+    { role: "bot", content: "If you don't know the hotel outlet, one adapter beats a bag of cables." },
+    { role: "ad", topic: "universal travel adapter for the hotel" }
   ];
 
   var STOP = {
@@ -150,13 +56,6 @@
     what: 1, is: 1, in: 1, need: 1, help: 1, me: 1, this: 1, that: 1,
     with: 1, from: 1, your: 1, our: 1, are: 1, was: 1, have: 1
   };
-
-  function nicheById(id) {
-    for (var i = 0; i < NICHES.length; i++) {
-      if (NICHES[i].id === id) return NICHES[i];
-    }
-    return NICHES[0];
-  }
 
   function tokenize(value) {
     return String(value || "")
@@ -193,12 +92,9 @@
     return dot / (Math.sqrt(magA) * Math.sqrt(magB));
   }
 
-  function matchPrompt(nicheId, prompt) {
+  function matchPrompt(prompt) {
     var queryVec = vector(tokenize(prompt));
-    var pool = CATALOG.filter(function (ad) {
-      return ad.niche === nicheId;
-    });
-    var scored = pool.map(function (ad) {
+    var scored = CATALOG.map(function (ad) {
       return { ad: ad, score: cosine(queryVec, vector(tokenize(ad.title + " " + ad.description + " " + ad.tokens))) };
     });
     scored.sort(function (x, y) {
@@ -209,10 +105,9 @@
     return best.ad;
   }
 
-  function pickReply(niche, index) {
-    var list = niche.replies;
-    var i = ((Number(index) % list.length) + list.length) % list.length;
-    return list[i];
+  function pickReply(index) {
+    var i = ((Number(index) % REPLIES.length) + REPLIES.length) % REPLIES.length;
+    return REPLIES[i];
   }
 
   function escapeHtml(str) {
@@ -232,13 +127,7 @@
   var resetBtn = document.querySelector("[data-demo-reset]");
   var input = document.querySelector("[data-demo-input]");
   var sendBtn = document.querySelector("[data-demo-send]");
-  var scenarioEl = document.querySelector("[data-demo-scenario]");
-  var titleEl = document.querySelector("[data-demo-title]");
-  var subtitleEl = document.querySelector("[data-demo-subtitle]");
-  var ageEl = document.querySelector("[data-demo-age]");
-  var tablist = document.querySelector("[data-demo-tabs]");
 
-  var niche = nicheById("travel");
   var timer = null;
   var index = 0;
   var messages = 0;
@@ -274,24 +163,8 @@
   function setPlayLabel() {
     if (!playBtn) return;
     if (playing) playBtn.textContent = "Pause";
-    else if (index >= niche.script.length && index > 0) playBtn.textContent = "Replay";
+    else if (index >= SCRIPT.length && index > 0) playBtn.textContent = "Replay";
     else playBtn.textContent = "Play";
-  }
-
-  function paintChrome() {
-    if (scenarioEl) scenarioEl.textContent = niche.scenario;
-    if (titleEl) titleEl.textContent = niche.title;
-    if (subtitleEl) subtitleEl.textContent = niche.subtitle;
-    if (ageEl) {
-      ageEl.hidden = !niche.ageGate;
-      ageEl.textContent = niche.ageGate;
-    }
-    if (input) input.placeholder = niche.placeholder;
-    if (tablist) {
-      tablist.querySelectorAll("[data-niche]").forEach(function (btn) {
-        btn.setAttribute("aria-selected", btn.getAttribute("data-niche") === niche.id ? "true" : "false");
-      });
-    }
   }
 
   function appendBubble(role, text) {
@@ -348,7 +221,7 @@
 
   async function showItem(item, token) {
     if (item.role === "ad") {
-      var ad = matchPrompt(niche.id, item.topic);
+      var ad = matchPrompt(item.topic);
       if (token !== runId) return;
       if (!ad) return;
       ads += 1;
@@ -370,11 +243,11 @@
     setComposerEnabled(false);
     var token = (runId += 1);
     setPlayLabel();
-    while (index < niche.script.length && playing && token === runId) {
-      await showItem(niche.script[index], token);
+    while (index < SCRIPT.length && playing && token === runId) {
+      await showItem(SCRIPT[index], token);
       if (token !== runId) return;
       index += 1;
-      if (playing && index < niche.script.length) await sleep(BETWEEN_MS);
+      if (playing && index < SCRIPT.length) await sleep(BETWEEN_MS);
     }
     playing = false;
     setComposerEnabled(true);
@@ -398,14 +271,8 @@
     if (log) log.innerHTML = "";
     if (stats.messages) stats.messages.textContent = "0";
     if (stats.ads) stats.ads.textContent = "0";
-    appendBubble("bot", niche.greeting);
+    appendBubble("bot", GREETING);
     setPlayLabel();
-  }
-
-  function selectNiche(id) {
-    niche = nicheById(id);
-    paintChrome();
-    reset();
   }
 
   function sendLive() {
@@ -416,8 +283,8 @@
     liveTurns += 1;
     if (stats.messages) stats.messages.textContent = String(messages);
     appendBubble("user", text);
-    appendBubble("bot", pickReply(niche, liveTurns));
-    var ad = matchPrompt(niche.id, text);
+    appendBubble("bot", pickReply(liveTurns));
+    var ad = matchPrompt(text);
     if (ad) {
       ads += 1;
       if (stats.ads) stats.ads.textContent = String(ads);
@@ -431,17 +298,11 @@
         stopPlayback();
         return;
       }
-      if (index >= niche.script.length) reset();
+      if (index >= SCRIPT.length) reset();
       playLoop();
     });
   }
   if (resetBtn) resetBtn.addEventListener("click", reset);
-  document.querySelectorAll("[data-niche]").forEach(function (btn) {
-    btn.addEventListener("click", function (event) {
-      event.preventDefault();
-      selectNiche(btn.getAttribute("data-niche"));
-    });
-  });
   if (sendBtn) {
     sendBtn.addEventListener("click", function (event) {
       event.preventDefault();
@@ -456,6 +317,5 @@
     });
   }
 
-  paintChrome();
   reset();
 })();

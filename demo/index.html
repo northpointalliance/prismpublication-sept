@@ -6,7 +6,7 @@
     <title>Chat ad demo | Prism Publication</title>
     <meta
       name="description"
-      content="Play a travel, health and wellness, or persona chat. A labeled card shows up only when the question is already about that product. Local demo, not a live auction."
+      content="A travel packing chat on a phone. A labeled card shows up only when the question is already about that product. Local demo, not a live auction."
     />
     <link rel="canonical" href="https://prismpublication.com/demo/" />
     <meta name="author" content="Daniel Rosenthal" />
@@ -25,17 +25,17 @@
             "dateModified": "2026-09-10",
             "author": { "@type": "Person", "name": "Daniel Rosenthal" },
             "publisher": { "@id": "https://prismpublication.com/#org" },
-            "description": "Travel, health and wellness, and persona. Play a script or type. Cards are labeled with the advertiser brand."
+            "description": "A travel packing chatbot on a phone. Play a script or type. Cards are labeled with the advertiser brand."
           },
           {
             "@type": "FAQPage",
             "mainEntity": [
               {
                 "@type": "Question",
-                "name": "Which chatbot niches does this demo use?",
+                "name": "What does this demo show?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Travel, health and wellness, and persona. Persona is an 18+ conversation demo. Matching happens in your browser. It is not a live auction."
+                  "text": "One travel packing chatbot, in a phone-sized chat. Matching happens in your browser. It is not a live auction."
                 }
               },
               {
@@ -43,7 +43,7 @@
                 "name": "When does a card show in the transcript?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Only when the line is already about an approved product in that niche. Off-topic lines still get a reply and no card. You would not be billed for that turn."
+                  "text": "Only when the line is already about packing cubes or a travel adapter. Off-topic lines still get a reply and no card. You would not be billed for that turn."
                 }
               }
             ]
@@ -70,77 +70,56 @@
     <main id="main">
       <section class="hero page-hero demo-hero">
         <div class="container">
-          <p class="audience-kicker">Live demo, three chatbot niches</p>
-          <h1>Watch a labeled ad land in a real chat, then stay out when it shouldn't.</h1>
+          <p class="audience-kicker">Live demo, travel packing</p>
+          <h1>A labeled ad in a phone chat. Out of the way when it shouldn't be there.</h1>
           <p class="subhead">
-            <strong>Travel, health and wellness, and persona.</strong>
-            Hit Play, or type after it finishes. When they're asking about that product, a labeled card sits in the same thread. When they're not, you just see the reply. This page is a local simulator, not a live auction.
+            <strong>One niche: travel.</strong>
+            Hit Play, or type after it finishes. Packing cubes and a hotel adapter can earn a labeled card. The weather would not. This page is a local simulator, not a live auction.
           </p>
         </div>
       </section>
 
       <section class="demo-board">
-        <div class="container demo-layout">
+        <div class="container demo-stage">
           <div class="demo-controls">
-            <article class="card demo-scenario">
-              <p class="audience-kicker">The scenario</p>
-              <p data-demo-scenario></p>
-              <p>Watch a labeled offer in the thread. No banners. No popups. Amazon links use tag prismpublicat-20.</p>
-            </article>
-            <div class="demo-tabs" role="tablist" aria-label="Chatbot niches" data-demo-tabs>
-              <button type="button" role="tab" aria-selected="true" data-niche="travel">Travel</button>
-              <button type="button" role="tab" aria-selected="false" data-niche="health-wellness">Health and wellness</button>
-              <button type="button" role="tab" aria-selected="false" data-niche="persona">Persona</button>
-            </div>
+            <p class="demo-scenario">Someone is packing a carry-on and asking about the hotel plug. When the topic matches, a labeled partner card shows up in the thread.</p>
             <div class="demo-actions">
               <button class="btn primary" type="button" data-demo-play>Play</button>
               <button class="btn secondary" type="button" data-demo-reset>Reset</button>
             </div>
-            <p class="demo-hint">Play a script, or type after it finishes. Same slot either way.</p>
-            <div class="demo-stats">
-              <article class="card">
-                <h3 data-stat-messages>0</h3>
-                <p>Messages</p>
-              </article>
-              <article class="card">
-                <h3 data-stat-ads>0</h3>
-                <p>Ads served</p>
-              </article>
-              <article class="card">
-                <h3>4.2%</h3>
-                <p>CTR est. Illustrative only.</p>
-              </article>
-            </div>
+            <p class="demo-hint"><span data-stat-messages>0</span> messages · <span data-stat-ads>0</span> ads served. Amazon links use tag prismpublicat-20.</p>
           </div>
 
-          <div class="demo-chat">
-            <header class="demo-chat-head">
-              <div>
-                <h2 data-demo-title>Travel assistant</h2>
-                <p data-demo-subtitle>Trips, packing, carry-on</p>
+          <div class="phone" aria-label="Phone-sized travel chat">
+            <div class="phone-bezel">
+              <p class="phone-notch" aria-hidden="true"></p>
+              <div class="demo-chat">
+                <header class="demo-chat-head">
+                  <div>
+                    <h2>Travel assistant</h2>
+                    <p>Trips, packing, carry-on</p>
+                  </div>
+                  <p class="demo-live">Live</p>
+                </header>
+                <div class="demo-log" data-chat-log aria-live="polite"></div>
+                <form class="demo-composer">
+                  <label class="skip" for="demo-input">Message</label>
+                  <input id="demo-input" data-demo-input type="text" maxlength="240" placeholder="Ask about packing or a trip" autocomplete="off" />
+                  <button class="btn primary" type="submit" data-demo-send>Send</button>
+                </form>
               </div>
-              <p class="demo-live">Live</p>
-              <p class="demo-age" data-demo-age hidden></p>
-            </header>
-            <div class="demo-log" data-chat-log aria-live="polite"></div>
-            <form class="demo-composer">
-              <label class="skip" for="demo-input">Message</label>
-              <input id="demo-input" data-demo-input type="text" maxlength="240" placeholder="Ask about packing, carry-on, or a trip" />
-              <button class="btn primary" type="submit" data-demo-send>Send</button>
-            </form>
+              <p class="phone-home" aria-hidden="true"></p>
+            </div>
           </div>
         </div>
       </section>
 
       <section class="aeo">
         <div class="container">
-          <h2>Which chatbot niches does this demo use?</h2>
+          <h2>What does this demo show?</h2>
           <p>
-            <strong>Travel, health and wellness, and persona.</strong>
-            Travel is packing and trips. Health and wellness is training, a protein goal, and winding down, not a clinical claim. Persona is an 18+ social conversation bot. The sponsored label names the advertiser, not Prism.
-          </p>
-          <p>
-            Google Ad Manager is available on the live SDK fan-out for publishers who already traffic GAM. This page does not call GAM. See
+            <strong>A travel packing chatbot, the size of a phone screen.</strong>
+            That is how most people actually talk to a bot. The sponsored label names the advertiser, not Prism. Google Ad Manager is available on the live SDK. This page does not call GAM. See
             <a href="https://prismpublication.com/developers/">developers</a>
             and
             <a href="https://prismpublication.com/ad-submission/">ad submission</a>.
