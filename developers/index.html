@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Wire a chatbot to Prism ads | Prism Publication</title>
+    <meta
+      name="description"
+      content="Keep the API key on your server. After the assistant replies, call displayAd. Render a labeled card with the advertiser's brand, or send the reply alone."
+    />
+    <link rel="canonical" href="https://prismpublication.com/developers/" />
+    <meta name="author" content="Daniel Rosenthal" />
+    <meta name="robots" content="index,follow" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://prismpublication.com/#org",
+            "name": "Prism Publication",
+            "url": "https://prismpublication.com/",
+            "email": "info@prismpublication.com"
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://prismpublication.com/developers/#webpage",
+            "url": "https://prismpublication.com/developers/",
+            "name": "Wire a chatbot to Prism ads | Prism Publication",
+            "datePublished": "2026-09-10",
+            "dateModified": "2026-09-10",
+            "author": { "@type": "Person", "name": "Daniel Rosenthal" },
+            "publisher": { "@id": "https://prismpublication.com/#org" },
+            "description": "How a publisher attaches an independent chatbot to Prism without putting a key in the browser."
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Where does the API key live?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "On your server. Call displayAd from Node or a Worker after the assistant reply is ready. Do not load the client in the chat widget."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What do you render if there is a card?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Title, description, destination URL, and a sponsored label that uses the advertiser's brand or product name. If displayAd returns nothing, send the assistant reply alone."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How do you get a publisher key?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Email info@prismpublication.com. Keys are issued by email until a billing desk exists."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site">
+      <div class="container">
+        <a class="brand" href="https://prismpublication.com/">Prism Publication</a>
+        <nav class="primary" aria-label="Primary">
+          <a href="https://prismpublication.com/#advertisers">Run ads</a>
+          <a href="https://prismpublication.com/#sandbox">See a card</a>
+          <a href="https://prismpublication.com/ad-submission/">Ad submission</a>
+          <a href="https://prismpublication.com/developers/">Developers</a>
+          <a href="mailto:info@prismpublication.com">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero page-hero">
+        <div class="container">
+          <p class="audience-kicker">For publishers wiring a bot</p>
+          <h1>How do you attach Prism without putting a key in the browser?</h1>
+          <p class="subhead">
+            <strong>Keep the key on your server. After the assistant finishes a reply, ask Prism for a card. The chat widget only draws HTML you already trust.</strong>
+            This page is the human guide. The JavaScript module is a file your server imports. It is not a landing page.
+          </p>
+          <div class="cta-group">
+            <a class="btn primary" href="mailto:info@prismpublication.com?subject=Publisher%20SDK%20key">Ask for a publisher key</a>
+            <a class="btn secondary" href="https://prismpublication.com/#sandbox">See a sample card</a>
+          </div>
+          <p class="meta">
+            By Daniel Rosenthal.
+            Published <time datetime="2026-09-10">10 September 2026</time>.
+            Last updated <time datetime="2026-09-10">10 September 2026</time>.
+          </p>
+        </div>
+      </section>
+
+      <section class="advertisers">
+        <div class="container">
+          <h2>What does your server do?</h2>
+          <p>
+            <strong>Call <code>displayAd</code> from Node or a Worker. Never bundle it into the chat widget.</strong>
+            Pass <code>botId</code>, <code>format: "card"</code>, and the user question as <code>topic</code>. If you get a card, render title, description, destination URL, and a sponsored label that uses the advertiser's brand or product name. If you get nothing, send the assistant reply alone. Matching must finish under 120 milliseconds or you also send the reply alone.
+          </p>
+          <p>
+            Email
+            <a href="mailto:info@prismpublication.com">info@prismpublication.com</a>
+            for a key. Advertisers submit creatives on
+            <a href="https://prismpublication.com/ad-submission/">ad submission</a>.
+            Do not paste the key into frontend code, and do not treat the module URL as a page to send a media buyer.
+          </p>
+        </div>
+      </section>
+
+      <section class="aeo">
+        <div class="container">
+          <h2>What does a fill look like in code?</h2>
+          <p>
+            <strong>Import the client on the server, wait for the assistant, then decide card or silence.</strong>
+            Copy this shape. Put your key in an environment variable. The widget never sees it.
+          </p>
+          <pre><code>import { displayAd } from "./prismClient.js";
+
+const card = await displayAd({
+  apiKey: process.env.PRISM_API_KEY,
+  botId: "your-bot-id",
+  topic: userQuestion,
+  format: "card",
+});
+
+if (!card) {
+  // send the assistant reply with no sponsored card
+}</code></pre>
+          <p>
+            The module file lives at
+            <a href="https://prismpublication.com/sdk/prismClient.js"><code>/sdk/prismClient.js</code></a>
+            for servers that import by URL. Open that link only if you are wiring an integration. It is source, not a product page.
+          </p>
+
+          <h2>What floors should you quote internally?</h2>
+          <p>
+            <strong>Serve only when the question is close enough to the ad copy, finish matching in under 120 milliseconds, and label every card with the advertiser's brand.</strong>
+            Cosine similarity 0.65 is how closeness is measured. Null means no card and no bill. Timeouts fail the same way.
+          </p>
+          <table>
+            <caption>Publisher matching floors</caption>
+            <thead>
+              <tr>
+                <th>What you ship</th>
+                <th>What we measure</th>
+                <th>Floor</th>
+                <th>If missed</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Card only when the user is already asking about that product</td>
+                <td>Cosine similarity of the question vs the creative</td>
+                <td>0.65</td>
+                <td>No card, no bill</td>
+              </tr>
+              <tr>
+                <td>The chat does not stall</td>
+                <td>Match latency</td>
+                <td>Under 120ms</td>
+                <td>No card, no bill</td>
+              </tr>
+              <tr>
+                <td>The user can tell it is an ad from that brand</td>
+                <td>Disclosure on the card</td>
+                <td>Sponsored, plus advertiser brand or product name</td>
+                <td>Creative does not run</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-grid">
+        <div>
+          <p>&copy; 2026 Prism Publication.</p>
+          <p>The SDK client is a server module. Do not load it in the browser.</p>
+        </div>
+        <ul>
+          <li><a href="https://prismpublication.com/">Home</a></li>
+          <li><a href="https://prismpublication.com/ad-submission/">Ad submission</a></li>
+          <li><a href="https://prismpublication.com/developers/">Developers</a></li>
+          <li><a href="mailto:info@prismpublication.com">info@prismpublication.com</a></li>
+        </ul>
+      </div>
+    </footer>
+  </body>
+</html>

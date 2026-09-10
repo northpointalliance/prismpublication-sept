@@ -212,9 +212,9 @@
           <h2>How do you attach a bot without putting a key in the browser?</h2>
           <p>
             <strong>Keep the key on your server. After the assistant reply is ready, ask Prism for a card. The chat widget only draws HTML you already trust.</strong>
-            There is no third-party ad tag in the transcript. If matching is too slow or the question is not close enough to an approved creative, send the reply alone. Import the client from
-            <a href="sdk/prismClient.js"><code>sdk/prismClient.js</code></a>
-            in Node or a Worker. Email <a href="mailto:info@prismpublication.com">info@prismpublication.com</a> for a publisher key.
+            There is no third-party ad tag in the transcript. If matching is too slow or the question is not close enough to an approved creative, send the reply alone. Read the
+            <a href="https://prismpublication.com/developers/">developer guide</a>
+            for the server call. Email <a href="mailto:info@prismpublication.com">info@prismpublication.com</a> for a publisher key.
           </p>
           <p>
             Call <code>displayAd</code> with <code>botId</code>, <code>format: "card"</code>, and <code>context.topic</code> set to the user question. Return title, description, URL, and a sponsored label that uses the advertiser's brand or product name. Those field names are the integration contract. They are not the pitch to a media buyer.
@@ -272,7 +272,7 @@
           <li><a href="#advertisers">Run ads</a></li>
           <li><a href="#sandbox">See a card</a></li>
           <li><a href="https://prismpublication.com/ad-submission/">Ad submission</a></li>
-          <li><a href="sdk/prismClient.js">SDK client</a></li>
+          <li><a href="https://prismpublication.com/developers/">Developers</a></li>
           <li><a href="mailto:info@prismpublication.com">info@prismpublication.com</a></li>
         </ul>
       </div>

@@ -491,3 +491,20 @@ footer {
 .page-hero .cta-group {
     justify-content: flex-start;
 }
+
+pre {
+    max-width: 44rem;
+    overflow-x: auto;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin: 0 0 1rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+pre code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    color: var(--text-main);
+}
