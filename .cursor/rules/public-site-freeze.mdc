@@ -1,0 +1,21 @@
+---
+description: Public HTML and CSS are frozen so crawlers and traffic see one stable site.
+alwaysApply: true
+---
+
+# Public site freeze
+
+`index.html`, `demo/index.html`, `developers/index.html`, `ad-submission/index.html`, and `css/styles.css` are locked.
+
+- Do not restyle, relaunch, rewrite, or "improve" public HTML or CSS.
+- Do not push layout, type, color, or copy changes that trigger a new Pages deploy.
+- Production is Git-connected Cloudflare Pages on `main`. One stable snapshot. No Wrangler deploys.
+
+Unlock only when Daniel explicitly says to change a public page.
+
+```text
+❌ BAD  New homepage layout, palette pass, or font-size sweep
+❌ BAD  npx wrangler pages deploy / wrangler deploy
+✅ GOOD Leave public HTML and CSS as committed
+✅ GOOD Docs, rules, and operator files only if asked
+```
