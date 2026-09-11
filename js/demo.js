@@ -35,7 +35,6 @@
     }
   ];
 
-  var GREETING = "Ask about packing, a trip, or a carry-on. Hit Play, or type your own line.";
   var REPLIES = [
     "Pack the outfit you will actually wear twice. Leave the just-in-case pile at home.",
     "A carry-on week is packing cubes, one pair of shoes that walk, and a charger that fits the seat.",
@@ -155,9 +154,12 @@
     if (log) log.scrollTop = log.scrollHeight;
   }
 
-  function setComposerEnabled(on) {
-    if (input) input.disabled = !on;
-    if (sendBtn) sendBtn.disabled = !on;
+  function setComposerEnabled() {
+    if (input) {
+      input.disabled = true;
+      input.placeholder = "Direct input disabled in this demo";
+    }
+    if (sendBtn) sendBtn.disabled = true;
   }
 
   function setPlayLabel() {
@@ -240,7 +242,7 @@
   async function playLoop() {
     if (playing) return;
     playing = true;
-    setComposerEnabled(false);
+    setComposerEnabled();
     var token = (runId += 1);
     setPlayLabel();
     while (index < SCRIPT.length && playing && token === runId) {
@@ -250,7 +252,7 @@
       if (playing && index < SCRIPT.length) await sleep(BETWEEN_MS);
     }
     playing = false;
-    setComposerEnabled(true);
+    setComposerEnabled();
     setPlayLabel();
   }
 
@@ -258,11 +260,32 @@
     playing = false;
     runId += 1;
     clearSleep();
-    setComposerEnabled(true);
+    setComposerEnabled();
     setPlayLabel();
   }
 
-  function reset() {
+  function paintFilled() {
+    stopPlayback();
+    index = SCRIPT.length;
+    messages = 4;
+    ads = 2;
+    liveTurns = 0;
+    if (log) log.innerHTML = "";
+    SCRIPT.forEach(function (item) {
+      if (item.role === "ad") {
+        var ad = matchPrompt(item.topic);
+        if (ad) renderAd(ad);
+        return;
+      }
+      appendBubble(item.role, item.content);
+    });
+    if (stats.messages) stats.messages.textContent = String(messages);
+    if (stats.ads) stats.ads.textContent = String(ads);
+    setPlayLabel();
+    scrollLog();
+  }
+
+  function startPlayback() {
     stopPlayback();
     index = 0;
     messages = 0;
@@ -271,25 +294,7 @@
     if (log) log.innerHTML = "";
     if (stats.messages) stats.messages.textContent = "0";
     if (stats.ads) stats.ads.textContent = "0";
-    appendBubble("bot", GREETING);
-    setPlayLabel();
-  }
-
-  function sendLive() {
-    var text = String(input && input.value ? input.value : "").trim();
-    if (!text || playing) return;
-    input.value = "";
-    messages += 1;
-    liveTurns += 1;
-    if (stats.messages) stats.messages.textContent = String(messages);
-    appendBubble("user", text);
-    appendBubble("bot", pickReply(liveTurns));
-    var ad = matchPrompt(text);
-    if (ad) {
-      ads += 1;
-      if (stats.ads) stats.ads.textContent = String(ads);
-      renderAd(ad);
-    }
+    playLoop();
   }
 
   if (playBtn) {
@@ -298,24 +303,21 @@
         stopPlayback();
         return;
       }
-      if (index >= SCRIPT.length) reset();
-      playLoop();
+      startPlayback();
     });
   }
-  if (resetBtn) resetBtn.addEventListener("click", reset);
+  if (resetBtn) resetBtn.addEventListener("click", paintFilled);
   if (sendBtn) {
     sendBtn.addEventListener("click", function (event) {
       event.preventDefault();
-      sendLive();
     });
   }
   var form = input && input.closest("form");
   if (form) {
     form.addEventListener("submit", function (event) {
       event.preventDefault();
-      sendLive();
     });
   }
 
-  reset();
+  paintFilled();
 })();

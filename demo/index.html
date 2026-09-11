@@ -22,10 +22,10 @@
             "url": "https://prismpublication.com/demo/",
             "name": "Chat ad demo | Prism Publication",
             "datePublished": "2026-09-10",
-            "dateModified": "2026-09-10",
+            "dateModified": "2026-09-11",
             "author": { "@type": "Person", "name": "Daniel Rosenthal" },
             "publisher": { "@id": "https://prismpublication.com/#org" },
-            "description": "A travel packing chatbot on a phone. Play a script or type. Cards are labeled with the advertiser brand."
+            "description": "A travel packing chatbot on a phone. The thread is pre-filled with sample lines and a labeled library card. It is not a live auction."
           },
           {
             "@type": "FAQPage",
@@ -35,7 +35,7 @@
                 "name": "What does this demo show?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "One travel packing chatbot, in a phone-sized chat. Matching happens in your browser. It is not a live auction."
+                  "text": "One travel packing chatbot, in a phone-sized chat. The thread is pre-filled with sample lines and labeled library cards. Matching happens in your browser. It is not a live auction."
                 }
               },
               {
@@ -74,7 +74,7 @@
           <h1>A labeled ad in a phone chat. Out of the way when it shouldn't be there.</h1>
           <p class="subhead">
             <strong>One niche: travel.</strong>
-            Hit Play, or type after it finishes. Packing cubes and a hotel adapter can earn a labeled card. The weather would not. This page is a local simulator, not a live auction.
+            The phone opens on a packed sample thread and a labeled library card. Play watches that script again. The composer is not a live field. This page is a local simulator, not a live auction.
           </p>
         </div>
       </section>
@@ -87,7 +87,7 @@
               <button class="btn primary" type="button" data-demo-play>Play</button>
               <button class="btn secondary" type="button" data-demo-reset>Reset</button>
             </div>
-            <p class="demo-hint"><span data-stat-messages>0</span> messages · <span data-stat-ads>0</span> ads served. Amazon links use tag prismpublicat-20.</p>
+            <p class="demo-hint"><span data-stat-messages>4</span> messages · <span data-stat-ads>2</span> ads served. Amazon links use tag prismpublicat-20.</p>
           </div>
 
           <div class="phone" aria-label="Phone-sized travel chat">
@@ -101,11 +101,28 @@
                   </div>
                   <p class="demo-live">Live</p>
                 </header>
-                <div class="demo-log" data-chat-log aria-live="polite"></div>
+                <div class="demo-log" data-chat-log aria-live="polite">
+                  <div class="bubble user">I have a four-day trip and I refuse to check a bag.</div>
+                  <div class="bubble bot">A carry-on week is packing cubes, one pair of shoes that walk, and a charger that fits the seat.</div>
+                  <article class="match-card">
+                    <span class="badge">Sponsored · Amazon</span>
+                    <h4>Packing cubes for a carry-on week</h4>
+                    <p>Compress a short trip without checking a bag.</p>
+                    <p><a class="btn primary" href="https://www.amazon.com/s?k=packing%20cubes%20carry%20on&amp;tag=prismpublicat-20" target="_blank" rel="sponsored noopener noreferrer">Shop on Amazon</a></p>
+                  </article>
+                  <div class="bubble user">What about the hotel plug? I never remember the adapter.</div>
+                  <div class="bubble bot">If you don't know the hotel outlet, one adapter beats a bag of cables.</div>
+                  <article class="match-card">
+                    <span class="badge">Sponsored · Amazon</span>
+                    <h4>Universal travel adapter</h4>
+                    <p>One plug for hotel rooms when you already asked about the trip.</p>
+                    <p><a class="btn primary" href="https://www.amazon.com/s?k=universal%20travel%20adapter&amp;tag=prismpublicat-20" target="_blank" rel="sponsored noopener noreferrer">Shop on Amazon</a></p>
+                  </article>
+                </div>
                 <form class="demo-composer">
                   <label class="skip" for="demo-input">Message</label>
-                  <input id="demo-input" data-demo-input type="text" maxlength="240" placeholder="Ask about packing or a trip" autocomplete="off" />
-                  <button class="btn primary" type="submit" data-demo-send>Send</button>
+                  <input id="demo-input" data-demo-input type="text" maxlength="240" placeholder="Direct input disabled in this demo" autocomplete="off" disabled />
+                  <button class="btn primary" type="submit" data-demo-send disabled>Send</button>
                 </form>
               </div>
               <p class="phone-home" aria-hidden="true"></p>
@@ -118,8 +135,8 @@
         <div class="container">
           <h2>What does this demo show?</h2>
           <p>
-            <strong>A travel packing chatbot, the size of a phone screen.</strong>
-            That is how most people actually talk to a bot. The sponsored label names the advertiser, not Prism. Google Ad Manager is available on the live SDK. This page does not call GAM. See
+            <strong>A travel packing chatbot, the size of a phone screen, already filled with sample lines and labeled Amazon cards from the library.</strong>
+            Play only replays that script. You do not type into this demo. See
             <a href="https://prismpublication.com/developers/">developers</a>
             and
             <a href="https://prismpublication.com/ad-submission/">ad submission</a>.
