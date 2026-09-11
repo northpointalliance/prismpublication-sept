@@ -13,10 +13,11 @@ alwaysApply: true
 
 Read `mem/current.md` first. Unlock only when Daniel explicitly says to change a public page.
 
-Rejected and do not restore: homepage category form, `js/sandbox.js` as the visitor UI, justified copy, white/blue full-width bands. Body stays left; only short headlines and CTAs center.
+Rejected and do not restore: homepage category form, `js/sandbox.js` as the visitor UI, justified copy, two-tone page washes, `linear-gradient` overlays, or `::before`/`::after` paints on html/body/main. Body stays left; only short headlines and CTAs center.
 
 ```text
 ❌ BAD  New homepage layout, palette pass, or font-size sweep
+❌ BAD  Tailwind CDN, default index boilerplate, linear-gradient wash
 ❌ BAD  Restore the old sandbox form
 ❌ BAD  npx wrangler pages deploy / wrangler deploy
 ✅ GOOD Leave public HTML and CSS as committed

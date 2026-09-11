@@ -1,5 +1,5 @@
 :root {
-    --bg-color: #f0f9ff;
+    --bg-color: #ffffff;
     --border-color: #7dd3fc;
     --text-main: #0c4a6e;
     --text-muted: #0c4a6e;
@@ -16,11 +16,13 @@
 }
 
 html, body {
-    background-color: #f0f9ff;
+    background-color: #ffffff !important;
+    background-image: none !important;
     margin: 0;
     padding: 0;
 }
 
+/* Locked page paint. No second wash, gradient, or overlay. Phone UI is excluded. */
 html,
 body,
 header,
@@ -34,7 +36,23 @@ pre,
 .aeo table,
 .aeo th,
 .aeo td {
-    background-color: #f0f9ff;
+    background-color: #ffffff !important;
+    background-image: none !important;
+}
+
+html::before,
+html::after,
+body::before,
+body::after,
+main::before,
+main::after,
+header::before,
+header::after,
+footer::before,
+footer::after {
+    content: none !important;
+    display: none !important;
+    background: none !important;
 }
 
 body {
@@ -90,7 +108,7 @@ a {
     position: absolute;
     left: 1rem;
     top: -3rem;
-    background-color: #f0f9ff;
+    background-color: #ffffff;
     color: var(--text-main);
     padding: 0.5rem 0.75rem;
     z-index: 20;
@@ -267,7 +285,7 @@ nav.primary a:hover {
 }
 
 .btn.secondary:hover {
-    background-color: #f0f9ff;
+    background-color: #ffffff;
 }
 
 .meta {
@@ -386,7 +404,7 @@ nav.primary a:hover {
 }
 
 .card {
-    background-color: #f0f9ff;
+    background-color: #ffffff;
     border: 1px solid var(--border-color);
     padding: 2rem;
     border-radius: 16px;
@@ -437,7 +455,7 @@ nav.primary a:hover {
 }
 
 .aeo th {
-    background: #f0f9ff;
+    background: #ffffff;
     color: var(--text-main);
 }
 
