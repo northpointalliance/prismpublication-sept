@@ -8,7 +8,7 @@ This repo is the live static site. It is not the hub. There is no `apps/memory` 
 - Host: Cloudflare Pages on GitHub `main`. Build `echo "Building static site"`. Never Wrangler deploy.
 - Pages: `index.html`, `demo/index.html`, `developers/index.html`, `ad-submission/index.html`, `css/styles.css`.
 - Visitor demo is the **phone thread** (Play/Reset, composer off). Not the category form.
-- Page wash `#f0f9ff`. No full-width white then blue then white bands. Marketing cards match the page. Phone screen stays white.
+- One page paint only: `#f0f9ff` on html, body, header, main, footer, sections, containers, cards, tables. No `--section` / `--card-bg` second wash. Buttons may use accent. Phone chrome and in-thread cards stay device UI, not page paint.
 - Alignment: paragraphs and long copy **left**. Headlines (h1/h2) and CTA groups **center**. No justify. No right-aligned body.
 - Measure: body lines about **75ch**. Body type **1.125rem** (never under 16px), `#1e293b` on `#f0f9ff`.
 - Contrast: normal text ≥ 4.5:1, large text ≥ 3:1. Links `#075985`, muted/headings `#0c4a6e`.
