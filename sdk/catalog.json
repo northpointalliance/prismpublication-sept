@@ -55,7 +55,7 @@
       "ctaText": "Start free trial",
       "clickUrl": "https://www.notion.so/product/ai",
       "advertiser": "Notion",
-      "affiliate": false,
+      "affiliate": true,
       "tokens": "notion notes ai productivity organize docs workspace draft email second brain"
     },
     {
