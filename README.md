@@ -37,7 +37,8 @@ docs/handoff.md         9 September 2026 GitHub handoff
 docs/pricing.md         Intercept pricing (operator)
 docs/ad-submission.md   Creative and brand-safety rules
 docs/aeo-strategy.md    Canonicals and crawler rules
-docs/publisher-key.md   Publisher key request path, smoke test, failures
+docs/publisher-key.md   How a third party wires fill on Pages
+docs/PUBLISHER-SMOKE-TEST.md  Operator smoke: Pages, not login/Supabase
 ```
 
 `scripts/build-static.js` and `components/editor.js` are leftover kit. Pages does not run them.

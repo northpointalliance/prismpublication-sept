@@ -4,6 +4,8 @@ Operator doc. Updated **10 September 2026**. Not a public page.
 
 This host is **Cloudflare Pages, static files only**. There is no database, no Pages Function, no Worker in this repo, and **no Prism-issued secret key**. A third party does not wait for a Bearer token. Do not send fill traffic to Vercel or to any leftover Edge Function host.
 
+Re-run checklist: [PUBLISHER-SMOKE-TEST.md](PUBLISHER-SMOKE-TEST.md).
+
 ## What happens when a third party wants to wire a bot
 
 ```
