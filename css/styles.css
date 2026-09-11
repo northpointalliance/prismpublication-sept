@@ -568,9 +568,11 @@ footer {
     border-bottom: 1px solid var(--border-color);
 }
 
-.demo-chat-head h2 {
+.demo-chat-head h2,
+.demo-chat-head h3 {
     font-size: 1rem;
     margin: 0;
+    font-weight: 700;
 }
 
 .demo-chat-head p {

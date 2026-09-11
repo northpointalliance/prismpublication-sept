@@ -182,28 +182,56 @@
           <h2>What does someone in the chat see?</h2>
           <p>
             <strong>A labeled card under the reply when they already asked about that product. Nothing extra when they did not.</strong>
-            The box below is a sample on this site, not where you run or host a campaign. Try a product question, then try the weather.
+            The phone below is a sample on this site, not where you run or host a campaign. Play watches that packed thread again.
           </p>
-          <form id="sandbox-form" class="sandbox-container">
-            <div class="controls">
-              <label for="sandbox-niche">Category</label>
-              <select id="sandbox-niche" name="niche">
-                <option value="fitness">Fitness</option>
-                <option value="sleep">Sleep tools</option>
-                <option value="productivity">Productivity</option>
-              </select>
-              <label for="sandbox-input">What the person asked</label>
-              <input id="sandbox-input" name="prompt" type="text" maxlength="240" value="what's a good protein powder for my workout routine this week?" />
-              <button class="btn primary" type="submit">Show the card</button>
-              <button class="btn secondary" type="button" data-sample="fitness">Fitness fill</button>
-              <button class="btn secondary" type="button" data-sample="sleep">Sleep fill</button>
-              <button class="btn secondary" type="button" data-sample="productivity">Productivity fill</button>
-              <button class="btn secondary" type="button" data-sample="miss">Stay silent</button>
+          <div class="demo-stage">
+            <div class="demo-controls">
+              <p class="demo-scenario">Someone is packing a carry-on and asking about the hotel plug. When the topic matches, a labeled partner card shows up in the thread.</p>
+              <div class="demo-actions">
+                <button class="btn primary" type="button" data-demo-play>Play</button>
+                <button class="btn secondary" type="button" data-demo-reset>Reset</button>
+              </div>
+              <p class="demo-hint"><span data-stat-messages>4</span> messages · <span data-stat-ads>2</span> ads served. Amazon links use tag prismpublicat-20.</p>
             </div>
-            <div class="output-panel" id="sandbox-output" aria-live="polite">
-              <p class="placeholder-text">Try a product question, or one that should not get an ad.</p>
+            <div class="phone" aria-label="Phone-sized travel chat">
+              <div class="phone-bezel">
+                <p class="phone-notch" aria-hidden="true"></p>
+                <div class="demo-chat">
+                  <header class="demo-chat-head">
+                    <div>
+                      <h3>Travel assistant</h3>
+                      <p>Trips, packing, carry-on</p>
+                    </div>
+                    <p class="demo-live">Live</p>
+                  </header>
+                  <div class="demo-log" data-chat-log aria-live="polite">
+                    <div class="bubble user">I have a four-day trip and I refuse to check a bag.</div>
+                    <div class="bubble bot">A carry-on week is packing cubes, one pair of shoes that walk, and a charger that fits the seat.</div>
+                    <article class="match-card">
+                      <span class="badge">Sponsored · Amazon</span>
+                      <h4>Packing cubes for a carry-on week</h4>
+                      <p>Compress a short trip without checking a bag.</p>
+                      <p><a class="btn primary" href="https://www.amazon.com/s?k=packing%20cubes%20carry%20on&amp;tag=prismpublicat-20" target="_blank" rel="sponsored noopener noreferrer">Shop on Amazon</a></p>
+                    </article>
+                    <div class="bubble user">What about the hotel plug? I never remember the adapter.</div>
+                    <div class="bubble bot">If you don't know the hotel outlet, one adapter beats a bag of cables.</div>
+                    <article class="match-card">
+                      <span class="badge">Sponsored · Amazon</span>
+                      <h4>Universal travel adapter</h4>
+                      <p>One plug for hotel rooms when you already asked about the trip.</p>
+                      <p><a class="btn primary" href="https://www.amazon.com/s?k=universal%20travel%20adapter&amp;tag=prismpublicat-20" target="_blank" rel="sponsored noopener noreferrer">Shop on Amazon</a></p>
+                    </article>
+                  </div>
+                  <form class="demo-composer">
+                    <label class="skip" for="sandbox-demo-input">Message</label>
+                    <input id="sandbox-demo-input" data-demo-input type="text" maxlength="240" placeholder="Direct input disabled in this demo" autocomplete="off" disabled />
+                    <button class="btn primary" type="submit" data-demo-send disabled>Send</button>
+                  </form>
+                </div>
+                <p class="phone-home" aria-hidden="true"></p>
+              </div>
             </div>
-          </form>
+          </div>
         </div>
       </section>
 
@@ -278,6 +306,6 @@
         </ul>
       </div>
     </footer>
-    <script src="js/sandbox.js" defer></script>
+    <script src="js/demo.js" defer></script>
   </body>
 </html>
