@@ -10,7 +10,7 @@ This repository is the **single-product** static site and server-side SDK client
 ## What it is
 
 - **Site:** Cloudflare Pages, files at repo root (`index.html`, `css/`, `js/`).
-- **Sandbox:** in-browser prompt matcher (`js/sandbox.js`). Cosine floor **0.65**. Matching budget **under 120ms**. Local catalog only.
+- **Homepage demo:** phone-frame scripted thread (`js/demo.js`), not a free-text sandbox. Play/Reset replays a fixed two-turn travel script; the composer is disabled. Each ad turn still runs the real cosine matcher (floor **0.65**) against a local catalog to pick the card, but visitors cannot type their own prompt here.
 - **SDK:** `sdk/prismClient.js`. Call `displayAd` from Node or a Worker after the assistant answers. It reads `sdk/catalog.json` on this Pages host. Optional Google Ad Manager fan-out via `sdk/gamClient.js`. No Prism-hosted secret key.
 - **Money:** intercept buyers who already run AI campaigns. Bill served labeled cards only. Operator detail: [docs/pricing.md](docs/pricing.md).
 
@@ -28,8 +28,8 @@ Do not invent fill rate or visitor counts on the homepage.
 
 ```
 index.html              Product page + JSON-LD
-css/styles.css          Layout and sandbox card
-js/sandbox.js           Local matcher
+css/styles.css          Layout and demo card
+js/demo.js              Scripted phone-thread demo (local cosine matcher, fixed script)
 sdk/prismClient.js      Server matcher against sdk/catalog.json
 sdk/catalog.json        Public creatives on Pages
 docs/architecture.md    System design and diagrams
@@ -55,7 +55,7 @@ Rules that enforce this: `.cursor/rules/prism-pages-static.mdc`, `.cursor/rules/
 
 ## Local preview
 
-Serve the repo root over HTTP (any static server). Open `/`. Run Fitness fill / Below 0.65 in the sandbox. A fill must not show cosine or millisecond text on the sponsored card.
+Serve the repo root over HTTP (any static server). Open `/` and press Play on the phone demo to watch the scripted travel thread render two sponsored Amazon cards; Reset replays it. A fill must not show cosine or millisecond text on the sponsored card.
 
 ## Contact
 

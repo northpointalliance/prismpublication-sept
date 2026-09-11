@@ -1,5 +1,7 @@
 # GitHub handoff | 9 September 2026
 
+**Superseded.** This is a point-in-time snapshot of 9 Sept 2026 — kept as-is for history, not updated as the site changed. `js/sandbox.js` and the Fitness/Sleep/Productivity fill buttons described below were replaced by the scripted `js/demo.js` travel-packing thread shortly after. For current state, read [architecture.md](architecture.md) and the root [README.md](../README.md) instead.
+
 Handoff for [northpointalliance/prismpublication-sept](https://github.com/northpointalliance/prismpublication-sept). Audience: whoever clones, reviews a PR, or wires Cloudflare Pages. Read [architecture.md](architecture.md) and the root [README.md](../README.md) with this file.
 
 ## Snapshot

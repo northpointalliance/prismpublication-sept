@@ -36,7 +36,7 @@ How fill is wired: [publisher-key.md](publisher-key.md)
 2. Confirm the sample is `displayAd({ topic: userQuestion })` with optional `gam`. No `apiKey`.
 3. Open [catalog.json](https://prismpublication.com/sdk/catalog.json). You should see creatives, not an auth error.
 4. Open [demo](https://prismpublication.com/demo/). Play. A labeled **Amazon** packing-cubes card can show. Weather-style lines should not.
-5. Homepage sandbox: protein / sleep / productivity fills; Stay silent stays empty. Badge is advertiser brand.
+5. Homepage `#sandbox` section: same scripted travel-packing thread as `/demo/`, embedded inline. Play/Reset only, no free-text fills. Badge is advertiser brand.
 6. Email `info@prismpublication.com` only if they want an IO or GAM, not a token.
 
 ## Matcher smoke (local, no network)
