@@ -11,11 +11,14 @@ alwaysApply: true
 - Do not push layout, type, color, or copy changes that trigger a new Pages deploy.
 - Production is Git-connected Cloudflare Pages on `main`. One stable snapshot. No Wrangler deploys.
 
-Unlock only when Daniel explicitly says to change a public page.
+Read `mem/current.md` first. Unlock only when Daniel explicitly says to change a public page.
+
+Rejected and do not restore: homepage category form, `js/sandbox.js` as the visitor UI, justified copy, white/blue full-width bands. Body stays left; only short headlines and CTAs center.
 
 ```text
 ❌ BAD  New homepage layout, palette pass, or font-size sweep
+❌ BAD  Restore the old sandbox form
 ❌ BAD  npx wrangler pages deploy / wrangler deploy
 ✅ GOOD Leave public HTML and CSS as committed
-✅ GOOD Docs, rules, and operator files only if asked
+✅ GOOD Docs, rules, and mem/current.md only if asked
 ```

@@ -5,9 +5,9 @@
     --card-bg: #ffffff;
     --border-color: #7dd3fc;
     --text-main: #0c4a6e;
-    --text-muted: #075985;
-    --accent: #0369a1;
-    --accent-hover: #075985;
+    --text-muted: #0c4a6e;
+    --accent: #075985;
+    --accent-hover: #0c4a6e;
     --success: #047857;
 }
 
@@ -34,8 +34,10 @@ body {
 }
 
 p, li, blockquote {
-    font-size: 1.05rem;
+    font-size: 1.125rem;
     line-height: 1.55;
+    text-align: left;
+    max-width: 75ch;
 }
 
 h1, h2, h3, h4 {
@@ -43,8 +45,27 @@ h1, h2, h3, h4 {
     color: var(--text-main);
 }
 
+h1 {
+    font-weight: 800;
+}
+
+h2 {
+    font-weight: 700;
+    font-size: 2rem;
+}
+
+h3 {
+    font-weight: 700;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
 a {
     color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
 }
 
 :focus-visible {
@@ -103,33 +124,25 @@ nav.primary {
 nav.primary a {
     color: var(--text-muted);
     text-decoration: none;
-    font-size: 1.05rem;
+    font-size: 1.125rem;
+    font-weight: 600;
 }
 
 nav.primary a:hover {
     color: var(--text-main);
 }
 
-.hero,
-.advertisers,
-.niches,
-.sandbox-section,
-.aeo,
-.developers,
-.demo-board {
-    text-align: left;
-}
-
 .hero {
     padding: 6rem 0 4rem 0;
     background: var(--bg-color);
+    text-align: center;
 }
 
 .hero h1,
 .page-hero h1 {
     font-size: 2.85rem;
     font-weight: 800;
-    margin: 0 0 1.25rem;
+    margin: 0 auto 1.25rem;
     max-width: 22ch;
     letter-spacing: -0.025em;
 }
@@ -138,29 +151,41 @@ nav.primary a:hover {
 .page-hero .subhead {
     font-size: 1.35rem;
     color: var(--text-muted);
-    max-width: 44rem;
-    margin: 0 0 2rem;
+    max-width: 75ch;
+    margin: 0 auto 2rem;
+    text-align: left;
 }
 
 .cta-group {
     display: flex;
     gap: 1rem;
-    justify-content: flex-start;
+    justify-content: center;
     flex-wrap: wrap;
 }
 
 .highlights-kicker,
 .audience-kicker {
-    margin: 2.5rem 0 1rem;
-    font-size: 0.95rem;
+    margin: 2.5rem auto 1rem;
+    font-size: 1rem;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--text-muted);
+    text-align: center;
 }
 
 .audience-kicker {
-    margin: 0 0 0.85rem;
+    margin: 0 auto 0.85rem;
+}
+
+.advertisers,
+.niches,
+.sandbox-section,
+.aeo,
+.developers,
+.demo-board,
+.page-hero {
+    text-align: left;
 }
 
 .hero .highlights {
@@ -179,7 +204,7 @@ nav.primary a:hover {
 }
 
 .hero .highlights p {
-    font-size: 1.05rem;
+    font-size: 1.125rem;
     margin: 0;
 }
 
@@ -202,14 +227,15 @@ nav.primary a:hover {
 
 .btn {
     display: inline-block;
-    padding: 0.85rem 1.6rem;
+    padding: 0.9rem 1.7rem;
+    min-height: 2.75rem;
     border-radius: 6px;
-    font-weight: 600;
+    font-weight: 700;
     text-decoration: none;
     transition: background 0.2s;
     cursor: pointer;
     border: 0;
-    font-size: 1.1rem;
+    font-size: 1.125rem;
 }
 
 .btn.primary {
@@ -249,8 +275,9 @@ nav.primary a:hover {
 .developers h2,
 .aeo h2 {
     font-size: 2rem;
-    margin: 0 0 0.75rem;
+    margin: 0 auto 0.75rem;
     max-width: 36rem;
+    text-align: center;
 }
 
 .sandbox-section > .container > p,
@@ -259,8 +286,8 @@ nav.primary a:hover {
 .aeo p,
 .niches .section-lead {
     color: var(--text-muted);
-    margin: 0 0 1.25rem;
-    max-width: 44rem;
+    margin: 0 auto 1.25rem;
+    max-width: 75ch;
     text-align: left;
 }
 
@@ -419,11 +446,14 @@ nav.primary a:hover {
     margin-bottom: 1rem;
     color: var(--accent);
     font-size: 1.3rem;
+    text-align: left;
 }
 
 .card p {
     color: var(--text-muted);
-    font-size: 1.1rem;
+    font-size: 1.125rem;
+    text-align: left;
+    max-width: none;
 }
 
 .aeo {
@@ -472,22 +502,18 @@ footer {
     color: var(--text-muted);
     font-size: 1.05rem;
     background: var(--bg-color);
-    text-align: left;
 }
 
 .footer-grid {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: flex-start;
-    gap: 1.5rem;
+    gap: 2rem;
+    flex-wrap: wrap;
 }
 
 .footer-grid ul {
     list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 0.75rem 1.25rem;
 }
 
 .footer-grid a {
@@ -516,12 +542,13 @@ footer {
 .demo-stage {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 1.25rem;
 }
 
 .demo-controls {
-    max-width: 32rem;
+    max-width: 75ch;
+    text-align: left;
 }
 
 .demo-scenario {
@@ -532,7 +559,7 @@ footer {
 
 .demo-actions {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 0.75rem;
     margin-bottom: 0.5rem;
 }
