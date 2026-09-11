@@ -1,311 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Chat ads on independent AI chatbots | Prism Publication</title>
-    <meta
-      name="description"
-      content="A labeled product card next to a chatbot reply, only when someone is already asking about that product. Brands run the ads. If we stay quiet, you are not billed."
-    />
-    <link rel="canonical" href="https://prismpublication.com/" />
-    <meta name="author" content="Daniel Rosenthal" />
-    <meta name="robots" content="index,follow" />
-    <link rel="stylesheet" href="css/styles.css" />
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@graph": [
-          {
-            "@type": "Organization",
-            "@id": "https://prismpublication.com/#org",
-            "name": "Prism Publication",
-            "url": "https://prismpublication.com/",
-            "email": "info@prismpublication.com"
-          },
-          {
-            "@type": "WebSite",
-            "@id": "https://prismpublication.com/#website",
-            "url": "https://prismpublication.com/",
-            "name": "Prism Publication",
-            "publisher": { "@id": "https://prismpublication.com/#org" }
-          },
-          {
-            "@type": "WebPage",
-            "@id": "https://prismpublication.com/#webpage",
-            "url": "https://prismpublication.com/",
-            "name": "Chat ads on independent AI chatbots | Prism Publication",
-            "isPartOf": { "@id": "https://prismpublication.com/#website" },
-            "datePublished": "2026-09-09",
-            "dateModified": "2026-09-11",
-            "author": { "@type": "Person", "name": "Daniel Rosenthal" },
-            "publisher": { "@id": "https://prismpublication.com/#org" },
-            "description": "A labeled product card next to a chatbot reply, only when someone is already asking about that product."
-          },
-          {
-            "@type": "FAQPage",
-            "mainEntity": [
-              {
-                "@type": "Question",
-                "name": "Who should use the sandbox?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Advertisers who want to test a contextual campaign against a real question, before that card sits next to a live bot reply. Bring the campaign you already run. You only pay when a labeled card actually shows."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "When does a sponsored card show?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Only when the person is already asking about that product. If they are not, the bot still answers and no card shows. You are not billed for that turn."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "How do engineers attach a bot on Cloudflare Pages?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Import displayAd on your server after the assistant reply. The matcher reads a static catalog on Cloudflare Pages. There is no Prism-hosted secret key. Matching must finish under 120ms or return no card."
-                }
-              }
-            ]
-          }
-        ]
-      }
-    </script>
-  </head>
-  <body>
-    <a class="skip" href="#main">Skip to content</a>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prism Publication - Test your ad on real conversations</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <a class="skip" href="#main-content">Skip to content</a>
+
     <header class="site">
-      <div class="container">
-        <a class="brand" href="https://prismpublication.com/">Prism Publication</a>
-        <nav class="primary" aria-label="Primary">
-          <a href="#advertisers">Run ads</a>
-          <a href="https://prismpublication.com/demo/">Demo</a>
-          <a href="#niches">Categories</a>
-          <a href="#sdk">Developers</a>
-          <a href="mailto:info@prismpublication.com">Contact</a>
-        </nav>
-      </div>
+        <div class="container">
+            <a href="#" class="brand">Prism Publication</a>
+            <nav class="primary">
+                <a href="#how-it-works">How it works</a>
+                <a href="mailto:info@prismpublication.com">Contact</a>
+                <button class="btn primary" onclick="switchView('form')">Start a test</button>
+            </nav>
+        </div>
     </header>
 
-    <main id="main">
-      <section class="hero">
-        <div class="container">
-          <h1>Chat ads on independent AI chatbots</h1>
-          <p class="subhead">
-            <strong>Show a labeled product card under the bot's reply, and only when the person is already asking about that product.</strong>
-            Your brand is on the badge, not Prism. If they asked about the weather, we stay out of the chat and you do not pay for that turn.
-          </p>
-          <div class="cta-group">
-            <a class="btn primary" href="https://prismpublication.com/demo/">Open the demo</a>
-            <a class="btn secondary" href="mailto:info@prismpublication.com?subject=Run%20ads%20on%20Prism">Run ads with us</a>
-          </div>
-          <p class="highlights-kicker">For media and brand teams</p>
-          <div class="grid highlights">
-            <article class="card">
-              <h3>They're already asking</h3>
-              <p>You show up when someone asks for a protein goal, a packing cube, or a sleep sound machine, not as a banner on a random turn.</p>
-            </article>
-            <article class="card">
-              <h3>No card, no bill</h3>
-              <p>If we do not show a sponsored card, that turn does not cost you anything.</p>
-            </article>
-            <article class="card">
-              <h3>Smaller chatbots</h3>
-              <p>These are independent assistants, not ChatGPT's homepage. You can run the same product story you already buy in AI campaigns.</p>
-            </article>
-            <article class="card">
-              <h3>Always labeled</h3>
-              <p>Every card says sponsored and names your brand or product. If you take the card away, the bot's answer still has to make sense.</p>
-            </article>
-          </div>
-          <p class="meta">
-            By Daniel Rosenthal.
-            Published <time datetime="2026-09-09">9 September 2026</time>.
-            Last updated <time datetime="2026-09-11">11 September 2026</time>.
-          </p>
-        </div>
-      </section>
-
-      <section class="advertisers" id="advertisers">
-        <div class="container">
-          <p class="audience-kicker">Advertisers and agencies</p>
-          <h2>Who should use the sandbox?</h2>
-          <p>
-            <strong>Advertisers who want to test a contextual campaign against a real question, before that card sits next to a live bot reply.</strong>
-            You are not starting from a blank brief. Bring the campaign you already run: category, creative, destination, and a daily or lifetime cap. Prism puts that same story on independent chatbots. <strong>Google Ad Manager is available.</strong>
-            Keep GAM on the sites and apps you already use. On chat, the publisher can ask GAM and Prism in the same turn.
-          </p>
-          <p>
-            We only bill when a labeled card actually shows. Weather question, no ad. "Any protein powder for lifting this week?" can earn a disclosed card under the reply. Email
-            <a href="mailto:info@prismpublication.com">info@prismpublication.com</a>
-            the campaign you already run. Creative rules are in
-            <a href="https://prismpublication.com/ad-submission/">ad submission</a>.
-          </p>
-        </div>
-      </section>
-
-      <section class="niches" id="niches">
-        <div class="container">
-          <h2>What does Prism allow, review, or ban?</h2>
-          <p class="section-lead">
-            <strong>You keep your own categories. Prism sets what is permitted. A person reads every campaign before it can run.</strong>
-            Allowed on this page today: fitness, sleep tools, and productivity. The phone demo is travel packing. Any other niche waits in review. Banned: impersonating the assistant, weapons, explosives, political campaigning, and medical or legal advice sold as a bot recommendation. Gambling stays off wellness bots. Alcohol and adult products stay off bots that are not age-gated 18+.
-          </p>
-          <div class="grid">
-            <article class="card">
-              <h3>Fitness</h3>
-              <p>
-                Workout routines, protein goals, bands, and running gear when they are already talking about training. Short questions. A natural place for a product card.
-              </p>
-            </article>
-            <article class="card">
-              <h3>Sleep tools</h3>
-              <p>
-                Sound machines and masks when they want a quieter night, not a diagnosis. Practical sleep aids only.
-              </p>
-            </article>
-            <article class="card">
-              <h3>Productivity</h3>
-              <p>
-                Notes, a daily planner, a task list. The Notion sample is how a software offer should sit next to a reply, without pretending the bot wrote it.
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="sandbox-section" id="sandbox">
-        <div class="container">
-          <h2>What does someone in the chat see?</h2>
-          <p>
-            <strong>A labeled card under the reply when they already asked about that product. Nothing extra when they did not.</strong>
-            The phone below is a sample on this site, not where you run or host a campaign. Play watches that packed thread again.
-          </p>
-          <div class="demo-stage">
-            <div class="demo-controls">
-              <p class="demo-scenario">Someone is packing a carry-on and asking about the hotel plug. When the topic matches, a labeled partner card shows up in the thread.</p>
-              <div class="demo-actions">
-                <button class="btn primary" type="button" data-demo-play>Play</button>
-                <button class="btn secondary" type="button" data-demo-reset>Reset</button>
-              </div>
-              <p class="demo-hint"><span data-stat-messages>4</span> messages · <span data-stat-ads>2</span> ads served. Amazon links use tag prismpublicat-20.</p>
-            </div>
-            <div class="phone" aria-label="Phone-sized travel chat">
-              <div class="phone-bezel">
-                <p class="phone-notch" aria-hidden="true"></p>
-                <div class="demo-chat">
-                  <header class="demo-chat-head">
-                    <div>
-                      <h3>Travel assistant</h3>
-                      <p>Trips, packing, carry-on</p>
-                    </div>
-                    <p class="demo-live">Live</p>
-                  </header>
-                  <div class="demo-log" data-chat-log aria-live="polite">
-                    <div class="bubble user">I have a four-day trip and I refuse to check a bag.</div>
-                    <div class="bubble bot">A carry-on week is packing cubes, one pair of shoes that walk, and a charger that fits the seat.</div>
-                    <article class="match-card">
-                      <span class="badge">Sponsored · Amazon</span>
-                      <h4>Packing cubes for a carry-on week</h4>
-                      <p>Compress a short trip without checking a bag.</p>
-                      <p><a class="btn primary" href="https://www.amazon.com/s?k=packing%20cubes%20carry%20on&amp;tag=prismpublicat-20" target="_blank" rel="sponsored noopener noreferrer">Shop on Amazon</a></p>
-                    </article>
-                    <div class="bubble user">What about the hotel plug? I never remember the adapter.</div>
-                    <div class="bubble bot">If you don't know the hotel outlet, one adapter beats a bag of cables.</div>
-                    <article class="match-card">
-                      <span class="badge">Sponsored · Amazon</span>
-                      <h4>Universal travel adapter</h4>
-                      <p>One plug for hotel rooms when you already asked about the trip.</p>
-                      <p><a class="btn primary" href="https://www.amazon.com/s?k=universal%20travel%20adapter&amp;tag=prismpublicat-20" target="_blank" rel="sponsored noopener noreferrer">Shop on Amazon</a></p>
-                    </article>
-                  </div>
-                  <form class="demo-composer">
-                    <label class="skip" for="sandbox-demo-input">Message</label>
-                    <input id="sandbox-demo-input" data-demo-input type="text" maxlength="240" placeholder="Direct input disabled in this demo" autocomplete="off" disabled />
-                    <button class="btn primary" type="submit" data-demo-send disabled>Send</button>
-                  </form>
+    <main id="main-content" class="container">
+        <!-- View 1: Landing Page Hero & Interactive Demo -->
+        <div id="view-hero">
+            <section class="hero">
+                <div class="highlights-kicker">What does someone in the chat see?</div>
+                <h1>Test your ad on real conversations, on our own site.</h1>
+                <p class="subhead">A labeled card under the reply when they already asked about that product. <strong>Nothing extra when they did not.</strong> The phone below is a sample on this site, not where you run or host a campaign. Play watches that packed thread again.</p>
+                
+                <div class="cta-group">
+                    <button class="btn primary" onclick="switchView('form')">Start a test</button>
+                    <a class="btn secondary" href="#how-it-works">See how matching works</a>
                 </div>
-                <p class="phone-home" aria-hidden="true"></p>
-              </div>
+            </section>
+
+            <!-- Interactive Demo Board Section -->
+            <section class="demo-board" id="how-it-works">
+                <div class="container">
+                    <div class="demo-stage">
+                        <div class="demo-controls">
+                            <p class="demo-scenario">Someone is packing a carry-on and asking about the hotel plug. When the topic matches, a labeled partner card shows up in the thread.</p>
+                            <div class="demo-actions">
+                                <button class="btn primary" type="button" data-demo-play>Play</button>
+                                <button class="btn secondary" type="button" data-demo-reset>Reset</button>
+                            </div>
+                            <p class="demo-hint"><span data-stat-messages>4</span> messages &bull; <span data-stat-ads>2</span> ads served. Amazon links use tag prismpublicat-20.</p>
+                        </div>
+
+                        <div class="phone" aria-label="Phone-sized travel chat">
+                            <div class="phone-bezel">
+                                <p class="phone-notch" aria-hidden="true"></p>
+                                <div class="demo-chat">
+                                    <header class="demo-chat-head">
+                                        <div>
+                                            <h3>Travel assistant</h3>
+                                            <p>Trips, packing, carry-on</p>
+                                        </div>
+                                        <p class="demo-live">Live</p>
+                                    </header>
+
+                                    <div class="demo-log" data-chat-log aria-live="polite">
+                                        <!-- Dynamic chat items populated by js/demo.js -->
+                                    </div>
+
+                                    <form class="demo-composer">
+                                        <label class="skip" for="home-demo-input">Message</label>
+                                        <input id="home-demo-input" data-demo-input type="text" maxlength="240" placeholder="Direct input disabled in this demo" autocomplete="off" disabled />
+                                        <button class="btn primary" type="submit" data-demo-send disabled>Send</button>
+                                    </form>
+                                </div>
+                                <p class="phone-home" aria-hidden="true"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- View 2: Multi-step Form View -->
+        <section id="view-form" class="sandbox-section" style="display: none;">
+            <div class="highlights-kicker">Start a test</div>
+            <h2>Tell us what you already run</h2>
+            <p style="text-align: center;">Three short steps. Nothing here charges you, it only starts the review, and you will hear back with a fixed price before anything goes live.</p>
+            <p class="meta" style="text-align: center; margin: 0 auto 2rem;">Prefer email? Write to <a href="mailto:info@prismpublication.com">info@prismpublication.com</a> with the same details.</p>
+
+            <div class="card" style="max-width: 600px; margin: 0 auto;">
+                <div class="progress-bars" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 30px;">
+                    <div style="height: 4px; background-color: var(--accent); border-radius: 2px;"></div>
+                    <div style="height: 4px; background-color: var(--border-color); border-radius: 2px;"></div>
+                    <div style="height: 4px; background-color: var(--border-color); border-radius: 2px;"></div>
+                </div>
+
+                <form onsubmit="event.preventDefault(); alert('Thanks — we will follow up by email with a fixed price.');">
+                    <div style="margin-bottom: 20px; text-align: left;">
+                        <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; color: var(--text-main);">Brand or company</label>
+                        <input type="text" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" placeholder="Acme Inc.">
+                    </div>
+
+                    <div style="margin-bottom: 20px; text-align: left;">
+                        <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; color: var(--text-main);">Work email</label>
+                        <input type="email" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" placeholder="you@yourcompany.com">
+                    </div>
+
+                    <div style="margin-bottom: 20px; text-align: left;">
+                        <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; color: var(--text-main);">Category</label>
+                        <select style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem; background: #fff;">
+                            <option>Sleep tools</option>
+                            <option>Productivity SaaS</option>
+                            <option>Developer Tools</option>
+                        </select>
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; margin-top: 30px;">
+                        <button type="submit" class="btn primary">Continue</button>
+                    </div>
+                </form>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="aeo developers" id="sdk">
-        <div class="container">
-          <p class="audience-kicker">For engineers wiring a bot</p>
-          <h2>How do you attach a bot on Cloudflare Pages?</h2>
-          <p>
-            <strong>There is no Prism-hosted secret key. After the bot has an answer, call displayAd from your server. The chat widget only draws HTML you already trust.</strong>
-            The matcher reads a static catalog on this Pages site. If matching is too slow, or the question is not close enough, send the reply alone. The
-            <a href="https://prismpublication.com/developers/">developer guide</a>
-            has the server call. Email <a href="mailto:info@prismpublication.com">info@prismpublication.com</a> if you are wiring a live bot.
-          </p>
-          <p>
-            Call <code>displayAd</code> with the user's question as the topic. You get back a title, description, URL, and a sponsored label that uses the advertiser's brand. That is for the engineer wiring the bot, not for the media brief.
-          </p>
-
-          <h2>What should a developer quote, and how does a buyer hear it?</h2>
-          <p>
-            <strong>Show the ad only when the question is already about that product, decide fast enough that the chat does not freeze, and label every card.</strong>
-            The three rows below are the public floors. 0.65 cosine and 120 milliseconds are how we build the matcher. "Close enough" and "the chat does not stall" are how a media lead should hear the same rules. No card means no bill.
-          </p>
-          <table>
-            <caption>Public matching contract, in buyer language and in engineer language</caption>
-            <thead>
-              <tr>
-                <th>What a buyer hears</th>
-                <th>What we measure</th>
-                <th>Floor</th>
-                <th>If missed</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Show the ad only when the question is already about that product</td>
-                <td>Cosine similarity of the user question vs the creative</td>
-                <td>0.65</td>
-                <td>No card, no bill</td>
-              </tr>
-              <tr>
-                <td>The chat does not stall while we decide</td>
-                <td>Match latency</td>
-                <td>Under 120ms</td>
-                <td>No card, no bill</td>
-              </tr>
-              <tr>
-                <td>The user can tell it is an ad from that brand</td>
-                <td>Disclosure copy on the card</td>
-                <td>Sponsored, plus advertiser brand or product name</td>
-                <td>Creative does not run</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
+        </section>
     </main>
 
     <footer>
-      <div class="container footer-grid">
-        <div>
-          <p>&copy; 2026 Prism Publication.</p>
-          <p>As an Amazon Associate, Prism Publication earns from qualifying purchases. Sandbox links use tag prismpublicat-20.</p>
-          <p>Chat ads are labelled sponsored placements. The demo on this page is a local simulator, not a live auction.</p>
+        <div class="container footer-grid">
+            <div>
+                <p><strong>Prism Publication</strong> &nbsp;&bull;&nbsp; Contextual ads on prismpublication.com's own traffic, not a third-party network</p>
+                <p>Payment by PayPal &bull; invoiced without VAT, Osek Patur registration &bull; <a href="mailto:info@prismpublication.com">info@prismpublication.com</a></p>
+            </div>
         </div>
-        <ul>
-          <li><a href="https://prismpublication.com/">Home</a></li>
-          <li><a href="#advertisers">Run ads</a></li>
-          <li><a href="https://prismpublication.com/demo/">Demo</a></li>
-          <li><a href="https://prismpublication.com/ad-submission/">Ad submission</a></li>
-          <li><a href="https://prismpublication.com/developers/">Developers</a></li>
-          <li><a href="mailto:info@prismpublication.com">info@prismpublication.com</a></li>
-        </ul>
-      </div>
     </footer>
+
+    <script>
+        // View Controller logic
+        function switchView(target) {
+            const hero = document.getElementById('view-hero');
+            const form = document.getElementById('view-form');
+            if(target === 'form') {
+                hero.style.display = 'none';
+                form.style.display = 'block';
+            } else {
+                hero.style.display = 'block';
+                form.style.display = 'none';
+            }
+        }
+    </script>
     <script src="js/demo.js" defer></script>
-  </body>
+</body>
 </html>
