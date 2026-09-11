@@ -62,7 +62,7 @@ a {
 }
 
 header.site {
-    background: var(--card-bg);
+    background: var(--bg-color);
     border-bottom: 1px solid var(--border-color);
 }
 
@@ -111,7 +111,7 @@ nav.primary a:hover {
 
 .hero {
     padding: 6rem 0 4rem 0;
-    background: linear-gradient(180deg, var(--bg-color), var(--section));
+    background: var(--bg-color);
 }
 
 .hero h1,
@@ -229,9 +229,7 @@ nav.primary a:hover {
 
 .sandbox-section {
     padding: 4rem 0;
-    background-color: var(--section);
-    border-top: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-color);
 }
 
 .sandbox-section h2,
@@ -364,8 +362,7 @@ nav.primary a:hover {
 
 .advertisers {
     padding: 4rem 0;
-    background: var(--section);
-    border-top: 1px solid var(--border-color);
+    background: var(--bg-color);
 }
 
 .advertisers p strong,
@@ -409,7 +406,6 @@ nav.primary a:hover {
 
 .aeo {
     padding: 3rem 0 5rem;
-    border-top: 1px solid var(--border-color);
     background: var(--bg-color);
 }
 
@@ -453,7 +449,7 @@ footer {
     padding: 3rem 0;
     color: var(--text-muted);
     font-size: 1.05rem;
-    background: var(--section-deep);
+    background: var(--bg-color);
     text-align: center;
 }
 
