@@ -16,11 +16,11 @@ Single-product static site plus a server-side chat-ad client. One commercial int
 
 | Layer | What ships | What does not |
 |---|---|---|
-| Public site | `index.html`, `css/styles.css`, `js/sandbox.js` at repo root | No `wrangler.toml`, no Pages Functions, no `/dist` output |
+| Public site | `index.html`, `css/styles.css`, `js/demo.js` at repo root | No `wrangler.toml`, no Pages Functions, no `/dist` output |
 | Host | Cloudflare Pages, Git from GitHub | Not Workers, not Vercel |
 | Build | `echo "Building static site"` | Not `npx wrangler deploy`, not `scripts/build-static.js` |
 | Live ads | `sdk/prismClient.js` matches `sdk/catalog.json` on the publisher **server** (static file on Pages). Optional GAM fan-out. | Never bundled into the chat widget; no googletag; no Supabase; no Pages Functions |
-| Sandbox | Local token cosine in the browser | No API key, not a live auction |
+| Homepage demo | Local token cosine in the browser, run against a fixed scripted thread (Play/Reset) | No API key, not a live auction, no free-text input (composer disabled) |
 | Auth | None on this host. Catalog is public JSON. | No Bearer key store; HMAC not used |
 
 Default catalog: `PRISM_CATALOG_URL` or `https://prismpublication.com/sdk/catalog.json`. Third-party wiring and smoke results: [publisher-key.md](publisher-key.md).
@@ -28,12 +28,12 @@ Default catalog: `PRISM_CATALOG_URL` or `https://prismpublication.com/sdk/catalo
 ## Entrypoint
 
 1. Humans and crawlers: `index.html` at `/`.
-2. Sandbox: `js/sandbox.js` on `DOMContentLoaded`, then `applySample("fitness")`.
+2. Homepage demo: `js/demo.js` waits for the visitor to press **Play**, then types out the fixed travel script turn by turn, scoring each ad turn against the local catalog with the same cosine matcher. **Reset** replays it. No `DOMContentLoaded` auto-run and no free-text prompt.
 3. Production fill: publisher Node or Worker imports `displayAd` from `sdk/prismClient.js` **after** the assistant finishes a complete thought.
 
 `scripts/build-static.js` and `components/editor.js` are leftover kit. They are not on the Pages path. The live homepage does not import them.
 
-## Matcher state machine (sandbox and live contract)
+## Matcher state machine (homepage demo and live contract)
 
 Public floors: cosine **0.65**, match budget **under 120ms**. Miss or timeout: `null`. Null is not billable.
 
@@ -43,9 +43,9 @@ Public floors: cosine **0.65**, match budget **under 120ms**. Miss or timeout: `
                           ▼
                  ┌─────────────────┐
                  │     IDLE        │
-                 │  (form / SDK)   │
+                 │ (Play / SDK)    │
                  └────────┬────────┘
-                          │ run / displayAd
+                          │ play / displayAd
                           ▼
                  ┌─────────────────┐
                  │    MATCHING     │
@@ -67,22 +67,23 @@ Public floors: cosine **0.65**, match budget **under 120ms**. Miss or timeout: `
    └─────────────┘                 └─────────────┘
 ```
 
-Fill card UI (sandbox, 9 Sept): badge, title, description, CTA. No cosine, advertiser name, or millisecond line on the sponsored card. Null results may still show matcher stats in the sandbox only.
+Fill card UI (homepage demo, current): badge, title, description, CTA. No cosine, advertiser name, or millisecond line on the sponsored card. Message/ad counters are the only matcher stats shown, and only for the scripted run.
 
-## Sequence: sandbox (this repo)
+## Sequence: homepage demo (this repo)
 
 ```
-Visitor          index.html       sandbox.js         Catalog
+Visitor          index.html       demo.js            Catalog (in-file)
    │                  │                │                │
    │  GET /           │                │                │
    │─────────────────►│                │                │
    │  HTML+CSS+JS     │                │                │
    │◄─────────────────│                │                │
-   │  Match prompt    │                │                │
-   │─────────────────►│───────────────►│  score pool    │
+   │  Press Play      │                │                │
+   │─────────────────►│───────────────►│  score fixed   │
+   │                  │                │   script turn  │
    │                  │                │───────────────►│
    │                  │                │◄───────────────│
-   │  card or null    │◄───────────────│                │
+   │  card, in order  │◄───────────────│                │
    │◄─────────────────│  no network    │                │
 ```
 
@@ -118,9 +119,9 @@ See [pricing.md](pricing.md). Buyer is an **active AI campaign** owner. Bill ren
 
 | Path | Role |
 |---|---|
-| `index.html` | Product page, JSON-LD, hero, sandbox markup, SDK Q&A |
-| `css/styles.css` | Light-blue marketing tokens, hero highlights, sandbox card |
-| `js/sandbox.js` | Local cosine catalog (fitness, sleep, productivity) |
+| `index.html` | Product page, JSON-LD, hero, phone demo markup, SDK Q&A |
+| `css/styles.css` | Light-blue marketing tokens, hero highlights, demo card |
+| `js/demo.js` | Scripted phone-thread demo (travel packing), local cosine catalog, Play/Reset |
 | `sdk/prismClient.js` | Server `displayAd` against static `sdk/catalog.json` |
 | `sdk/catalog.json` | Public creatives on Pages |
 | `sdk/gamClient.js` | GAM demand leg (fill URL, network, ad unit) |

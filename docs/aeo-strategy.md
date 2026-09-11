@@ -13,7 +13,7 @@ Operator notes. Do not paste this file onto the live homepage. The page must rea
 ## What crawlers must see in view-source
 
 - Hero, sandbox explanation, demo transcripts, and Q&A sections as static HTML
-- The simulator may rewrite a card in `#sandbox-output`. The demos and AEO sections stay in the first response
+- The demo script may rewrite cards inside the `[data-chat-log]` thread on Play/Reset. The demos and AEO sections stay in the first response
 - Prices and affiliate disclosure as text, not as a canvas
 - JSON-LD in `<head>` that matches visible copy (`WebSite`, `Organization`, `FAQPage`, `Person` author)
 
@@ -41,9 +41,9 @@ Target 120–180 words per H2 block. Refresh or re-evaluate inside three months.
 
 Prefer commas, colons, periods, and `|` in titles. Grep for `—` before ship. Keep the count near zero.
 
-## Sandbox vs production claims
+## Demo vs production claims
 
-Public floors to print: cosine similarity **0.65**, matching budget **under 120ms**. The sandbox is a local catalog that reports score and `performance.now()` elapsed time. It is not a live auction. Do not invent fill rate or monthly visitor counts.
+Public floors to print: cosine similarity **0.65**, matching budget **under 120ms**. The homepage/`/demo/` thread is a scripted, local-catalog playback (Play/Reset, no free-text input) that shows message/ad counts only, not a score or timing readout. It is not a live auction. Do not invent fill rate or monthly visitor counts.
 
 ## Deploy
 

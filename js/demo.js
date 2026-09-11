@@ -5,8 +5,8 @@
 (function () {
   var AMAZON_TAG = "prismpublicat-20";
   var THRESHOLD = 0.65;
-  var WORD_MS = 28;
-  var BETWEEN_MS = 420;
+  var WORD_MS = 42;
+  var BETWEEN_MS = 550;
 
   function amazonSearchUrl(query) {
     return "https://www.amazon.com/s?k=" + encodeURIComponent(query) + "&tag=" + AMAZON_TAG;
@@ -26,7 +26,7 @@
     {
       id: "ad_travel_adapter",
       title: "Universal travel adapter",
-      description: "One plug for hotel rooms when you already asked about the trip.",
+      description: "One plug covers any hotel outlet.",
       ctaText: "Shop on Amazon",
       clickUrl: amazonSearchUrl("universal travel adapter"),
       advertiser: "Amazon",
