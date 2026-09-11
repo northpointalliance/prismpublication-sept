@@ -117,7 +117,7 @@ nav.primary a:hover {
 .aeo,
 .developers,
 .demo-board {
-    text-align: center;
+    text-align: left;
 }
 
 .hero {
@@ -129,7 +129,7 @@ nav.primary a:hover {
 .page-hero h1 {
     font-size: 2.85rem;
     font-weight: 800;
-    margin: 0 auto 1.25rem;
+    margin: 0 0 1.25rem;
     max-width: 22ch;
     letter-spacing: -0.025em;
 }
@@ -139,19 +139,19 @@ nav.primary a:hover {
     font-size: 1.35rem;
     color: var(--text-muted);
     max-width: 44rem;
-    margin: 0 auto 2rem auto;
+    margin: 0 0 2rem;
 }
 
 .cta-group {
     display: flex;
     gap: 1rem;
-    justify-content: center;
+    justify-content: flex-start;
     flex-wrap: wrap;
 }
 
 .highlights-kicker,
 .audience-kicker {
-    margin: 2.5rem auto 1rem;
+    margin: 2.5rem 0 1rem;
     font-size: 0.95rem;
     font-weight: 700;
     letter-spacing: 0.06em;
@@ -160,7 +160,7 @@ nav.primary a:hover {
 }
 
 .audience-kicker {
-    margin: 0 auto 0.85rem;
+    margin: 0 0 0.85rem;
 }
 
 .hero .highlights {
@@ -232,7 +232,7 @@ nav.primary a:hover {
 }
 
 .meta {
-    margin: 1.5rem auto 0;
+    margin: 1.5rem 0 0;
     font-size: 1.05rem;
     color: var(--text-muted);
     max-width: 44rem;
@@ -249,7 +249,7 @@ nav.primary a:hover {
 .developers h2,
 .aeo h2 {
     font-size: 2rem;
-    margin: 0 auto 0.75rem;
+    margin: 0 0 0.75rem;
     max-width: 36rem;
 }
 
@@ -259,8 +259,9 @@ nav.primary a:hover {
 .aeo p,
 .niches .section-lead {
     color: var(--text-muted);
-    margin: 0 auto 1.25rem;
+    margin: 0 0 1.25rem;
     max-width: 44rem;
+    text-align: left;
 }
 
 .sandbox-section > .container > p {
@@ -271,7 +272,7 @@ nav.primary a:hover {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
-    background: var(--card-bg);
+    background: var(--bg-color);
     border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 2rem;
@@ -402,17 +403,16 @@ nav.primary a:hover {
 .chat-wrapper,
 .card,
 .sandbox-container {
-    background-color: #ffffff;
+    background-color: #f0f9ff;
     border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    box-shadow: none;
 }
 
 .card {
-    background-color: #ffffff;
+    background-color: #f0f9ff;
     border: 1px solid var(--border-color);
     padding: 2rem;
     border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .card h3 {
@@ -435,10 +435,10 @@ nav.primary a:hover {
     width: 100%;
     max-width: 56rem;
     border-collapse: collapse;
-    margin: 1.25rem auto 0;
+    margin: 1.25rem 0 0;
     font-size: 1.05rem;
     text-align: left;
-    background: var(--card-bg);
+    background: var(--bg-color);
 }
 
 .aeo caption {
@@ -472,13 +472,13 @@ footer {
     color: var(--text-muted);
     font-size: 1.05rem;
     background: var(--bg-color);
-    text-align: center;
+    text-align: left;
 }
 
 .footer-grid {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     gap: 1.5rem;
 }
 
@@ -486,7 +486,7 @@ footer {
     list-style: none;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0.75rem 1.25rem;
 }
 
@@ -500,7 +500,7 @@ footer {
 }
 
 .footer-grid p {
-    margin: 0 auto 0.5rem;
+    margin: 0 0 0.5rem;
     max-width: 40rem;
 }
 
@@ -516,7 +516,7 @@ footer {
 .demo-stage {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     gap: 1.25rem;
 }
 
@@ -532,7 +532,7 @@ footer {
 
 .demo-actions {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0.75rem;
     margin-bottom: 0.5rem;
 }
@@ -694,11 +694,11 @@ footer {
 pre {
     max-width: 44rem;
     overflow-x: auto;
-    background: var(--card-bg);
+    background: var(--bg-color);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 1rem 1.25rem;
-    margin: 0 auto 1.25rem;
+    margin: 0 0 1.25rem;
     font-size: 1rem;
     line-height: 1.55;
     text-align: left;
