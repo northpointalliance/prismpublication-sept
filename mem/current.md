@@ -2,6 +2,18 @@
 
 This repo is the live static site. It is not the hub. There is no `apps/memory` Worker here. Next session starts from this file, not from another rebuild.
 
+## FROZEN (13 September 2026) — read this before touching anything
+
+Daniel has spent repeated sessions rebuilding this homepage across different tools (Cursor, Cowork, Gemini) and wants that to stop. **The homepage exactly as it exists on `main` right now — this `index.html`, `css/styles.css`, `js/demo.js`, nav, copy, colors, and the phone demo — is the permanent baseline.** Do not redesign it, restructure it, re-theme it, or rewrite its copy on your own initiative, no matter how it was reached ("this is more correct," "this reads better," matching a mockup someone pasted in). If a task seems to require changing the homepage's look, structure, or copy, stop and ask first.
+
+A separate branch/PR (`cursor/prefilled-demo-thread`, PR #12) rebuilt this homepage from a different tool's output and was **closed without merging** on 13 September 2026 for exactly this reason. Do not resurrect it, cherry-pick from it, or treat its existence as evidence the homepage should change.
+
+**The only new work permitted right now:**
+- A blog (new pages/section)
+- Legal pages: Terms & Conditions, Privacy
+
+Both are additive — their own pages/files. They do not touch `index.html`, `css/styles.css`, `js/demo.js`, or the existing nav/colors/hierarchy, beyond adding a nav link to the new pages if asked.
+
 ## Locked public site
 
 - Origin: https://prismpublication.com/

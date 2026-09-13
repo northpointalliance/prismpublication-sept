@@ -7,6 +7,8 @@ This repository is the **single-product** static site and server-side SDK client
 **Live origin:** [https://prismpublication.com/](https://prismpublication.com/)  
 **GitHub:** [northpointalliance/prismpublication-sept](https://github.com/northpointalliance/prismpublication-sept)
 
+> **Read [mem/current.md](mem/current.md) before changing public HTML or CSS.** The homepage is frozen as of 13 September 2026 — no more redesigns. Only additive work (a blog, legal Terms & Conditions / Privacy pages) is in scope until Daniel says otherwise.
+
 ## What it is
 
 - **Site:** Cloudflare Pages, files at repo root (`index.html`, `css/`, `js/`).
@@ -39,9 +41,9 @@ docs/ad-submission.md   Creative and brand-safety rules
 docs/aeo-strategy.md    Canonicals and crawler rules
 docs/publisher-key.md   How a third party wires fill on Pages
 docs/PUBLISHER-SMOKE-TEST.md  Operator smoke: Pages, not login/Supabase
+docs/affiliate-tracker.md    House affiliate program tracker
+mem/current.md          Locked decisions carry-forward — read before editing HTML/CSS
 ```
-
-`scripts/build-static.js` and `components/editor.js` are leftover kit. Pages does not run them.
 
 ## Deploy (Cloudflare Pages)
 
