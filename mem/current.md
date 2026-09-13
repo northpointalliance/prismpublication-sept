@@ -2,6 +2,22 @@
 
 This repo is the live static site. It is not the hub. There is no `apps/memory` Worker here. Next session starts from this file, not from another rebuild.
 
+## FROZEN (13 September 2026) — read this before touching anything
+
+Daniel has spent repeated sessions rebuilding this homepage across different tools (Cursor, Cowork, Gemini) and wants that to stop. **The homepage — `index.html`, `css/styles.css`, `js/demo.js`, and the phone demo UX/colors/layout as they exist after [PR #12](https://github.com/northpointalliance/prismpublication-sept/pull/12) — is the baseline.** Do not redesign it, restructure it, re-theme it, or "improve" its copy or layout on your own initiative.
+
+**The only new work permitted right now:**
+- A blog (new pages/section)
+- Legal pages: Terms & Conditions, Privacy
+
+Both are additive. They get their own pages/files. They do not change `index.html`, `css/styles.css`, `js/demo.js`, or the nav/colors/hierarchy already in place, beyond adding a nav link to the new pages if asked.
+
+**Known, accepted drift — do not "fix" these as a side effect of other work; only touch them if Daniel explicitly asks:**
+- `index.html` has no JSON-LD in `<head>` and no SDK Q&A section (`docs/aeo-strategy.md` calls for both, but adding them means editing the homepage, which is frozen).
+- Two paragraphs in the "Start a test" form are center-aligned, not left, per the alignment rule below.
+
+If a task seems to require changing the homepage's look, structure, or copy, stop and ask first — do not treat "it'll look better" or "this is more correct" as authorization.
+
 ## Locked public site
 
 - Origin: https://prismpublication.com/
