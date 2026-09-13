@@ -2,6 +2,8 @@
 
 Single-product static site plus a server-side chat-ad client. One commercial intent: labeled native cards on independent AI chatbots when prompt overlap is high enough; otherwise silence.
 
+**Homepage is frozen as of 13 September 2026** — see [mem/current.md](../mem/current.md). Only additive work (blog, legal pages) is in scope; do not redesign `index.html`, `css/styles.css`, or `js/demo.js`.
+
 ```
 ╔════════════════════════════════════════╗
 ║ PROJECT: Prism Publication             ║
@@ -18,7 +20,7 @@ Single-product static site plus a server-side chat-ad client. One commercial int
 |---|---|---|
 | Public site | `index.html`, `css/styles.css`, `js/demo.js` at repo root | No `wrangler.toml`, no Pages Functions, no `/dist` output |
 | Host | Cloudflare Pages, Git from GitHub | Not Workers, not Vercel |
-| Build | `echo "Building static site"` | Not `npx wrangler deploy`, not `scripts/build-static.js` |
+| Build | `echo "Building static site"` | Not `npx wrangler deploy` |
 | Live ads | `sdk/prismClient.js` matches `sdk/catalog.json` on the publisher **server** (static file on Pages). Optional GAM fan-out. | Never bundled into the chat widget; no googletag; no Supabase; no Pages Functions |
 | Homepage demo | Local token cosine in the browser, run against a fixed scripted thread (Play/Reset) | No API key, not a live auction, no free-text input (composer disabled) |
 | Auth | None on this host. Catalog is public JSON. | No Bearer key store; HMAC not used |
@@ -31,7 +33,7 @@ Default catalog: `PRISM_CATALOG_URL` or `https://prismpublication.com/sdk/catalo
 2. Homepage demo: `js/demo.js` waits for the visitor to press **Play**, then types out the fixed travel script turn by turn, scoring each ad turn against the local catalog with the same cosine matcher. **Reset** replays it. No `DOMContentLoaded` auto-run and no free-text prompt.
 3. Production fill: publisher Node or Worker imports `displayAd` from `sdk/prismClient.js` **after** the assistant finishes a complete thought.
 
-`scripts/build-static.js` and `components/editor.js` are leftover kit. They are not on the Pages path. The live homepage does not import them.
+Advertiser flow: `#advertisers` and `#sdk` are same-page anchors, not separate views — there is no client-side view toggle on this homepage.
 
 ## Matcher state machine (homepage demo and live contract)
 
