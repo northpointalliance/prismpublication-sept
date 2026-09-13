@@ -1,4 +1,4 @@
-# Architecture | Prism Publication (9 September 2026)
+# Architecture | Prism Publication (last updated 11 September 2026)
 
 Single-product static site plus a server-side chat-ad client. One commercial intent: labeled native cards on independent AI chatbots when prompt overlap is high enough; otherwise silence.
 
@@ -18,10 +18,12 @@ Single-product static site plus a server-side chat-ad client. One commercial int
 |---|---|---|
 | Public site | `index.html`, `css/styles.css`, `js/demo.js` at repo root | No `wrangler.toml`, no Pages Functions, no `/dist` output |
 | Host | Cloudflare Pages, Git from GitHub | Not Workers, not Vercel |
-| Build | `echo "Building static site"` | Not `npx wrangler deploy`, not `scripts/build-static.js` |
+| Build | `echo "Building static site"` | Not `npx wrangler deploy` |
 | Live ads | `sdk/prismClient.js` matches `sdk/catalog.json` on the publisher **server** (static file on Pages). Optional GAM fan-out. | Never bundled into the chat widget; no googletag; no Supabase; no Pages Functions |
 | Homepage demo | Local token cosine in the browser, run against a fixed scripted thread (Play/Reset) | No API key, not a live auction, no free-text input (composer disabled) |
 | Auth | None on this host. Catalog is public JSON. | No Bearer key store; HMAC not used |
+
+**Known drift (11 September 2026):** `index.html` was rebuilt from screenshots by a different session and currently ships with no JSON-LD in `<head>` and no SDK Q&A/matching-contract table — both required by [aeo-strategy.md](aeo-strategy.md). Also, `demo/index.html` and `ad-submission/index.html` are deleted in the working tree even though [mem/current.md](../mem/current.md) locks them as part of the Pages set. None of this is fixed yet; see the root [README.md](../README.md#known-gaps-as-of-11-september-2026).
 
 Default catalog: `PRISM_CATALOG_URL` or `https://prismpublication.com/sdk/catalog.json`. Third-party wiring and smoke results: [publisher-key.md](publisher-key.md).
 
@@ -31,7 +33,7 @@ Default catalog: `PRISM_CATALOG_URL` or `https://prismpublication.com/sdk/catalo
 2. Homepage demo: `js/demo.js` waits for the visitor to press **Play**, then types out the fixed travel script turn by turn, scoring each ad turn against the local catalog with the same cosine matcher. **Reset** replays it. No `DOMContentLoaded` auto-run and no free-text prompt.
 3. Production fill: publisher Node or Worker imports `displayAd` from `sdk/prismClient.js` **after** the assistant finishes a complete thought.
 
-`scripts/build-static.js` and `components/editor.js` are leftover kit. They are not on the Pages path. The live homepage does not import them.
+4. Advertiser flow: the "Start a test" button/nav link toggles `#view-hero` off and `#view-form` on via `switchView()` in `index.html` — a client-side view swap, not a route. The form posts nowhere; submit shows an `alert()` and the copy directs the visitor to email instead.
 
 ## Matcher state machine (homepage demo and live contract)
 
@@ -119,12 +121,13 @@ See [pricing.md](pricing.md). Buyer is an **active AI campaign** owner. Bill ren
 
 | Path | Role |
 |---|---|
-| `index.html` | Product page, JSON-LD, hero, phone demo markup, SDK Q&A |
+| `index.html` | Homepage: hero, phone demo markup, advertiser form. No JSON-LD or SDK Q&A currently (see "Known drift" above) |
 | `css/styles.css` | Light-blue marketing tokens, hero highlights, demo card |
 | `js/demo.js` | Scripted phone-thread demo (travel packing), local cosine catalog, Play/Reset |
 | `sdk/prismClient.js` | Server `displayAd` against static `sdk/catalog.json` |
 | `sdk/catalog.json` | Public creatives on Pages |
 | `sdk/gamClient.js` | GAM demand leg (fill URL, network, ad unit) |
+| `mem/current.md` | Locked decisions carry-forward from prior sessions — read before touching public HTML/CSS |
 | `docs/publisher-key.md` | Third-party wiring and smoke test |
 | `docs/ad-submission.md` | Creative rules and 0.65 / 120ms floors |
 | `docs/pricing.md` | Intercept pricing model |
