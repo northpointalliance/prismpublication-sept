@@ -1,9 +1,6 @@
-// Public endpoint: POST /api/paypal/create-order
-// Creates a $5.00 PayPal order server-side (amount is fixed here, never
-// trusted from the client) and returns the order ID for the PayPal Buttons
-// SDK to approve on the client.
-
-import { createOrder } from "./_shared.js";
+// TEMPORARY DIAGNOSTIC VERSION -- self-contained, no import from _shared.js,
+// to isolate whether the 502 is an import/bundling issue or a fetch-to-PayPal
+// issue. Revert to the real implementation once diagnosed.
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -15,12 +12,26 @@ function json(data, status = 200) {
 export async function onRequestPost(context) {
   const { env } = context;
   try {
-    const orderId = await createOrder(env);
-    return json({ orderId });
+    const hasClientId = typeof env.PAYPAL_CLIENT_ID === "string" && env.PAYPAL_CLIENT_ID.length > 0;
+    const hasSecret = typeof env.PAYPAL_CLIENT_SECRET === "string" && env.PAYPAL_CLIENT_SECRET.length > 0;
+
+    if (!hasClientId || !hasSecret) {
+      return json({ step: "env-check", hasClientId, hasSecret }, 200);
+    }
+
+    const auth = btoa(`${env.PAYPAL_CLIENT_ID}:${env.PAYPAL_CLIENT_SECRET}`);
+    const res = await fetch("https://api-m.sandbox.paypal.com/v1/oauth2/token", {
+      method: "POST",
+      headers: {
+        Authorization: `Basic ${auth}`,
+        "content-type": "application/x-www-form-urlencoded",
+      },
+      body: "grant_type=client_credentials",
+    });
+    const text = await res.text();
+    return json({ step: "fetch-complete", status: res.status, bodyPreview: text.slice(0, 300) }, 200);
   } catch (err) {
-    // TEMPORARY: exposing err.message for one-time production debugging.
-    // Revert to a generic message once the root cause is confirmed fixed.
-    return json({ error: "Could not start PayPal checkout.", debug: String(err && err.message || err) }, 502);
+    return json({ step: "caught-exception", message: String(err && err.message || err), stack: String(err && err.stack || "") }, 200);
   }
 }
 
