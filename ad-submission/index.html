@@ -112,6 +112,53 @@
         </div>
       </section>
 
+      <section class="advertisers" id="submit-form">
+        <div class="container">
+          <h2>Submit your campaign</h2>
+          <p>
+            <strong>Fill this in instead of writing an email.</strong>
+            Fitness, sleep tools, and productivity clear this form automatically for review. Any other category still needs a person to look at it first, same as always.
+          </p>
+          <form id="ad-form" class="card" style="max-width: 640px; text-align: left;" novalidate>
+            <p class="meta" id="form-status" role="status" style="margin-bottom: 1rem;"></p>
+
+            <label for="f-brand">Brand or company</label><br />
+            <input id="f-brand" name="brand" type="text" required style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
+
+            <label for="f-email">Work email</label><br />
+            <input id="f-email" name="email" type="email" required style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
+
+            <label for="f-category">Category</label><br />
+            <select id="f-category" name="category" required style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem; background: #fff;">
+              <option value="fitness">Fitness and training gear</option>
+              <option value="sleep">Sleep tools</option>
+              <option value="productivity">Productivity software</option>
+              <option value="other">Other (needs review)</option>
+            </select>
+
+            <label for="f-title">Card title</label><br />
+            <input id="f-title" name="title" type="text" required maxlength="80" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
+
+            <label for="f-description">Short description</label><br />
+            <textarea id="f-description" name="description" required maxlength="200" rows="3" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;"></textarea>
+
+            <label for="f-destination">Destination URL (https)</label><br />
+            <input id="f-destination" name="destinationUrl" type="url" required pattern="https://.*" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
+
+            <label for="f-cta">Button text</label><br />
+            <input id="f-cta" name="ctaText" type="text" required maxlength="30" placeholder="Shop now" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
+
+            <label for="f-budget">Daily or lifetime cap (optional, for context only -- no billing happens here)</label><br />
+            <input id="f-budget" name="budgetNote" type="text" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1.5rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
+
+            <button type="submit" class="btn primary">Submit for review</button>
+          </form>
+          <p class="meta">
+            Prefer email? Write to <a href="mailto:info@prismpublication.com">info@prismpublication.com</a> with the same details.
+          </p>
+        </div>
+      </section>
+
       <section class="advertisers">
         <div class="container">
           <h2>What do you send us?</h2>
@@ -229,5 +276,35 @@
         </ul>
       </div>
     </footer>
+    <script>
+      (function () {
+        var form = document.getElementById("ad-form");
+        var statusEl = document.getElementById("form-status");
+        if (!form) return;
+
+        form.addEventListener("submit", async function (event) {
+          event.preventDefault();
+          var data = Object.fromEntries(new FormData(form).entries());
+          statusEl.textContent = "Sending…";
+
+          try {
+            var res = await fetch("/api/submit", {
+              method: "POST",
+              headers: { "content-type": "application/json" },
+              body: JSON.stringify(data),
+            });
+            var body = await res.json();
+            if (!res.ok) {
+              statusEl.textContent = "Error: " + (body.error || "Something went wrong.");
+              return;
+            }
+            statusEl.textContent = body.message;
+            form.reset();
+          } catch (err) {
+            statusEl.textContent = "Could not reach the server. Email info@prismpublication.com instead.";
+          }
+        });
+      })();
+    </script>
   </body>
 </html>

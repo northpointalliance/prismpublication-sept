@@ -18,12 +18,13 @@ Single-product static site plus a server-side chat-ad client. One commercial int
 
 | Layer | What ships | What does not |
 |---|---|---|
-| Public site | `index.html`, `css/styles.css`, `js/demo.js` at repo root | No `wrangler.toml`, no Pages Functions, no `/dist` output |
-| Host | Cloudflare Pages, Git from GitHub | Not Workers, not Vercel |
-| Build | `echo "Building static site"` | Not `npx wrangler deploy` |
-| Live ads | `sdk/prismClient.js` matches `sdk/catalog.json` on the publisher **server** (static file on Pages). Optional GAM fan-out. | Never bundled into the chat widget; no googletag; no Supabase; no Pages Functions |
+| Public site | `index.html`, `css/styles.css`, `js/demo.js` at repo root | No `/dist` output, no build step beyond the no-op |
+| Host | Cloudflare Pages, Git from GitHub | Not Workers-as-a-separate-project, not Vercel |
+| Build | `echo "Building static site"` | Not `npx wrangler deploy` or `wrangler pages deploy` -- git push is the only deploy path |
+| Live ads | `sdk/prismClient.js` matches `sdk/catalog.json` on the publisher **server** (static file on Pages). Optional GAM fan-out. | Never bundled into the chat widget; no googletag; no Supabase |
 | Homepage demo | Local token cosine in the browser, run against a fixed scripted thread (Play/Reset) | No API key, not a live auction, no free-text input (composer disabled) |
-| Auth | None on this host. Catalog is public JSON. | No Bearer key store; HMAC not used |
+| Ad submission backend (14 Sept 2026) | `functions/api/submit.js` + `functions/api/submissions/*` (Cloudflare Pages Functions, i.e. Workers that deploy with this Pages project) write to/read the `prism-crm` D1 database. `admin/index.html` reviews the queue. | No email/notification service, no third-party form handler, no Supabase/Vercel/Stripe |
+| Auth | None on the public site. Catalog is public JSON. `/admin/*` and `/api/submissions*` are gated by Cloudflare Access (dashboard-configured) plus a header check in the Function itself. | No Bearer key store; no custom login system |
 
 Default catalog: `PRISM_CATALOG_URL` or `https://prismpublication.com/sdk/catalog.json`. Third-party wiring and smoke results: [publisher-key.md](publisher-key.md).
 

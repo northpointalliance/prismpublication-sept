@@ -15,6 +15,7 @@ This repository is the **single-product** static site and server-side SDK client
 - **Homepage demo:** phone-frame scripted thread (`js/demo.js`), not a free-text sandbox. Play/Reset replays a fixed two-turn travel script; the composer is disabled. Each ad turn still runs the real cosine matcher (floor **0.65**) against a local catalog to pick the card, but visitors cannot type their own prompt here.
 - **SDK:** `sdk/prismClient.js`. Call `displayAd` from Node or a Worker after the assistant answers. It reads `sdk/catalog.json` on this Pages host. Optional Google Ad Manager fan-out via `sdk/gamClient.js`. No Prism-hosted secret key.
 - **Money:** intercept buyers who already run AI campaigns. Bill served labeled cards only. Operator detail: [docs/pricing.md](docs/pricing.md).
+- **Ad submission backend (added 14 September 2026):** `ad-submission/index.html` posts to a Cloudflare Pages Function (`functions/api/submit.js`), which writes to D1. `admin/index.html` reviews the queue, protected by Cloudflare Access. No third-party service, no API key. Full detail: [docs/ad-submission-backend.md](docs/ad-submission-backend.md).
 
 ## Public contract (quote these)
 
@@ -42,7 +43,13 @@ docs/aeo-strategy.md    Canonicals and crawler rules
 docs/publisher-key.md   How a third party wires fill on Pages
 docs/PUBLISHER-SMOKE-TEST.md  Operator smoke: Pages, not login/Supabase
 docs/affiliate-tracker.md    House affiliate program tracker
+docs/ad-submission-backend.md  Cloudflare Pages Function + D1 setup, incl. one-time dashboard steps
 mem/current.md          Locked decisions carry-forward — read before editing HTML/CSS
+functions/api/submit.js       Pages Function: public submission intake
+functions/api/submissions/    Pages Function: admin list + approve/reject (Access-protected)
+admin/index.html        Submission review UI (Access-protected)
+d1/schema.sql           ad_submissions table (already applied to prism-crm)
+wrangler.toml           Local dev only -- not read by the Git-connected Pages build
 ```
 
 ## Deploy (Cloudflare Pages)

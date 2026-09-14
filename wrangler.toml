@@ -1,0 +1,12 @@
+# Local development only. Cloudflare Pages' Git-connected build does not read
+# this file -- the production D1 binding is configured in the dashboard
+# (Pages project -> Settings -> Functions -> D1 database bindings), not here.
+# This exists so `wrangler pages dev .` can emulate that binding locally.
+name = "prismpublication-sept"
+compatibility_date = "2026-09-11"
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "DB"
+database_name = "prism-crm"
+database_id = "52f65e4f-0cca-4111-bc87-9cfab575600b"

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ad submissions review | Prism Publication</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <style>
+      /* Admin-only, additive. Does not touch styles.css or any public page. */
+      table.submissions { width: 100%; border-collapse: collapse; margin-top: 1.5rem; }
+      table.submissions th, table.submissions td { text-align: left; padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; vertical-align: top; }
+      table.submissions th { color: var(--text-main); }
+      .status-pill { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700; }
+      .status-pending, .status-needs_review { background: #fef3c7; color: #92400e; }
+      .status-auto_cleared { background: #dbeafe; color: #1e3a8a; }
+      .status-approved { background: #dcfce7; color: #14532d; }
+      .status-rejected { background: #fee2e2; color: #7f1d1d; }
+      .row-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+      .row-actions button { font-size: 0.85rem; padding: 0.35rem 0.7rem; }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site">
+      <div class="container">
+        <a class="brand" href="https://prismpublication.com/">Prism Publication</a>
+        <nav class="primary" aria-label="Primary">
+          <a href="https://prismpublication.com/">Home</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero page-hero">
+        <div class="container">
+          <p class="audience-kicker">Internal, protected by Cloudflare Access</p>
+          <h1>Ad submissions review</h1>
+          <p class="subhead">
+            Approving or rejecting here only updates the queue. Adding a creative to the live catalog is still a
+            manual edit to <code>sdk/catalog.json</code>.
+          </p>
+        </div>
+      </section>
+
+      <section class="advertisers">
+        <div class="container">
+          <p id="status-line">Loading submissions&hellip;</p>
+          <table class="submissions" id="submissions-table" hidden>
+            <thead>
+              <tr>
+                <th>Received</th>
+                <th>Status</th>
+                <th>Brand / email</th>
+                <th>Category</th>
+                <th>Creative</th>
+                <th>Notes</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="submissions-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-grid">
+        <div>
+          <p>&copy; 2026 Prism Publication.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const statusLine = document.getElementById("status-line");
+      const table = document.getElementById("submissions-table");
+      const tbody = document.getElementById("submissions-body");
+
+      function escapeHtml(s) {
+        return String(s == null ? "" : s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+
+      async function patchStatus(id, status) {
+        const reviewNotes = status === "rejected" ? window.prompt("Reason for rejecting (optional):") || "" : "";
+        const res = await fetch("/api/submissions/" + id, {
+          method: "PATCH",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ status, reviewNotes }),
+        });
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({}));
+          alert("Failed: " + (body.error || res.status));
+          return;
+        }
+        load();
+      }
+
+      function renderRow(row) {
+        const tr = document.createElement("tr");
+        const created = new Date(row.created_at + "Z").toLocaleString();
+        tr.innerHTML =
+          "<td>" + escapeHtml(created) + "</td>" +
+          '<td><span class="status-pill status-' + escapeHtml(row.status) + '">' + escapeHtml(row.status) + "</span></td>" +
+          "<td>" + escapeHtml(row.brand) + "<br><small>" + escapeHtml(row.email) + "</small></td>" +
+          "<td>" + escapeHtml(row.category) + "</td>" +
+          "<td><strong>" + escapeHtml(row.title) + "</strong><br>" + escapeHtml(row.description) +
+            "<br><a href=\"" + escapeHtml(row.destination_url) + "\" target=\"_blank\" rel=\"noopener noreferrer\">" +
+            escapeHtml(row.destination_url) + "</a>" +
+            (row.budget_note ? "<br><small>Budget: " + escapeHtml(row.budget_note) + "</small>" : "") +
+          "</td>" +
+          "<td>" + escapeHtml(row.review_notes || "") + "</td>" +
+          "<td class=\"row-actions\"></td>";
+
+        const actions = tr.querySelector(".row-actions");
+        const approveBtn = document.createElement("button");
+        approveBtn.className = "btn primary";
+        approveBtn.type = "button";
+        approveBtn.textContent = "Approve";
+        approveBtn.addEventListener("click", () => patchStatus(row.id, "approved"));
+
+        const rejectBtn = document.createElement("button");
+        rejectBtn.className = "btn secondary";
+        rejectBtn.type = "button";
+        rejectBtn.textContent = "Reject";
+        rejectBtn.addEventListener("click", () => patchStatus(row.id, "rejected"));
+
+        actions.appendChild(approveBtn);
+        actions.appendChild(rejectBtn);
+        return tr;
+      }
+
+      async function load() {
+        statusLine.textContent = "Loading submissions…";
+        table.hidden = true;
+        try {
+          const res = await fetch("/api/submissions");
+          if (res.status === 403) {
+            statusLine.textContent = "Not authorized. This page must be accessed through Cloudflare Access.";
+            return;
+          }
+          if (!res.ok) {
+            statusLine.textContent = "Failed to load submissions (" + res.status + ").";
+            return;
+          }
+          const data = await res.json();
+          tbody.innerHTML = "";
+          if (!data.submissions.length) {
+            statusLine.textContent = "No submissions yet.";
+            return;
+          }
+          data.submissions.forEach((row) => tbody.appendChild(renderRow(row)));
+          statusLine.textContent = data.submissions.length + " submission(s).";
+          table.hidden = false;
+        } catch (err) {
+          statusLine.textContent = "Error loading submissions: " + err.message;
+        }
+      }
+
+      load();
+    </script>
+  </body>
+</html>

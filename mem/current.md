@@ -16,11 +16,28 @@ A separate branch/PR (`cursor/prefilled-demo-thread`, PR #12) rebuilt this homep
 
 New pages are additive — their own files. They do not touch `index.html`, `css/styles.css`, or `js/demo.js`'s existing content, beyond adding a nav/footer link to the new pages if asked (done for `blog/` in PR #15 — every page's nav and footer now links to it).
 
+## Backend (added 14 September 2026)
+
+This site is no longer *pure* static. `ad-submission/index.html` now posts to
+`functions/api/submit.js` (a Cloudflare Pages Function, i.e. a Worker that
+deploys as part of this Pages project, not a separate Worker), which writes
+to the `prism-crm` D1 database. `admin/index.html` reviews submissions,
+protected by Cloudflare Access. Full detail, including the one-time
+dashboard setup this still needs: [docs/ad-submission-backend.md](../docs/ad-submission-backend.md).
+This was a deliberate, requested unlock -- it does not reopen the homepage
+freeze above, and it did not use Supabase, Vercel, Stripe, or any
+third-party API/secret. Do not add a third-party service (email sender,
+form handler, auth provider) to this flow without asking; the whole point
+was avoiding exactly that.
+
+Still not built: a plain HTTP matching endpoint for third-party publishers
+on non-JS backends. See "Known gap" in docs/ad-submission-backend.md.
+
 ## Locked public site
 
 - Origin: https://prismpublication.com/
-- Host: Cloudflare Pages on GitHub `main`. Build `echo "Building static site"`. Never Wrangler deploy.
-- Pages: `index.html`, `demo/index.html`, `developers/index.html`, `ad-submission/index.html`, `blog/` (index + 15 posts), `css/styles.css`.
+- Host: Cloudflare Pages on GitHub `main`. Build `echo "Building static site"`. Never `wrangler pages deploy` or `wrangler deploy` -- Git push is the only deploy path. `wrangler pages dev` locally is fine (it's not a deploy).
+- Pages: `index.html`, `demo/index.html`, `developers/index.html`, `ad-submission/index.html`, `blog/` (index + 15 posts), `admin/index.html` (Access-protected), `css/styles.css`.
 - Visitor demo is the **phone thread** (Play/Reset, composer off). Not the category form.
 - One page paint only: `#f0f9ff` on html, body, header, main, footer, sections, containers, cards, tables. No `--section` / `--card-bg` second wash. Buttons may use accent. Phone chrome and in-thread cards stay device UI, not page paint.
 - Alignment: paragraphs and long copy **left**. Headlines (h1/h2) and CTA groups **center**. No justify. No right-aligned body.
