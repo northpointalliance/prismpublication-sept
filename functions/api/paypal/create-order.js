@@ -18,7 +18,9 @@ export async function onRequestPost(context) {
     const orderId = await createOrder(env);
     return json({ orderId });
   } catch (err) {
-    return json({ error: "Could not start PayPal checkout. Try again in a moment." }, 502);
+    // TEMPORARY: exposing err.message for one-time production debugging.
+    // Revert to a generic message once the root cause is confirmed fixed.
+    return json({ error: "Could not start PayPal checkout.", debug: String(err && err.message || err) }, 502);
   }
 }
 
