@@ -1,8 +1,8 @@
-# Architecture | Prism Publication (9 September 2026)
+# Architecture | Prism Publication (last updated 14 September 2026)
 
-Single-product static site plus a server-side chat-ad client. One commercial intent: labeled native cards on independent AI chatbots when prompt overlap is high enough; otherwise silence.
+Single-product static site plus a server-side chat-ad client, now with a real (Cloudflare-only) backend for ad submission and live testing. One commercial intent: labeled native cards on independent AI chatbots when prompt overlap is high enough; otherwise silence.
 
-**Homepage is frozen as of 13 September 2026** — see [mem/current.md](../mem/current.md). Only additive work (blog, legal pages) is in scope; do not redesign `index.html`, `css/styles.css`, or `js/demo.js`.
+**Homepage is frozen as of 13 September 2026** — see [mem/current.md](../mem/current.md). Do not redesign `index.html`, `css/styles.css`, or `js/demo.js`. New work is additive (own pages/files): the blog and the ad-submission backend below already shipped this way; legal pages are still open.
 
 ```
 ╔════════════════════════════════════════╗
@@ -24,7 +24,10 @@ Single-product static site plus a server-side chat-ad client. One commercial int
 | Live ads | `sdk/prismClient.js` matches `sdk/catalog.json` on the publisher **server** (static file on Pages). Optional GAM fan-out. | Never bundled into the chat widget; no googletag; no Supabase |
 | Homepage demo | Local token cosine in the browser, run against a fixed scripted thread (Play/Reset) | No API key, not a live auction, no free-text input (composer disabled) |
 | Ad submission backend (14 Sept 2026) | `functions/api/submit.js` + `functions/api/submissions/*` (Cloudflare Pages Functions, i.e. Workers that deploy with this Pages project) write to/read the `prism-crm` D1 database. `admin/index.html` reviews the queue. | No email/notification service, no third-party form handler, no Supabase/Vercel/Stripe |
+| Live ad testing (14 Sept 2026) | `run-ads/index.html` — a second phone-UI chat, separate from the frozen homepage demo. Free-text input calls `functions/api/match.js`, which runs the real cosine matcher against **approved** D1 submissions only. | No fake LLM-generated bot reply (would need a third-party AI API); no login — advertisers just type questions and watch for their own brand |
+| Analytics | Google Analytics (GA4, property `G-22TDLD3N4E`) on every public page except `admin/`. Restored 14 Sept 2026 after being found missing from the live repo (lost in an earlier rebuild). Cloudflare's own Pages/Web Analytics also runs, dashboard-native, no code. | — |
 | Auth | None on the public site. Catalog is public JSON. `/admin/*` and `/api/submissions*` are gated by Cloudflare Access (dashboard-configured) plus a header check in the Function itself. | No Bearer key store; no custom login system |
+| Payments | Not built. Decided: $5.00 flat fee per submission via PayPal, covers review + unlimited `/run-ads/` testing. Blocked on Daniel providing a PayPal Client ID + Secret. See [mem/current.md](../mem/current.md) "Next up, blocked on Daniel". | No Stripe (doesn't work in Israel) |
 
 Default catalog: `PRISM_CATALOG_URL` or `https://prismpublication.com/sdk/catalog.json`. Third-party wiring and smoke results: [publisher-key.md](publisher-key.md).
 
@@ -33,8 +36,9 @@ Default catalog: `PRISM_CATALOG_URL` or `https://prismpublication.com/sdk/catalo
 1. Humans and crawlers: `index.html` at `/`.
 2. Homepage demo: `js/demo.js` waits for the visitor to press **Play**, then types out the fixed travel script turn by turn, scoring each ad turn against the local catalog with the same cosine matcher. **Reset** replays it. No `DOMContentLoaded` auto-run and no free-text prompt.
 3. Production fill: publisher Node or Worker imports `displayAd` from `sdk/prismClient.js` **after** the assistant finishes a complete thought.
+4. Advertiser flow (14 Sept 2026): `ad-submission/` → `run-ads/`, real pages with real Functions behind them (see the sequence diagram below). The homepage nav's "Run ads" link points to `/run-ads/`, not a same-page anchor anymore — `#advertisers` and `#sdk` still exist as homepage sections but are no longer linked from nav directly, only reachable by scrolling.
 
-Advertiser flow: `#advertisers` and `#sdk` are same-page anchors, not separate views — there is no client-side view toggle on this homepage.
+There is no client-side view toggle on the homepage itself — it's still one static page.
 
 ## Matcher state machine (homepage demo and live contract)
 
@@ -114,9 +118,40 @@ User     Chat UI     Publisher server     prismClient      Pages catalog / GAM
 
 Impression and click helpers on the Pages path return `{ ok: true }` with no remote POST. GAM tracking stays on the GAM stack.
 
+## Sequence: submit → approve → test (the actual current product loop)
+
+```
+Advertiser    ad-submission/    functions/api/submit.js    D1 (prism-crm)    Daniel        run-ads/    functions/api/match.js
+    │              │                      │                      │             │              │                 │
+    │ fill form    │                      │                      │             │              │                 │
+    │─────────────►│                      │                      │             │              │                 │
+    │              │  POST /api/submit    │                      │             │              │                 │
+    │              │─────────────────────►│  category in list?   │             │              │                 │
+    │              │                      │  auto_cleared/       │             │              │                 │
+    │              │                      │  needs_review ───────►             │              │                 │
+    │              │                      │                      │             │              │                 │
+    │              │                      │                      │  GET /api/submissions       │                 │
+    │              │                      │                      │◄────────────│ (Access-gated)│                 │
+    │              │                      │                      │             │              │                 │
+    │              │                      │  PATCH status=approved             │              │                 │
+    │              │                      │                      │◄────────────│              │                 │
+    │              │                      │                      │             │              │                 │
+    │  type a real question                                                    │              │                 │
+    │──────────────────────────────────────────────────────────────────────────────────────────►│                 │
+    │              │                      │                      │             │              │ POST /api/match │
+    │              │                      │                      │◄─────────────────────────────────────────────│
+    │              │                      │                      │  cosine >= 0.65 vs approved rows only         │
+    │  card, labeled, or "no card matched"                                     │              │◄────────────────│
+    │◄──────────────────────────────────────────────────────────────────────────────────────────│                 │
+```
+
+Approving in `/admin/` only updates the D1 row's status — it does **not** add the creative to `sdk/catalog.json`, which is what a third-party publisher's `displayAd` call actually reads. Those are still two separate catalogs; see "Known gap" in [ad-submission-backend.md](ad-submission-backend.md).
+
 ## Money path (operator, not public rates)
 
 See [pricing.md](pricing.md). Buyer is an **active AI campaign** owner. Bill rendered labeled cards (CPC preferred, then rendered impression, then IO budget transfer). Amazon Associates tag `prismpublicat-20` is fallback catalog, not the intercept product. Split lives on the insertion order; do not invent a take rate on the homepage.
+
+**Submission/testing tier (decided 14 Sept 2026, not built):** $5.00 flat fee per campaign submission via PayPal, covering review plus unlimited `/run-ads/` testing on that campaign. Separate from the IO-negotiated rate above — this is a low, near-cost fee meant to validate whether anyone uses the flow at all, not the real ad-serving price. `ad-submission/` and `run-ads/` currently say testing is free; that copy needs to change once payment ships.
 
 ## Key files
 
@@ -128,9 +163,20 @@ See [pricing.md](pricing.md). Buyer is an **active AI campaign** owner. Bill ren
 | `sdk/prismClient.js` | Server `displayAd` against static `sdk/catalog.json` |
 | `sdk/catalog.json` | Public creatives on Pages |
 | `sdk/gamClient.js` | GAM demand leg (fill URL, network, ad unit) |
+| `blog/` | 15 posts + index, migrated from an abandoned Desktop draft. Own template instance of the same foundation (`css/styles.css` + additive `css/blog.css`) |
+| `ad-submission/index.html` | Real submission form (not `mailto:`), posts to `functions/api/submit.js` |
+| `run-ads/index.html` | Live ad-testing chat, posts to `functions/api/match.js` |
+| `admin/index.html` | Submission review queue, Cloudflare Access-gated |
+| `functions/api/submit.js` | Public: validate + category-triage + insert into D1 |
+| `functions/api/submissions/{index,[id]}.js` | Access-gated: list / approve / reject |
+| `functions/api/match.js` | Public: live cosine match against approved D1 rows |
+| `d1/schema.sql` | `ad_submissions` table definition, already applied to the real `prism-crm` database |
+| `wrangler.toml` | Local dev only (`wrangler pages dev`) — not read by the Git-connected Pages build |
+| `mem/current.md` | Locked decisions carry-forward — **read this first**, especially the homepage freeze and the "blocked on Daniel" list |
+| `docs/ad-submission-backend.md` | Full backend setup detail, incl. the one-time Cloudflare dashboard steps |
 | `docs/publisher-key.md` | Third-party wiring and smoke test |
 | `docs/ad-submission.md` | Creative rules and 0.65 / 120ms floors |
-| `docs/pricing.md` | Intercept pricing model |
+| `docs/pricing.md` | Intercept pricing model (IO-negotiated tier; the $5 flat tier is documented above, not yet in this file) |
 | `docs/aeo-strategy.md` | Canonical and crawler rules |
 | `.cursor/rules/prism-pages-static.mdc` | Pages-only deploy |
 | `.cursor/rules/cloudflare-pages-deploy.mdc` | Git via Pages tab, not Workers |

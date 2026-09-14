@@ -2,12 +2,12 @@
 
 Native contextual ads for independent AI chatbots. A labeled card when the user prompt closely matches a product. Silence when it does not.
 
-This repository is the **single-product** static site and server-side SDK client as of **9 September 2026**. It is not a Workers app and not a multi-product hub.
+This repository is the **single-product** static site, a server-side SDK client, and (as of 14 September 2026) a real Cloudflare-only backend for ad submission and live testing. It is not a Workers-as-a-separate-project app and not a multi-product hub.
 
 **Live origin:** [https://prismpublication.com/](https://prismpublication.com/)  
 **GitHub:** [northpointalliance/prismpublication-sept](https://github.com/northpointalliance/prismpublication-sept)
 
-> **Read [mem/current.md](mem/current.md) before changing public HTML or CSS.** The homepage is frozen as of 13 September 2026 — no more redesigns. Only additive work (a blog, legal Terms & Conditions / Privacy pages) is in scope until Daniel says otherwise.
+> **Read [mem/current.md](mem/current.md) before changing public HTML or CSS.** The homepage is frozen as of 13 September 2026 — no redesigns. New work is additive, own pages/files: the blog and the ad-submission backend already shipped this way; legal pages are still open. See mem/current.md's "Next up, blocked on Daniel" for the one thing waiting on real credentials (PayPal).
 
 ## What it is
 
@@ -16,7 +16,10 @@ This repository is the **single-product** static site and server-side SDK client
 - **SDK:** `sdk/prismClient.js`. Call `displayAd` from Node or a Worker after the assistant answers. It reads `sdk/catalog.json` on this Pages host. Optional Google Ad Manager fan-out via `sdk/gamClient.js`. No Prism-hosted secret key.
 - **Money:** intercept buyers who already run AI campaigns. Bill served labeled cards only. Operator detail: [docs/pricing.md](docs/pricing.md).
 - **Ad submission backend (added 14 September 2026):** `ad-submission/index.html` posts to a Cloudflare Pages Function (`functions/api/submit.js`), which writes to D1. `admin/index.html` reviews the queue, protected by Cloudflare Access. No third-party service, no API key. Full detail: [docs/ad-submission-backend.md](docs/ad-submission-backend.md).
-- **Live ad testing (added 14 September 2026):** `run-ads/index.html` is a second, separate phone-UI chat (the homepage demo is untouched) where an advertiser types real questions and `functions/api/match.js` runs the live cosine matcher against the pool of **approved** D1 submissions. This is the actual "submit → get approved → test it live" loop.
+- **Live ad testing (added 14 September 2026):** `run-ads/index.html` is a second, separate phone-UI chat (the homepage demo is untouched) where an advertiser types real questions and `functions/api/match.js` runs the live cosine matcher against the pool of **approved** D1 submissions. This is the actual "submit → get approved → test it live" loop. Every page's nav "Run ads" link now points here (it used to point at a homepage anchor — see "Known gaps" below) and `ad-submission/`'s hero CTA also links here.
+- **Blog (added 14 September 2026):** `blog/` — 15 posts + index, migrated from an abandoned Desktop draft, restyled onto this site's own foundation. Linked from every page's nav.
+- **Analytics (restored 14 September 2026):** Google Analytics (`G-22TDLD3N4E`) on every public page except `admin/`. It existed before but was missing from the live repo — lost in an earlier rebuild, not a new addition.
+- **Pricing status:** submitting and testing are currently free (by design, to see if anyone uses the flow at all). A $5.00 flat submission fee via PayPal is decided but **not built** — blocked on Daniel providing PayPal API credentials. See mem/current.md.
 
 ## Public contract (quote these)
 
@@ -33,11 +36,15 @@ Do not invent fill rate or visitor counts on the homepage.
 ```
 index.html              Product page + JSON-LD
 css/styles.css          Layout and demo card
+css/blog.css            Additive: cover image, pull-quote (blog/ only, doesn't touch styles.css)
 js/demo.js              Scripted phone-thread demo (local cosine matcher, fixed script)
+blog/                   15 posts + index, same site foundation
+ad-submission/index.html  Real submission form -> functions/api/submit.js
 sdk/prismClient.js      Server matcher against sdk/catalog.json
 sdk/catalog.json        Public creatives on Pages
 docs/architecture.md    System design and diagrams
-docs/handoff.md         9 September 2026 GitHub handoff
+docs/handoff.md         9 September 2026 GitHub handoff (superseded, kept for history)
+docs/handoff-2026-09-14.md  Current handoff -- read this one first
 docs/pricing.md         Intercept pricing (operator)
 docs/ad-submission.md   Creative and brand-safety rules
 docs/aeo-strategy.md    Canonicals and crawler rules
@@ -68,6 +75,13 @@ Rules that enforce this: `.cursor/rules/prism-pages-static.mdc`, `.cursor/rules/
 ## Local preview
 
 Serve the repo root over HTTP (any static server). Open `/` and press Play on the phone demo to watch the scripted travel thread render two sponsored Amazon cards; Reset replays it. A fill must not show cosine or millisecond text on the sponsored card.
+
+## Known gaps
+
+- **Approving a submission doesn't make it live.** `/admin/` only updates the D1 row's status. Getting an approved creative into `sdk/catalog.json` (what a real third-party publisher's SDK reads) is still a manual git edit. See [docs/ad-submission-backend.md](docs/ad-submission-backend.md).
+- **No plain-language pricing yet.** `docs/pricing.md`'s IO-negotiated rate is the real ad-serving price; the $5 flat submission fee is a separate, smaller, decided-but-unbuilt tier (see mem/current.md).
+- **No non-JS publisher integration.** `sdk/prismClient.js` requires the publisher's own server to be Node/JS. `functions/api/match.js` is a plain HTTP endpoint any language could call, but it matches against D1 submissions, not `sdk/catalog.json` — same pattern, not the same integration.
+- **The `Desktop\prismpublication*` folders and D1 databases (`prism-cms`, `prism-memory`) found during this session's cleanup are still unresolved** — not touched, not deleted, still sitting there from earlier abandoned attempts.
 
 ## Contact
 
