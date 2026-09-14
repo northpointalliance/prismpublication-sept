@@ -8,9 +8,11 @@ Daniel has spent repeated sessions rebuilding this homepage across different too
 
 A separate branch/PR (`cursor/prefilled-demo-thread`, PR #12) rebuilt this homepage from a different tool's output and was **closed without merging** on 13 September 2026 for exactly this reason. Do not resurrect it, cherry-pick from it, or treat its existence as evidence the homepage should change.
 
-**The only new work permitted right now:**
-- A blog (shipped 14 September 2026 — `blog/`, 15 posts + index)
-- Legal pages: Terms & Conditions, Privacy
+**The only new work permitted right now (all shipped 14 September 2026):**
+- A blog — `blog/`, 15 posts + index
+- Legal pages — `privacy/`, `terms/`, linked in every footer. Terms states Israeli governing law, confirmed directly with Daniel, not inferred.
+
+No more items queued here as of 14 September. Next new-page work needs an explicit ask, same as everything else past the freeze.
 
 **One foundation, no exceptions (14 September 2026):** every page on this site — the frozen homepage, `demo/`, `ad-submission/`, `developers/`, `blog/`, and any future page — loads the same `css/styles.css` and reuses the same header/nav/footer HTML structure, fonts, and colors. A new page is new copy inside the existing template, never a new design. `blog/` follows this already: it loads `css/styles.css` plus a small *additive* `css/blog.css` for the few elements the homepage doesn't have (cover image, pull-quote), and nothing in `css/blog.css` overrides or duplicates a rule from `css/styles.css`. Any future add-on (legal pages included) must work the same way.
 
@@ -72,7 +74,7 @@ their own product and watches for their own brand.
 
 - Origin: https://prismpublication.com/
 - Host: Cloudflare Pages on GitHub `main`. Build `echo "Building static site"`. Never `wrangler pages deploy` or `wrangler deploy` -- Git push is the only deploy path. `wrangler pages dev` locally is fine (it's not a deploy).
-- Pages: `index.html`, `demo/index.html`, `developers/index.html`, `ad-submission/index.html`, `blog/` (index + 15 posts), `admin/index.html` (Access-protected), `run-ads/index.html` (live ad-testing chat, separate from the homepage demo), `css/styles.css`.
+- Pages: `index.html`, `demo/index.html`, `developers/index.html`, `ad-submission/index.html`, `blog/` (index + 15 posts), `admin/index.html` (Access-protected), `run-ads/index.html` (live ad-testing chat, separate from the homepage demo), `privacy/index.html`, `terms/index.html`, `css/styles.css`.
 - Visitor demo is the **phone thread** (Play/Reset, composer off). Not the category form.
 - One page paint only: `#f0f9ff` on html, body, header, main, footer, sections, containers, cards, tables. No `--section` / `--card-bg` second wash. Buttons may use accent. Phone chrome and in-thread cards stay device UI, not page paint.
 - Alignment: paragraphs and long copy **left**. Headlines (h1/h2) and CTA groups **center**. No justify. No right-aligned body.
