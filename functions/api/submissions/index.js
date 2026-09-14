@@ -20,7 +20,7 @@ export async function onRequestGet(context) {
 
   const { results } = await env.DB.prepare(
     `SELECT id, created_at, status, brand, email, category, title, description,
-            destination_url, cta_text, budget_note, review_notes
+            destination_url, cta_text, budget_note, review_notes, keywords
      FROM ad_submissions
      ORDER BY created_at DESC`
   ).all();

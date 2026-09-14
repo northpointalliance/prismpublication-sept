@@ -72,6 +72,22 @@ existing deploy pipeline (`echo "Building static site"`, no `wrangler deploy`).
 `prism-crm` database, so you don't need to run it again unless the database
 is ever recreated from scratch.
 
+## /run-ads/: live ad testing (added 14 September 2026)
+
+`run-ads/index.html` is a second, separate phone UI (the homepage demo is
+untouched) where an advertiser types a real question and the *live* matcher
+(`functions/api/match.js`) checks it against every **approved** D1
+submission -- not a script, not a static catalog file.
+
+Before shipping this, I tested realistic queries against realistic ad copy
+and found category+title+description alone was too sparse to clear the
+public 0.65 cosine floor -- a genuinely on-topic query scored 0.54. Rather
+than lower the threshold (which would misrepresent the floor quoted
+everywhere else on this site), the submission form now has an optional
+**keywords** field, and `match.js` does light stemming ("sleeping" ->
+"sleep"). Advertisers who leave keywords blank will see fewer matches; the
+form copy says this is optional but "helps matching" for a reason.
+
 ## Known gap, not built here
 
 `sdk/prismClient.js` requires a publisher's server to be Node/JS, since the

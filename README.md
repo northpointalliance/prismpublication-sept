@@ -16,6 +16,7 @@ This repository is the **single-product** static site and server-side SDK client
 - **SDK:** `sdk/prismClient.js`. Call `displayAd` from Node or a Worker after the assistant answers. It reads `sdk/catalog.json` on this Pages host. Optional Google Ad Manager fan-out via `sdk/gamClient.js`. No Prism-hosted secret key.
 - **Money:** intercept buyers who already run AI campaigns. Bill served labeled cards only. Operator detail: [docs/pricing.md](docs/pricing.md).
 - **Ad submission backend (added 14 September 2026):** `ad-submission/index.html` posts to a Cloudflare Pages Function (`functions/api/submit.js`), which writes to D1. `admin/index.html` reviews the queue, protected by Cloudflare Access. No third-party service, no API key. Full detail: [docs/ad-submission-backend.md](docs/ad-submission-backend.md).
+- **Live ad testing (added 14 September 2026):** `run-ads/index.html` is a second, separate phone-UI chat (the homepage demo is untouched) where an advertiser types real questions and `functions/api/match.js` runs the live cosine matcher against the pool of **approved** D1 submissions. This is the actual "submit → get approved → test it live" loop.
 
 ## Public contract (quote these)
 
@@ -47,7 +48,9 @@ docs/ad-submission-backend.md  Cloudflare Pages Function + D1 setup, incl. one-t
 mem/current.md          Locked decisions carry-forward — read before editing HTML/CSS
 functions/api/submit.js       Pages Function: public submission intake
 functions/api/submissions/    Pages Function: admin list + approve/reject (Access-protected)
+functions/api/match.js        Pages Function: live matcher for run-ads/, approved pool only
 admin/index.html        Submission review UI (Access-protected)
+run-ads/index.html      Live ad-testing chat (separate from the homepage demo)
 d1/schema.sql           ad_submissions table (already applied to prism-crm)
 wrangler.toml           Local dev only -- not read by the Git-connected Pages build
 ```

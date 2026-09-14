@@ -111,6 +111,7 @@
             "<br><a href=\"" + escapeHtml(row.destination_url) + "\" target=\"_blank\" rel=\"noopener noreferrer\">" +
             escapeHtml(row.destination_url) + "</a>" +
             (row.budget_note ? "<br><small>Budget: " + escapeHtml(row.budget_note) + "</small>" : "") +
+            (row.keywords ? "<br><small>Keywords: " + escapeHtml(row.keywords) + "</small>" : "") +
           "</td>" +
           "<td>" + escapeHtml(row.review_notes || "") + "</td>" +
           "<td class=\"row-actions\"></td>";

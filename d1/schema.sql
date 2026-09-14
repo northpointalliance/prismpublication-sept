@@ -15,5 +15,11 @@ CREATE TABLE IF NOT EXISTS ad_submissions (
   destination_url TEXT NOT NULL,
   cta_text TEXT NOT NULL,
   budget_note TEXT,
-  review_notes TEXT
+  review_notes TEXT,
+  keywords TEXT -- space-separated extra terms for matching (see functions/api/match.js)
 );
+
+-- Added 14 September 2026, after live testing showed category+title+description
+-- alone was too sparse for the 0.65 cosine floor to clear on realistic queries.
+-- Already applied to the real database:
+--   ALTER TABLE ad_submissions ADD COLUMN keywords TEXT;

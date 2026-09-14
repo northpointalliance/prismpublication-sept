@@ -32,6 +32,7 @@ export async function onRequestPost(context) {
   const destinationUrl = String(body.destinationUrl || "").trim();
   const ctaText = String(body.ctaText || "").trim();
   const budgetNote = String(body.budgetNote || "").trim();
+  const keywords = String(body.keywords || "").trim().slice(0, 300);
 
   const missing = [];
   if (!brand) missing.push("brand");
@@ -56,10 +57,10 @@ export async function onRequestPost(context) {
 
   await env.DB.prepare(
     `INSERT INTO ad_submissions
-      (status, brand, email, category, title, description, destination_url, cta_text, budget_note)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      (status, brand, email, category, title, description, destination_url, cta_text, budget_note, keywords)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   )
-    .bind(status, brand, email, category, title, description, destinationUrl, ctaText, budgetNote || null)
+    .bind(status, brand, email, category, title, description, destinationUrl, ctaText, budgetNote || null, keywords || null)
     .run();
 
   return json({
