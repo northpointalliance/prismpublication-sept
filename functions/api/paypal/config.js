@@ -14,8 +14,9 @@ function json(data, status = 200) {
 
 export async function onRequestGet(context) {
   const { env } = context;
-  if (!env.PAYPAL_CLIENT_ID) {
+  const clientId = String(env.PAYPAL_CLIENT_ID || "").trim();
+  if (!clientId) {
     return json({ error: "PayPal is not configured yet." }, 503);
   }
-  return json({ clientId: env.PAYPAL_CLIENT_ID });
+  return json({ clientId });
 }

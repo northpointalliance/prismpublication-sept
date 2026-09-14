@@ -13,9 +13,18 @@ export function paypalBaseUrl(env) {
     : "https://api-m.sandbox.paypal.com";
 }
 
+// Cloudflare env var values can end up with a stray trailing newline or
+// whitespace depending on how they were copy-pasted into the dashboard --
+// confirmed happening here (PAYPAL_CLIENT_ID had a literal trailing \n,
+// which silently breaks the Basic Auth header PayPal rejects as
+// invalid_client). Trim defensively rather than relying on a clean paste.
+function clean(value) {
+  return String(value || "").trim();
+}
+
 export async function getAccessToken(env) {
   const base = paypalBaseUrl(env);
-  const auth = btoa(`${env.PAYPAL_CLIENT_ID}:${env.PAYPAL_CLIENT_SECRET}`);
+  const auth = btoa(`${clean(env.PAYPAL_CLIENT_ID)}:${clean(env.PAYPAL_CLIENT_SECRET)}`);
   const res = await fetch(`${base}/v1/oauth2/token`, {
     method: "POST",
     headers: {
