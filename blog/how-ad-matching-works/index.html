@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>How Ad Matching Works in an AI Chat Interface | Prism Publication</title>
+    <meta name="description" content="In a chat interface, the user just told you exactly what they want, in plain language, right now. Prism uses that message directly as the matching input." />
+    <link rel="canonical" href="https://prismpublication.com/blog/how-ad-matching-works/" />
+    <meta name="author" content="Daniel Rosenthal" />
+    <meta name="robots" content="index,follow" />
+    <link rel="stylesheet" href="../../css/styles.css" />
+    <link rel="stylesheet" href="../../css/blog.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": ["BlogPosting", "TechArticle"],
+            "@id": "https://prismpublication.com/blog/how-ad-matching-works/#article",
+            "headline": "How Ad Matching Works in an AI Chat Interface",
+            "description": "In a chat interface, the user just told you exactly what they want, in plain language, right now. Prism uses that message directly as the matching input.",
+            "url": "https://prismpublication.com/blog/how-ad-matching-works/",
+            "datePublished": "2026-09-06",
+            "dateModified": "2026-09-06",
+            "author": { "@type": "Person", "name": "Daniel Rosenthal" },
+            "publisher": { "@id": "https://prismpublication.com/#org" }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site">
+      <div class="container">
+        <a class="brand" href="https://prismpublication.com/">Prism Publication</a>
+        <nav class="primary" aria-label="Primary">
+          <a href="https://prismpublication.com/#advertisers">Run ads</a>
+          <a href="https://prismpublication.com/demo/">Demo</a>
+          <a href="https://prismpublication.com/ad-submission/">Ad submission</a>
+          <a href="https://prismpublication.com/developers/">Developers</a>
+          <a href="../">Blog</a>
+          <a href="mailto:info@prismpublication.com">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero page-hero">
+        <div class="container">
+          <p class="audience-kicker">ad-tech</p>
+          <h1>How Ad Matching Works in an AI Chat Interface</h1>
+          <figure class="cover"><img src="../images/how-ad-matching-works-cover.png" alt="In a chat interface, the user just told you exactly what they want, in plain language, right now." width="800" height="450" loading="lazy" /></figure>
+          <p class="meta">
+            By Daniel Rosenthal.
+            Published <time datetime="2026-09-06">September 6, 2026</time>.
+            Last updated <time datetime="2026-09-06">September 6, 2026</time>.
+          </p>
+        </div>
+      </section>
+
+      <section class="aeo">
+        <div class="container">
+<section>
+      <h2 id="what-is-the-direct-answer">What is the direct answer?</h2>
+      <blockquote class="direct-answer" cite="#what-is-the-direct-answer"><p>In a chat interface, the user just told you exactly what they want, in plain language, right now. Prism uses that message directly as the matching input. No behavioral profiles, no cookies, no guesswork.</p></blockquote>
+    </section>
+    <section>
+      <h2 id="what-are-the-key-takeaways">What are the key takeaways?</h2>
+      <ul><li>When someone types "I've been struggling to sleep lately" into a wellness chatbot, or "any protein powder recommendations?" into a fitness assistant, that message carries more intent signal than almost any other data point in digital advertising.</li>
+<li>Not every message maps cleanly to an ad tag.</li>
+<li>Each ad in Prism can have a daily budget and a lifetime budget, both tracked in real time.</li></ul>
+    </section>
+    <section class="analysis">
+      <p>Most ad systems make a guess. They look at who you are: your age, your browsing history, what you bought six months ago, and serve something they think you might want. It works well enough for a banner at the top of a news article. It works poorly for a conversation.</p>
+<p>In a chat interface, the user just told you exactly what they want. Not in aggregate, not inferred from behavior over time. Right now, in this message, in plain language. That changes the targeting problem completely.</p>
+<h2 id="what-does-the-user-s-message-actually-contain">What does the user's message actually contain?</h2>
+<p>When someone types "I've been struggling to sleep lately" into a wellness chatbot, or "any protein powder recommendations?" into a fitness assistant, that message carries more intent signal than almost any other data point in digital advertising. It is explicit. It is timely. It is in context.</p>
+<p>Prism uses the user's message directly as the matching input. There is no profile to build, no cookie to read, no behavioral graph to consult. The topic is right there.</p>
+<p>The matching process takes the user's message text, normalizes it (lowercase, trimmed), and checks it against the topic tags attached to each active ad. If an ad tagged <code>["protein", "fitness", "nutrition"]</code> is in the system, and the user asks about protein powder, that ad is a candidate. It is not complicated. The power comes from the fact that the input is genuinely high-quality.</p>
+<h2 id="what-happens-when-there-is-no-direct-match">What happens when there is no direct match?</h2>
+<p>Not every message maps cleanly to an ad tag. Someone might say "ugh I had a rough day" in a wellness app, and that message does not obviously correspond to any product category. In those cases, Prism falls back to a weighted random selection from the full pool of eligible ads.</p>
+<p>Weighted means advertisers can assign more or less weight to a given ad. A campaign with twice the weight gets roughly twice the impressions over time. It is a simple lever, but it matters for advertisers managing multiple creatives or running A/B tests.</p>
+<p>The fallback is not a failure state. In a well-stocked ad marketplace, a relevant ad can still land even without a topic match. A sleep supplement ad served during a conversation about a rough day is not contextually off. It is adjacent in a way that still makes sense.</p>
+<h2 id="how-does-budget-pacing-work">How does budget pacing work?</h2>
+<p>Each ad in Prism can have a daily budget and a lifetime budget, both tracked in real time. Before an ad is considered eligible for matching, the system checks whether either budget cap has been hit for the day or overall. If it has, that ad drops out of the eligible pool for that request.</p>
+<p>This matters for advertisers who need spend control, and for publishers who want to avoid a situation where one advertiser's ads dominate every conversation. As more advertisers participate, the system balances naturally.</p>
+<h2 id="why-does-this-feel-different-to-the-user">Why does this feel different to the user?</h2>
+<p>The thing that makes chat advertising different from banner advertising is the flow. A banner interrupts. It sits above content you were trying to read, or floats over it, or auto-plays with sound on. The relationship is adversarial.</p>
+<p>An ad inside a chat conversation, served after the bot responds, visually distinct but part of the same thread, lands in a different way. The user just shared what they want. The system responded. A relevant product appearing next is a natural next step, not an intrusion.</p>
+<p>That said, the format matters a lot. Prism uses a card format for most placements: a title, a short description, a clear call to action button, and a "Sponsored via Prism" label so there is no ambiguity about what it is. No tricks. The user can click or ignore.</p>
+<h2 id="what-makes-ad-matching-better-over-time">What makes ad matching better over time?</h2>
+<p>Right now, Prism does topic matching based on tags that advertisers set manually when submitting an ad. If an advertiser tags their ad <code>["ai", "productivity", "tools"]</code>, it matches messages about AI productivity tools. If they tag it <code>["fitness"]</code>, it matches fitness-related messages.</p>
+<p>The practical upside for advertisers: the more specific and accurate your topic tags, the better your match rate. A generic tag like <code>["health"]</code> competes with everything. A tag like <code>["sleep", "insomnia", "recovery"]</code> reaches the right conversations.</p>
+<p>For publishers, the implication is different. The more clearly scoped your bot or assistant is to a topic area, the higher the match rate will be. A fitness chatbot where users consistently talk about workouts and nutrition will see better ad relevance than a general-purpose assistant where the topics jump around.</p>
+<h2 id="what-version-are-we-building-toward">What version are we building toward?</h2>
+<p>Context matching on raw message text is the starting point. The next layer is reading not just the user's current message but the thread. What has the conversation been about for the last few turns? What problem is the user actually trying to solve, not just what did they type in the last message?</p>
+<p>That richer context produces better matches and, more importantly, better timing. A product recommendation that shows up at the right moment in a longer conversation lands differently than one served on the first message.</p>
+<p>The infrastructure for that already exists in the request structure. It is a matter of feeding more signal in. That is where this goes.</p>
+<p>Prism is a contextual ad marketplace built for AI chat interfaces. Publishers integrate the SDK and earn when relevant partner products are surfaced inside their bots. Advertisers reach users at the moment they are already asking about what they sell.</p>
+<p>If you are building an AI assistant or chatbot and want to see how this fits your product, <a href="https://prismpublication.com/" rel="noopener">get in touch</a>.</p>
+    </section>
+    <section>
+      <h2 id="frequently-asked-questions">Frequently asked questions</h2>
+      <h3 id="faq-1">What does the user's message actually contain?</h3>
+<p>When someone types "I've been struggling to sleep lately" into a wellness chatbot, or "any protein powder recommendations?" into a fitness assistant, that message carries more intent signal than almost any other data point in digital advertising. It is explicit. It is timely. It is in context.</p>
+<h3 id="faq-2">What happens when there is no direct match?</h3>
+<p>Not every message maps cleanly to an ad tag. Someone might say "ugh I had a rough day" in a wellness app, and that message does not obviously correspond to any product category. In those cases, Prism falls back to a weighted random selection from the full pool of eligible ads.</p>
+<h3 id="faq-3">How does budget pacing work?</h3>
+<p>Each ad in Prism can have a daily budget and a lifetime budget, both tracked in real time. Before an ad is considered eligible for matching, the system checks whether either budget cap has been hit for the day or overall. If it has, that ad drops out of the eligible pool for that request.</p>
+    </section>
+        </div>
+      </section>
+
+      <section class="advertisers">
+        <div class="container">
+          <h2>A chat-ad path that is not ChatGPT-priced</h2>
+          <p>Indie chatbot apps still need labelled partner offers. ChatGPT-scale ad deals are out of reach. The SDK returns a labelled card or nothing. Three lines. The key stays on your server.</p>
+          <div class="cta-group">
+            <a class="btn primary" href="https://prismpublication.com/developers/">Open the developer guide</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-grid">
+        <div>
+          <p>&copy; 2026 Prism Publication.</p>
+          <p>Chat ads are labelled sponsored placements. Nothing on this page is a live auction.</p>
+        </div>
+        <ul>
+          <li><a href="https://prismpublication.com/">Home</a></li>
+          <li><a href="../">Blog</a></li>
+          <li><a href="https://prismpublication.com/demo/">Demo</a></li>
+          <li><a href="https://prismpublication.com/ad-submission/">Ad submission</a></li>
+          <li><a href="https://prismpublication.com/developers/">Developers</a></li>
+          <li><a href="mailto:info@prismpublication.com">info@prismpublication.com</a></li>
+        </ul>
+      </div>
+    </footer>
+  </body>
+</html>
