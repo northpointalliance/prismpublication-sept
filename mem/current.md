@@ -9,16 +9,18 @@ Daniel has spent repeated sessions rebuilding this homepage across different too
 A separate branch/PR (`cursor/prefilled-demo-thread`, PR #12) rebuilt this homepage from a different tool's output and was **closed without merging** on 13 September 2026 for exactly this reason. Do not resurrect it, cherry-pick from it, or treat its existence as evidence the homepage should change.
 
 **The only new work permitted right now:**
-- A blog (new pages/section)
+- A blog (shipped 14 September 2026 — `blog/`, 15 posts + index)
 - Legal pages: Terms & Conditions, Privacy
 
-Both are additive — their own pages/files. They do not touch `index.html`, `css/styles.css`, `js/demo.js`, or the existing nav/colors/hierarchy, beyond adding a nav link to the new pages if asked.
+**One foundation, no exceptions (14 September 2026):** every page on this site — the frozen homepage, `demo/`, `ad-submission/`, `developers/`, `blog/`, and any future page — loads the same `css/styles.css` and reuses the same header/nav/footer HTML structure, fonts, and colors. A new page is new copy inside the existing template, never a new design. `blog/` follows this already: it loads `css/styles.css` plus a small *additive* `css/blog.css` for the few elements the homepage doesn't have (cover image, pull-quote), and nothing in `css/blog.css` overrides or duplicates a rule from `css/styles.css`. Any future add-on (legal pages included) must work the same way.
+
+New pages are additive — their own files. They do not touch `index.html`, `css/styles.css`, or `js/demo.js`'s existing content, beyond adding a nav/footer link to the new pages if asked (done for `blog/` in PR #15 — every page's nav and footer now links to it).
 
 ## Locked public site
 
 - Origin: https://prismpublication.com/
 - Host: Cloudflare Pages on GitHub `main`. Build `echo "Building static site"`. Never Wrangler deploy.
-- Pages: `index.html`, `demo/index.html`, `developers/index.html`, `ad-submission/index.html`, `css/styles.css`.
+- Pages: `index.html`, `demo/index.html`, `developers/index.html`, `ad-submission/index.html`, `blog/` (index + 15 posts), `css/styles.css`.
 - Visitor demo is the **phone thread** (Play/Reset, composer off). Not the category form.
 - One page paint only: `#f0f9ff` on html, body, header, main, footer, sections, containers, cards, tables. No `--section` / `--card-bg` second wash. Buttons may use accent. Phone chrome and in-thread cards stay device UI, not page paint.
 - Alignment: paragraphs and long copy **left**. Headlines (h1/h2) and CTA groups **center**. No justify. No right-aligned body.
