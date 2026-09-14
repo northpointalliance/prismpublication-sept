@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-22TDLD3N4E"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-22TDLD3N4E");
+    </script>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Privacy | Prism Publication</title>
+    <meta
+      name="description"
+      content="What Prism Publication collects, why, and who it's shared with: ad submissions, PayPal payments, and analytics. Plain language, not boilerplate."
+    />
+    <link rel="canonical" href="https://prismpublication.com/privacy/" />
+    <meta name="author" content="Daniel Rosenthal" />
+    <meta name="robots" content="index,follow" />
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site">
+      <div class="container">
+        <a class="brand" href="https://prismpublication.com/">Prism Publication</a>
+        <nav class="primary" aria-label="Primary">
+          <a href="https://prismpublication.com/run-ads/">Run ads</a>
+          <a href="https://prismpublication.com/demo/">Demo</a>
+          <a href="https://prismpublication.com/ad-submission/">Ad submission</a>
+          <a href="https://prismpublication.com/developers/">Developers</a>
+          <a href="https://prismpublication.com/blog/">Blog</a>
+          <a href="mailto:info@prismpublication.com">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero page-hero">
+        <div class="container">
+          <h1>Privacy</h1>
+          <p class="subhead">
+            <strong>What this site actually collects, why, and who sees it -- matched to what the code does, not generic boilerplate.</strong>
+            If a line here stops being true, it's a bug in the policy, not a footnote. Email <a href="mailto:info@prismpublication.com">info@prismpublication.com</a> if something looks wrong.
+          </p>
+          <p class="meta">
+            By Daniel Rosenthal.
+            Last updated <time datetime="2026-09-14">14 September 2026</time>.
+          </p>
+        </div>
+      </section>
+
+      <section class="aeo">
+        <div class="container">
+          <h2>What does this site collect?</h2>
+          <p>
+            <strong>If you submit an ad campaign:</strong> brand name, work email, category, card title, description, destination URL, button text, optional keywords, and an optional budget note. This is stored in a Cloudflare D1 database so it can be reviewed and, if approved, matched against questions on <a href="https://prismpublication.com/run-ads/">run-ads</a>.
+          </p>
+          <p>
+            <strong>If you pay the $5.00 submission fee:</strong> the payment itself is handled entirely by PayPal. This site never sees or stores your card number, PayPal password, or any other payment credential. What we do store is the PayPal order ID and the confirmed amount, so a submission can be tied to a verified payment.
+          </p>
+          <p>
+            <strong>If you type a question into the phone UI on <a href="https://prismpublication.com/run-ads/">run-ads</a> or the homepage demo:</strong> that text is sent to the matching function to compare against approved ad creative, and the result is returned to your browser. It is not written to any database or log. It is not stored anywhere after the request completes.
+          </p>
+          <p>
+            <strong>General site visits:</strong> Google Analytics (a standard, cookie-based analytics tool) runs on every public page except the internal admin review page. It collects the usual aggregate signals -- pages visited, rough location, device/browser type, referring site -- the same as most websites. Cloudflare, our host, also collects its own basic traffic analytics (visit counts, page views) automatically; this is separate from Google Analytics and doesn't involve any code on this site.
+          </p>
+
+          <h2>Who is this shared with?</h2>
+          <p>
+            <strong>PayPal</strong>, to process the $5.00 submission fee and any future advertiser billing. <strong>Google</strong>, via Google Analytics, for traffic measurement. <strong>Cloudflare</strong>, which hosts this entire site and its database -- your data physically lives on Cloudflare's infrastructure. Nobody else. This site doesn't sell data, and doesn't share ad-submission details with anyone beyond what's needed to review and, if approved, run the campaign you submitted.
+          </p>
+
+          <h2>How long is it kept?</h2>
+          <p>
+            <strong>Ad submissions are kept until you ask for deletion or the campaign is clearly no longer active.</strong>
+            There's no automatic expiry built into the system yet -- if you want a submission removed, email <a href="mailto:info@prismpublication.com">info@prismpublication.com</a> and it will be deleted from the database directly. Analytics data retention follows Google Analytics' and Cloudflare's own standard retention settings, not anything custom to this site.
+          </p>
+
+          <h2>What are your rights?</h2>
+          <p>
+            <strong>You can ask to see what's stored about you, correct it, or have it deleted.</strong>
+            Email <a href="mailto:info@prismpublication.com">info@prismpublication.com</a> with the email address you submitted under, and it will be handled directly -- this is a small, single-operator site, not a company with a formal request portal, so expect a real reply from a real person, not an automated ticket system.
+          </p>
+
+          <h2>Cookies</h2>
+          <p>
+            <strong>Google Analytics sets cookies to distinguish visitors and sessions.</strong>
+            This site does not set any other cookies of its own. No login system exists on the public site, so there's nothing to keep you "signed in" to.
+          </p>
+
+          <h2>Where is this hosted?</h2>
+          <p>
+            <strong>Cloudflare Pages, with Cloudflare D1 as the database.</strong>
+            No separate server, no third-party database provider. Payment processing (PayPal) and analytics (Google) are the only other services this site's data ever touches.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-grid">
+        <div>
+          <p>&copy; 2026 Prism Publication.</p>
+          <p>Questions about this policy: <a href="mailto:info@prismpublication.com">info@prismpublication.com</a></p>
+        </div>
+        <ul>
+          <li><a href="https://prismpublication.com/">Home</a></li>
+          <li><a href="https://prismpublication.com/terms/">Terms</a></li>
+          <li><a href="https://prismpublication.com/ad-submission/">Ad submission</a></li>
+          <li><a href="https://prismpublication.com/developers/">Developers</a></li>
+          <li><a href="https://prismpublication.com/blog/">Blog</a></li>
+          <li><a href="mailto:info@prismpublication.com">info@prismpublication.com</a></li>
+        </ul>
+      </div>
+    </footer>
+  </body>
+</html>
