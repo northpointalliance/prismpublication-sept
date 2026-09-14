@@ -1,0 +1,35 @@
+/* Additive styles for /blog/. Does not modify styles.css or any rule that
+   applies to the homepage, demo, ad-submission, or developers pages. */
+
+.page-hero figure.cover {
+    margin: 1.5rem auto 0;
+    max-width: 800px;
+}
+
+.page-hero figure.cover img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.aeo blockquote.direct-answer {
+    border-left: 4px solid var(--accent);
+    padding: 0.25rem 0 0.25rem 1.25rem;
+    margin: 0 0 1.5rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.aeo blockquote.direct-answer p {
+    margin: 0;
+}
+
+.aeo h3 {
+    margin-top: 1.5rem;
+    font-size: 1.2rem;
+}
+
+.aeo section + section {
+    margin-top: 1.5rem;
+}

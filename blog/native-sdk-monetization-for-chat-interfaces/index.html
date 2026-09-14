@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>How do you add native ads to a chatbot without slowing the reply? | Prism Publication</title>
+    <meta name="description" content="Call getAd from the server after the assistant answers. Pass the live message as context. Render a labelled card, or render nothing." />
+    <link rel="canonical" href="https://prismpublication.com/blog/native-sdk-monetization-for-chat-interfaces/" />
+    <meta name="author" content="Daniel Rosenthal" />
+    <meta name="robots" content="index,follow" />
+    <link rel="stylesheet" href="../../css/styles.css" />
+    <link rel="stylesheet" href="../../css/blog.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": ["BlogPosting", "TechArticle"],
+            "@id": "https://prismpublication.com/blog/native-sdk-monetization-for-chat-interfaces/#article",
+            "headline": "How do you add native ads to a chatbot without slowing the reply?",
+            "description": "Call getAd from the server after the assistant answers. Pass the live message as context. Render a labelled card, or render nothing.",
+            "url": "https://prismpublication.com/blog/native-sdk-monetization-for-chat-interfaces/",
+            "datePublished": "2026-09-06",
+            "dateModified": "2026-09-06",
+            "author": { "@type": "Person", "name": "Daniel Rosenthal" },
+            "publisher": { "@id": "https://prismpublication.com/#org" }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site">
+      <div class="container">
+        <a class="brand" href="https://prismpublication.com/">Prism Publication</a>
+        <nav class="primary" aria-label="Primary">
+          <a href="https://prismpublication.com/#advertisers">Run ads</a>
+          <a href="https://prismpublication.com/demo/">Demo</a>
+          <a href="https://prismpublication.com/ad-submission/">Ad submission</a>
+          <a href="https://prismpublication.com/developers/">Developers</a>
+          <a href="../">Blog</a>
+          <a href="mailto:info@prismpublication.com">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero page-hero">
+        <div class="container">
+          <p class="audience-kicker">ad-tech</p>
+          <h1>How do you add native ads to a chatbot without slowing the reply?</h1>
+          <p class="meta">
+            By Daniel Rosenthal.
+            Published <time datetime="2026-09-06">September 6, 2026</time>.
+            Last updated <time datetime="2026-09-06">September 6, 2026</time>.
+          </p>
+        </div>
+      </section>
+
+      <section class="aeo">
+        <div class="container">
+<section class="analysis">
+      <p>Here is what matters if you run an indie chatbot and you need partner revenue that is not a ChatGPT-priced deal. Native ads in a conversational interface are a labelled offer in the thread, matched to what the person just asked. They are not a banner parked on top of the chat. The Software Development Kit (SDK) is three lines in your handler. The Application Programming Interface (API) should add one round trip after the reply, not a second product in the browser.</p>
+<p>If you can delete the disclosure and the card still looks like the bot's own advice, you built the wrong thing. Speed without a label is still a lie. A label on a slow waterfall is still a banner with extra steps. Rank those two failures before you pick a vendor.</p>
+<h2 id="what-is-native-sdk-monetization-inside-a-chat">What is native SDK monetization inside a chat?</h2>
+<p>Native SDK monetization means the offer is selected from conversation context and drawn as a card in the same thread as the reply. The developer platform exposes one function. You pass a key, a format, and the topic. You get a labelled card, or you get <code>null</code>. Quiet sessions stay quiet.</p>
+<p>That is different from wrapping the widget in a display network. Display networks guess from a profile. Chat already has the question in plain language. Matching on that question is the job. The SDK is only the pipe: one call from your server, one render rule in your client, no script that phones home from the user's browser.</p>
+<p>Prism's chat ads path is built for independent bot developers who cannot buy OpenAI, Google, or Amazon chat inventory. The demo on this site is scripted. There is not a live bid behind every visitor yet. Say that out loud if you write about latency. A fast mock is not a measured marketplace.</p>
+<p>See <a href="../what-ai-chat-ads-actually-are/">what AI chat ads actually are</a> if you need the format before the wire.</p>
+<h2 id="who-should-integrate-this-and-who-should-not">Who should integrate this, and who should not?</h2>
+<p>Integrate if you ship a chatbot people use every day, inference has a bill, and a day-one paywall would kill the habit. A labelled partner offer is one way to pay for the session without a strip of display. Do not integrate if you run a support bot that should never sell. That product is judgment per turn, not a card.</p>
+<p>Developer platforms (the people who sell bot builders, not a single bot) should expose the same rule to every tenant: server-side key, card or nothing, disclosure on the card. Hide the advertiser roster. Hide the matching table. Tenants should not paste your secret into a client bundle.</p>
+<p>If the bot is medical, legal, or a place people confess, sit this out until you have a human policy, not until you have a faster API. Speed does not fix a category you should not monetize.</p>
+<p>Prism Signals scores support turns. It does not insert ads. Keep those jobs separate on purpose.</p>
+<h2 id="why-does-api-efficiency-matter-more-than-a-fatter-payload">Why does API efficiency matter more than a fatter payload?</h2>
+<p>Every extra token you send to matching is a token you already paid the model to produce, plus a token you now pay to ship. Efficiency here is boring: send the live user message, maybe a short topic field, not the whole thread dump, not embeddings you recomputed for fun, not a cookie jar. The matcher needs the question. It does not need your session archaeology.</p>
+<p>A fat payload also delays the card. The person already waited on the Large Language Model (LLM) reply. A second wait that looks like "loading partner" trains them to leave. Keep the ad request smaller than the chat completion. If your ad call is bigger than the prompt, you inverted the product.</p>
+<p>Do not fan out to five networks from the chat handler and wait for the slowest. That is how display latency got into mobile web. Chat cannot afford it. One endpoint. One timeout you choose. Fallback is <code>null</code>, not a house ad that pretends to be relevant.</p>
+<p>The <a href="../how-ad-matching-works/">ad matching write-up</a> is the product view of tags and the current message. This page is the integration view: what you refuse to send.</p>
+<h2 id="how-do-you-implement-the-sdk-without-putting-a-key-in-the-br">How do you implement the SDK without putting a key in the browser?</h2>
+<p>Keep the key on the server. Call <code>getAd</code> from the same process that already holds your model key. Pass <code>format: "card"</code> and <code>context: { topic: userMessage }</code>. If a card comes back, serialize the title, description, link, and advertiser label to the client. If <code>null</code> comes back, send the reply alone.</p>
+<p>Three lines is not a metaphor. Import <code>getAd</code> from <code>@prismpublication/sdk</code>. Await it with <code>apiKey</code> from <code>process.env.PRISM_API_KEY</code>, <code>format: "card"</code>, and <code>context: { topic: userMessage }</code>. Same contract as the public SDK page.</p>
+<p>No pixel in the page. No third-party script in the chat widget. The browser only draws HTML you already trust. That is the difference between an SDK and an ad tag. An ad tag is a guest in the user's machine. This call is a guest in your Worker.</p>
+<p>Email <a href="mailto:info@prismpublication.com">info@prismpublication.com</a> if you are building the bot and need that path. The <a href="https://prismpublication.com/developers/">SDK page</a> has the same snippet next to the constraints.</p>
+<h2 id="when-should-the-ad-call-run-relative-to-the-model-reply">When should the ad call run relative to the model reply?</h2>
+<p>After the assistant answers, not before. Matching on the user turn plus the reply topic beats matching on the half-typed question. The card then follows the answer instead of interrupting the wait. Users forgive a labelled card under a useful answer. They do not forgive a spinner that delayed the answer so you could pick a sponsor.</p>
+<p>If your stack streams tokens, still wait for a complete thought before you request an offer. A card that arrives mid-sentence is a banner. A card that arrives when the answer is done is a next step. That timing rule is more important than shaving ten milliseconds off the HTTP call.</p>
+<p>Do not run the ad call in parallel with the first token if the match needs the full question. Parallelism looks fast in a waterfall chart and looks rude in a thread.</p>
+<h2 id="what-does-low-latency-ad-delivery-actually-mean-here">What does low-latency ad delivery actually mean here?</h2>
+<p>It means one server-side request after the reply, with a hard timeout, and a UI that does not block the transcript on that request. It does not mean we published a millisecond SLA. We have not. Anyone quoting "sub-50ms matching" without a method is selling a number, not a log.</p>
+<p>Low latency in chat is relative to the model, not to a display exchange. The completion already took hundreds of milliseconds to many seconds. The ad call should be a rounding error on that wait, or it should fail closed. Fail closed: show the answer, skip the card, log the timeout. Fail open with a default offer is how people learn to ignore you.</p>
+<p>Edge execution helps because the chat handler is often already on a Worker. Putting matching in the same region as the handler beats shipping the topic to a distant bidder and back. That is architecture, not a benchmark. Measure your own p95 once you have live traffic. Until then, design for <code>null</code>.</p>
+<p>The <a href="../../demo/">scripted demo</a> shows four insertions every visitor sees. Use it to check the card chrome. Do not treat it as proof of production latency.</p>
+<h2 id="why-return-a-card-or-null-instead-of-always-filling-a-slot">Why return a card or null instead of always filling a slot?</h2>
+<p>Always filling a slot trains the eye to skip the thread. Fill rate is a publisher vanity metric. Trust is the retention metric. If the topic does not match, <code>null</code> is the product working. Operators who cannot stand empty slots will paste a fallback creative and call it native. It is not native. It is a house banner with a chat skin.</p>
+<p><code>null</code> also keeps the API honest. You are not paying to render junk. You are not teaching the model to talk around a guaranteed sponsor. The reply stays the reply. The card is optional HTML underneath.</p>
+<p>Disclosure stays on the card: sponsored, named advertiser, a button the user can ignore. <a href="../how-native-ads-in-ai-chatbots-actually-work/">How native ads in AI chatbots actually work</a> walks the formats. Inline recommendations without a label are the fast way to lose the room.</p>
+<h2 id="how-should-context-be-sent-so-matching-stays-cheap">How should context be sent so matching stays cheap?</h2>
+<p>Send the current user message as <code>topic</code>. Trim it. Do not send passwords, emails, or health record dumps your bot happened to collect. Matching on "protein powder" is enough. Matching on the person's full name and last order is a different business, and a worse one.</p>
+<p>Thread-level context is the next layer, not the first. The matching write-up already says that: current message now, last few turns later. Do not invent a vector store in the first integration so the ad call looks clever. Clever context that is wrong is slower and ruder than a tag on the last sentence.</p>
+<p>If you operate a developer platform, give tenants an allow-list of fields they may attach. Default is the message text. Everything else is a signed add-on with a reason. That is how you keep the API small when fifty bots share your endpoint.</p>
+<h2 id="what-should-a-developer-platform-expose-versus-hide">What should a developer platform expose versus hide?</h2>
+<p>Expose: the <code>getAd</code> contract, the disclosure requirement, the timeout, the <code>null</code> rule, a test key that returns fixtures. Hide: advertiser identities until a card is chosen, floor prices if you ever have them, other tenants' topics, the raw match table.</p>
+<p>Platforms that dump the whole catalog into the client "for debugging" will watch someone scrape it. Platforms that require a browser key will watch someone steal it. The efficiency story and the security story are the same story: fewer bytes, fewer places the secret can leak, fewer reasons to run JavaScript you do not own.</p>
+<p>If you already wrap model APIs for customers, put this call next to that wrap. Same secrets manager. Same log redaction. Same region. Do not stand up a second control plane for ads unless the ads volume actually appears.</p>
+<h2 id="what-breaks-trust-even-if-the-api-is-fast">What breaks trust even if the API is fast?</h2>
+<p>An unlabeled suggestion. A card that contradicts the answer. A card that arrives before the answer. A card on a crisis turn. A card that uses the person's words as a headline for a product they did not ask about. Latency will not save those. People can taste a microwave paragraph. They can also taste a sponsor that hijacked the question.</p>
+<p>Regulators care about disclosure. Users care about whether they still believe the next unsponsored sentence. Those are not the same test, and you need both. The EU-shaped watermark conversation is the car-law pattern again: the tool shipped, the street filled up, the rulebook is arriving. Label the card now so you are not scrambling for a prompt that fakes compliance.</p>
+<p>If you need the economics of the free tier, that is a different pillar: unit economics. This page stays on the wire.</p>
+<h2 id="how-do-you-test-the-insertion-without-a-live-bid">How do you test the insertion without a live bid?</h2>
+<p>Use fixtures. The public demo plays the same four cards so you can see the label, the button, and the thread spacing. In your staging bot, stub <code>getAd</code> to return a card on a keyword you control and <code>null</code> on everything else. Time the handler with the stub at 0ms and at your timeout. Confirm the transcript never waits on the stub.</p>
+<p>When a live match exists, keep the same UI. The API should not change shape because money showed up. That is the point of <code>card | null</code>. Switching chrome later is how you teach users that sponsored means "we redesigned the chat."</p>
+<p>Do not A/B a hidden sponsorship. A/B whether the card sits after the answer or not, with the label always on.</p>
+<h2 id="what-should-you-measure-after-the-first-integration">What should you measure after the first integration?</h2>
+<p>Measure answer time with and without the ad call. Measure timeout rate. Measure how often you render <code>null</code>. Measure whether people continue the thread after a card, not only whether they click. Clicks without a continued conversation are a banner score. Continued conversation is whether you still have a bot.</p>
+<p>I will not invent a click-through rate for chat cards. Unverified. What I will stand behind is the sequence: question, answer, optional labelled card, continue. If your logs cannot tell those four events apart, you are not measuring native ads. You are measuring hope.</p>
+<p>When inference cost per turn is the actual wound, put the ad revenue next to that number, not next to vanity impressions. ConvoMargin exists for the margin per turn. The SDK exists for the labelled card. Do not mash the dashboards into one lie.</p>
+<h2 id="where-do-you-start-this-week">Where do you start this week?</h2>
+<p>Read the <a href="https://prismpublication.com/developers/">chat ads SDK</a>. Copy the three lines into the handler that already holds your model key. Render only when a card returns. Watch one real conversation in staging. If the card would embarrass you in front of the user, keep <code>null</code> until the topic tags are honest.</p>
+<p>Then email <a href="mailto:info@prismpublication.com">info@prismpublication.com</a> with what the bot actually does, not a pitch deck. Indie volume is the audience. ChatGPT-scale deals are not. If you need the card path, say so. If you need support-bot scoring, that is Signals, and you should not mix the two in one call.</p>
+    </section>
+        </div>
+      </section>
+
+      <section class="advertisers">
+        <div class="container">
+          <h2>A chat-ad path that is not ChatGPT-priced</h2>
+          <p>Indie chatbot apps still need labelled partner offers. ChatGPT-scale ad deals are out of reach. The SDK returns a labelled card or nothing. Three lines. The key stays on your server.</p>
+          <div class="cta-group">
+            <a class="btn primary" href="https://prismpublication.com/developers/">Open the developer guide</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-grid">
+        <div>
+          <p>&copy; 2026 Prism Publication.</p>
+          <p>Chat ads are labelled sponsored placements. Nothing on this page is a live auction.</p>
+        </div>
+        <ul>
+          <li><a href="https://prismpublication.com/">Home</a></li>
+          <li><a href="../">Blog</a></li>
+          <li><a href="https://prismpublication.com/demo/">Demo</a></li>
+          <li><a href="https://prismpublication.com/ad-submission/">Ad submission</a></li>
+          <li><a href="https://prismpublication.com/developers/">Developers</a></li>
+          <li><a href="mailto:info@prismpublication.com">info@prismpublication.com</a></li>
+        </ul>
+      </div>
+    </footer>
+  </body>
+</html>
