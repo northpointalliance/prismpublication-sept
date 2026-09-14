@@ -95,7 +95,7 @@
           <a href="https://prismpublication.com/demo/">Demo</a>
           <a href="https://prismpublication.com/#niches">Categories</a>
           <a href="https://prismpublication.com/#sdk">Developers</a>
-          <a href="https://prismpublication.com/blog/">Blog</a>
+          <a href="https://prismpublication.com/blog/">Blog</a>
           <a href="mailto:info@prismpublication.com">Contact</a>
         </nav>
       </div>
@@ -107,7 +107,7 @@
           <h1>How do you submit a chat ad?</h1>
           <p class="subhead">
             <strong>Submit the campaign you already run. A person reviews it. We place a labeled card next to chatbot replies only when someone is already asking about that product.</strong>
-            This page is for brands and agencies. <strong>Submitting and testing your ad are free.</strong> A live campaign is billed per click or per rendered impression, only when a card actually shows -- and that rate is set with you after review, not charged automatically.
+            This page is for brands and agencies. <strong>Submitting costs a flat $5.00</strong>, which covers review and unlimited testing on <a href="https://prismpublication.com/run-ads/">run-ads</a>. A live campaign is billed separately, per click or per rendered impression, only when a card actually shows -- that rate is set with you after review, not charged automatically.
           </p>
           <div class="cta-group">
             <a class="btn primary" href="#submit-form">Submit a campaign</a>
@@ -126,7 +126,7 @@
           <h2>Submit your campaign</h2>
           <p>
             <strong>Fill this in instead of writing an email.</strong>
-            Fitness, sleep tools, and productivity clear this form automatically for review. Any other category still needs a person to look at it first, same as always.
+            Fitness, sleep tools, and productivity clear this form automatically for review. Any other category still needs a person to look at it first, same as always. A flat <strong>$5.00</strong> covers review and unlimited testing -- pay after filling in the details below, via PayPal.
           </p>
           <form id="ad-form" class="card" style="max-width: 640px; text-align: left;" novalidate>
             <p class="meta" id="form-status" role="status" style="margin-bottom: 1rem;"></p>
@@ -160,10 +160,16 @@
             <label for="f-keywords">Extra words a customer might use (optional, helps matching -- e.g. "resistance bands, home gym, strength training")</label><br />
             <input id="f-keywords" name="keywords" type="text" maxlength="300" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
 
-            <label for="f-budget">Daily or lifetime cap (optional, for context only -- no billing happens here)</label><br />
+            <label for="f-budget">Daily or lifetime cap (optional, for the campaign itself -- separate from the $5 submission fee)</label><br />
             <input id="f-budget" name="budgetNote" type="text" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1.5rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
 
-            <button type="submit" class="btn primary">Submit for review</button>
+            <button type="submit" id="continue-to-pay" class="btn primary">Continue to payment ($5.00)</button>
+
+            <div id="payment-step" style="display: none;">
+              <p class="meta" style="margin: 1rem 0 0.5rem;">Pay $5.00 to submit "<span id="payment-title-preview"></span>" for review.</p>
+              <div id="paypal-button-container"></div>
+              <button type="button" id="back-to-form" class="btn secondary" style="margin-top: 0.5rem;">Back to edit</button>
+            </div>
           </form>
           <p class="meta">
             Prefer email? Write to <a href="mailto:info@prismpublication.com">info@prismpublication.com</a> with the same details.
@@ -283,7 +289,7 @@
           <li><a href="https://prismpublication.com/">Home</a></li>
           <li><a href="https://prismpublication.com/ad-submission/">Ad submission</a></li>
           <li><a href="https://prismpublication.com/developers/">Developers</a></li>
-          <li><a href="https://prismpublication.com/blog/">Blog</a></li>
+          <li><a href="https://prismpublication.com/blog/">Blog</a></li>
           <li><a href="mailto:info@prismpublication.com">info@prismpublication.com</a></li>
         </ul>
       </div>
@@ -292,13 +298,103 @@
       (function () {
         var form = document.getElementById("ad-form");
         var statusEl = document.getElementById("form-status");
+        var continueBtn = document.getElementById("continue-to-pay");
+        var paymentStep = document.getElementById("payment-step");
+        var backBtn = document.getElementById("back-to-form");
+        var titlePreview = document.getElementById("payment-title-preview");
         if (!form) return;
 
-        form.addEventListener("submit", async function (event) {
-          event.preventDefault();
-          var data = Object.fromEntries(new FormData(form).entries());
-          statusEl.textContent = "Sending…";
+        var formFields = [
+          "f-brand", "f-email", "f-category", "f-title", "f-description",
+          "f-destination", "f-cta", "f-keywords", "f-budget",
+        ];
 
+        // Not using the `hidden` attribute: .btn sets display:inline-block,
+        // which (equal specificity, author beats UA styles) wins over the
+        // browser's default [hidden]{display:none}, so a "hidden" button
+        // would still render. Inline style always wins instead.
+        function show(el) { el.style.display = ""; }
+        function hide(el) { el.style.display = "none"; }
+
+        function setFieldsDisabled(disabled) {
+          formFields.forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el) el.disabled = disabled;
+          });
+        }
+
+        function loadPayPalSdk() {
+          return fetch("/api/paypal/config")
+            .then(function (res) {
+              if (!res.ok) throw new Error("PayPal is not available right now.");
+              return res.json();
+            })
+            .then(function (config) {
+              return new Promise(function (resolve, reject) {
+                var script = document.createElement("script");
+                script.src = "https://www.paypal.com/sdk/js?client-id=" + encodeURIComponent(config.clientId) + "&currency=USD&intent=capture";
+                script.onload = resolve;
+                script.onerror = function () { reject(new Error("Could not load PayPal.")); };
+                document.head.appendChild(script);
+              });
+            });
+        }
+
+        var paypalRendered = false;
+        var capturedFormData = null;
+
+        form.addEventListener("submit", function (event) {
+          event.preventDefault();
+          if (!form.reportValidity()) return;
+
+          // Capture before disabling -- disabled fields are excluded from FormData.
+          capturedFormData = Object.fromEntries(new FormData(form).entries());
+
+          titlePreview.textContent = document.getElementById("f-title").value;
+          hide(continueBtn);
+          show(paymentStep);
+          setFieldsDisabled(true);
+          statusEl.textContent = "";
+
+          if (paypalRendered) return;
+          paypalRendered = true;
+
+          statusEl.textContent = "Loading PayPal…";
+          loadPayPalSdk()
+            .then(function () {
+              statusEl.textContent = "";
+              window.paypal.Buttons({
+                createOrder: function () {
+                  return fetch("/api/paypal/create-order", { method: "POST" })
+                    .then(function (res) { return res.json(); })
+                    .then(function (data) {
+                      if (!data.orderId) throw new Error(data.error || "Could not start PayPal checkout.");
+                      return data.orderId;
+                    });
+                },
+                onApprove: function (paypalData) {
+                  statusEl.textContent = "Payment approved -- submitting your campaign…";
+                  var data = Object.assign({}, capturedFormData, { paypalOrderId: paypalData.orderID });
+                  return submitCampaign(data);
+                },
+                onError: function (err) {
+                  statusEl.textContent = "PayPal error: " + (err && err.message ? err.message : "something went wrong.");
+                },
+              }).render("#paypal-button-container");
+            })
+            .catch(function (err) {
+              statusEl.textContent = "Error: " + err.message;
+            });
+        });
+
+        backBtn.addEventListener("click", function () {
+          show(continueBtn);
+          hide(paymentStep);
+          setFieldsDisabled(false);
+          statusEl.textContent = "";
+        });
+
+        async function submitCampaign(data) {
           try {
             var res = await fetch("/api/submit", {
               method: "POST",
@@ -307,15 +403,18 @@
             });
             var body = await res.json();
             if (!res.ok) {
-              statusEl.textContent = "Error: " + (body.error || "Something went wrong.");
+              statusEl.textContent = "Payment succeeded, but the submission failed: " + (body.error || "Something went wrong.") + ". Email info@prismpublication.com with your payment confirmation.";
               return;
             }
             statusEl.textContent = body.message;
             form.reset();
+            show(continueBtn);
+            hide(paymentStep);
+            setFieldsDisabled(false);
           } catch (err) {
-            statusEl.textContent = "Could not reach the server. Email info@prismpublication.com instead.";
+            statusEl.textContent = "Payment succeeded, but could not reach the server to record it. Email info@prismpublication.com with your payment confirmation.";
           }
-        });
+        }
       })();
     </script>
   </body>

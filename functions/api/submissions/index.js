@@ -20,7 +20,8 @@ export async function onRequestGet(context) {
 
   const { results } = await env.DB.prepare(
     `SELECT id, created_at, status, brand, email, category, title, description,
-            destination_url, cta_text, budget_note, review_notes, keywords
+            destination_url, cta_text, budget_note, review_notes, keywords,
+            paypal_order_id, amount_paid_cents
      FROM ad_submissions
      ORDER BY created_at DESC`
   ).all();

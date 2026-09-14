@@ -1,0 +1,95 @@
+// Shared PayPal helpers. Filename starts with "_" so Cloudflare Pages does
+// not treat it as a route -- it's only imported by the actual endpoints.
+// Requires PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET as Cloudflare Pages
+// secrets (Settings -> Environment variables -> Secret). PAYPAL_MODE
+// ("sandbox" | "live") is optional, defaults to "sandbox" -- flip it when
+// ready to take real money, no code change needed.
+
+export const SUBMISSION_FEE_USD = "5.00";
+
+export function paypalBaseUrl(env) {
+  return env.PAYPAL_MODE === "live"
+    ? "https://api-m.paypal.com"
+    : "https://api-m.sandbox.paypal.com";
+}
+
+export async function getAccessToken(env) {
+  const base = paypalBaseUrl(env);
+  const auth = btoa(`${env.PAYPAL_CLIENT_ID}:${env.PAYPAL_CLIENT_SECRET}`);
+  const res = await fetch(`${base}/v1/oauth2/token`, {
+    method: "POST",
+    headers: {
+      Authorization: `Basic ${auth}`,
+      "content-type": "application/x-www-form-urlencoded",
+    },
+    body: "grant_type=client_credentials",
+  });
+  if (!res.ok) {
+    throw new Error(`PayPal auth failed: ${res.status} ${await res.text()}`);
+  }
+  const data = await res.json();
+  return data.access_token;
+}
+
+export async function createOrder(env) {
+  const base = paypalBaseUrl(env);
+  const token = await getAccessToken(env);
+  const res = await fetch(`${base}/v2/checkout/orders`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      intent: "CAPTURE",
+      purchase_units: [
+        {
+          description: "Prism Publication ad submission review",
+          amount: { currency_code: "USD", value: SUBMISSION_FEE_USD },
+        },
+      ],
+    }),
+  });
+  if (!res.ok) {
+    throw new Error(`PayPal create order failed: ${res.status} ${await res.text()}`);
+  }
+  const data = await res.json();
+  return data.id;
+}
+
+// Captures the order and returns { ok, amountCents } if the payment is real
+// and matches the expected fee. Throws only on a genuine network/API error;
+// a declined/mismatched payment returns { ok: false }, it doesn't throw.
+export async function captureOrder(env, orderId) {
+  const base = paypalBaseUrl(env);
+  const token = await getAccessToken(env);
+  const res = await fetch(`${base}/v2/checkout/orders/${encodeURIComponent(orderId)}/capture`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+  });
+  const data = await res.json().catch(() => null);
+
+  if (!res.ok || !data) {
+    return { ok: false, reason: `capture request failed (${res.status})` };
+  }
+  if (data.status !== "COMPLETED") {
+    return { ok: false, reason: `order status is ${data.status}, not COMPLETED` };
+  }
+
+  const capture = data.purchase_units?.[0]?.payments?.captures?.[0];
+  if (!capture || capture.status !== "COMPLETED") {
+    return { ok: false, reason: "no completed capture found on order" };
+  }
+
+  const amount = capture.amount;
+  const expectedCents = Math.round(Number(SUBMISSION_FEE_USD) * 100);
+  const actualCents = Math.round(Number(amount?.value) * 100);
+  if (amount?.currency_code !== "USD" || actualCents !== expectedCents) {
+    return { ok: false, reason: `unexpected amount: ${amount?.currency_code} ${amount?.value}` };
+  }
+
+  return { ok: true, amountCents: actualCents };
+}

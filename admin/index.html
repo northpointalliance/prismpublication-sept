@@ -51,6 +51,7 @@
               <tr>
                 <th>Received</th>
                 <th>Status</th>
+                <th>Paid</th>
                 <th>Brand / email</th>
                 <th>Category</th>
                 <th>Creative</th>
@@ -105,6 +106,8 @@
         tr.innerHTML =
           "<td>" + escapeHtml(created) + "</td>" +
           '<td><span class="status-pill status-' + escapeHtml(row.status) + '">' + escapeHtml(row.status) + "</span></td>" +
+          "<td>" + (row.amount_paid_cents ? "$" + (row.amount_paid_cents / 100).toFixed(2) : "—") +
+            (row.paypal_order_id ? "<br><small>" + escapeHtml(row.paypal_order_id) + "</small>" : "") + "</td>" +
           "<td>" + escapeHtml(row.brand) + "<br><small>" + escapeHtml(row.email) + "</small></td>" +
           "<td>" + escapeHtml(row.category) + "</td>" +
           "<td><strong>" + escapeHtml(row.title) + "</strong><br>" + escapeHtml(row.description) +

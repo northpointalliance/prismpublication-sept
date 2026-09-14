@@ -19,7 +19,7 @@ This repository is the **single-product** static site, a server-side SDK client,
 - **Live ad testing (added 14 September 2026):** `run-ads/index.html` is a second, separate phone-UI chat (the homepage demo is untouched) where an advertiser types real questions and `functions/api/match.js` runs the live cosine matcher against the pool of **approved** D1 submissions. This is the actual "submit → get approved → test it live" loop. Every page's nav "Run ads" link now points here (it used to point at a homepage anchor — see "Known gaps" below) and `ad-submission/`'s hero CTA also links here.
 - **Blog (added 14 September 2026):** `blog/` — 15 posts + index, migrated from an abandoned Desktop draft, restyled onto this site's own foundation. Linked from every page's nav.
 - **Analytics (restored 14 September 2026):** Google Analytics (`G-22TDLD3N4E`) on every public page except `admin/`. It existed before but was missing from the live repo — lost in an earlier rebuild, not a new addition.
-- **Pricing status:** submitting and testing are currently free (by design, to see if anyone uses the flow at all). A $5.00 flat submission fee via PayPal is decided but **not built** — blocked on Daniel providing PayPal API credentials. See mem/current.md.
+- **Pricing (live, Sandbox mode, 14 September 2026):** submitting a campaign costs a flat **$5.00 via PayPal**, verified server-side (`functions/api/paypal/`) before anything is written to D1. Covers review + unlimited `/run-ads/` testing. Currently in PayPal Sandbox (no real money) — switch `PAYPAL_MODE` to `live` when ready. See mem/current.md.
 
 ## Public contract (quote these)
 
@@ -56,6 +56,9 @@ mem/current.md          Locked decisions carry-forward — read before editing H
 functions/api/submit.js       Pages Function: public submission intake
 functions/api/submissions/    Pages Function: admin list + approve/reject (Access-protected)
 functions/api/match.js        Pages Function: live matcher for run-ads/, approved pool only
+functions/api/paypal/config.js       Pages Function: serves the public PayPal Client ID
+functions/api/paypal/create-order.js Pages Function: creates a server-authoritative $5.00 order
+functions/api/paypal/_shared.js      PayPal API helpers (not a route -- imported by the above and submit.js)
 admin/index.html        Submission review UI (Access-protected)
 run-ads/index.html      Live ad-testing chat (separate from the homepage demo)
 d1/schema.sql           ad_submissions table (already applied to prism-crm)
@@ -79,7 +82,7 @@ Serve the repo root over HTTP (any static server). Open `/` and press Play on th
 ## Known gaps
 
 - **Approving a submission doesn't make it live.** `/admin/` only updates the D1 row's status. Getting an approved creative into `sdk/catalog.json` (what a real third-party publisher's SDK reads) is still a manual git edit. See [docs/ad-submission-backend.md](docs/ad-submission-backend.md).
-- **No plain-language pricing yet.** `docs/pricing.md`'s IO-negotiated rate is the real ad-serving price; the $5 flat submission fee is a separate, smaller, decided-but-unbuilt tier (see mem/current.md).
+- **PayPal is in Sandbox mode.** The $5 submission fee is live but not collecting real money yet — flip `PAYPAL_MODE` to `live` (one Cloudflare env var) when ready, only after a real sandbox test transaction has been run end-to-end. `docs/pricing.md`'s IO-negotiated rate remains the separate, real ad-serving price.
 - **No non-JS publisher integration.** `sdk/prismClient.js` requires the publisher's own server to be Node/JS. `functions/api/match.js` is a plain HTTP endpoint any language could call, but it matches against D1 submissions, not `sdk/catalog.json` — same pattern, not the same integration.
 - **The `Desktop\prismpublication*` folders and D1 databases (`prism-cms`, `prism-memory`) found during this session's cleanup are still unresolved** — not touched, not deleted, still sitting there from earlier abandoned attempts.
 
