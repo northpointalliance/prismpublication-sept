@@ -30,14 +30,26 @@ third-party API/secret. Do not add a third-party service (email sender,
 form handler, auth provider) to this flow without asking; the whole point
 was avoiding exactly that.
 
-Still not built: a plain HTTP matching endpoint for third-party publishers
-on non-JS backends. See "Known gap" in docs/ad-submission-backend.md.
+`functions/api/match.js` (added 14 September 2026, for `/run-ads/` below) is
+now a plain HTTP matching endpoint any language can call with a POST -- but
+it matches against the D1 `ad_submissions` approved pool, not
+`sdk/catalog.json`. It happens to be the same *pattern* a non-JS publisher
+integration would need, but it is not that integration. Still not built: an
+endpoint that matches against `sdk/catalog.json` itself for publishers.
+
+**`/run-ads/` (added 14 September 2026):** a second, separate phone-UI chat
+page -- not the homepage demo, which stays exactly as frozen above. Real
+free-text input, calls `functions/api/match.js`, shows the matched card or
+an honest "no card" against the live pool of **approved** submissions. This
+is the actual product loop: submit -> get approved -> type real questions
+-> see your ad. No login -- an advertiser just types questions relevant to
+their own product and watches for their own brand.
 
 ## Locked public site
 
 - Origin: https://prismpublication.com/
 - Host: Cloudflare Pages on GitHub `main`. Build `echo "Building static site"`. Never `wrangler pages deploy` or `wrangler deploy` -- Git push is the only deploy path. `wrangler pages dev` locally is fine (it's not a deploy).
-- Pages: `index.html`, `demo/index.html`, `developers/index.html`, `ad-submission/index.html`, `blog/` (index + 15 posts), `admin/index.html` (Access-protected), `css/styles.css`.
+- Pages: `index.html`, `demo/index.html`, `developers/index.html`, `ad-submission/index.html`, `blog/` (index + 15 posts), `admin/index.html` (Access-protected), `run-ads/index.html` (live ad-testing chat, separate from the homepage demo), `css/styles.css`.
 - Visitor demo is the **phone thread** (Play/Reset, composer off). Not the category form.
 - One page paint only: `#f0f9ff` on html, body, header, main, footer, sections, containers, cards, tables. No `--section` / `--card-bg` second wash. Buttons may use accent. Phone chrome and in-thread cards stay device UI, not page paint.
 - Alignment: paragraphs and long copy **left**. Headlines (h1/h2) and CTA groups **center**. No justify. No right-aligned body.

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Test your ad | Prism Publication</title>
+    <meta
+      name="description"
+      content="Type a real question and see whether your approved ad gets matched, how it's labeled, and how it looks -- against the live cosine matcher, not a script."
+    />
+    <link rel="canonical" href="https://prismpublication.com/run-ads/" />
+    <meta name="author" content="Daniel Rosenthal" />
+    <meta name="robots" content="index,follow" />
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site">
+      <div class="container">
+        <a class="brand" href="https://prismpublication.com/">Prism Publication</a>
+        <nav class="primary" aria-label="Primary">
+          <a href="https://prismpublication.com/#advertisers">Run ads</a>
+          <a href="https://prismpublication.com/demo/">Demo</a>
+          <a href="https://prismpublication.com/ad-submission/">Ad submission</a>
+          <a href="https://prismpublication.com/developers/">Developers</a>
+          <a href="https://prismpublication.com/blog/">Blog</a>
+          <a href="mailto:info@prismpublication.com">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero page-hero demo-hero">
+        <div class="container">
+          <p class="audience-kicker">For advertisers with an approved ad</p>
+          <h1>Type a real question. See if your ad shows up.</h1>
+          <p class="subhead">
+            <strong>This runs the live matcher against your approved creative, not a script.</strong>
+            Type something a real customer might ask. If your ad clears the 0.65 similarity floor, it shows up labeled exactly as it would in a real chat. If it doesn't, you'll see that too -- no card is also useful information.
+          </p>
+        </div>
+      </section>
+
+      <section class="demo-board">
+        <div class="container demo-stage">
+          <div class="demo-controls">
+            <p class="demo-scenario">
+              Only <strong>approved</strong> submissions are in this pool. If you haven't submitted a campaign yet, start at
+              <a href="https://prismpublication.com/ad-submission/">ad submission</a>. If you submitted and don't see your ad here yet, it's likely still in review -- check with
+              <a href="mailto:info@prismpublication.com">info@prismpublication.com</a>.
+            </p>
+          </div>
+
+          <div class="phone" aria-label="Phone-sized live ad test">
+            <div class="phone-bezel">
+              <p class="phone-notch" aria-hidden="true"></p>
+              <div class="demo-chat">
+                <header class="demo-chat-head">
+                  <div>
+                    <h2>Test your ad</h2>
+                    <p>Live matcher, approved pool</p>
+                  </div>
+                  <p class="demo-live">Live</p>
+                </header>
+                <div class="demo-log" id="chat-log" aria-live="polite"></div>
+                <form class="demo-composer" id="chat-form">
+                  <label class="skip" for="chat-input">Message</label>
+                  <input id="chat-input" type="text" maxlength="240" placeholder="Ask a question your customer might ask" autocomplete="off" />
+                  <button class="btn primary" type="submit">Send</button>
+                </form>
+              </div>
+              <p class="phone-home" aria-hidden="true"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="aeo">
+        <div class="container">
+          <h2>What counts as a match?</h2>
+          <p>
+            <strong>Cosine similarity of 0.65 or higher between your question and the approved creative's category, title, and description.</strong>
+            The same floor quoted everywhere else on this site. No card means the question wasn't close enough -- that's not a bug, it's the point: no card, no bill, on a real campaign.
+          </p>
+          <h2>Why can I see other advertisers' ads too?</h2>
+          <p>
+            <strong>Because that's the real pool your ad runs against.</strong>
+            Every approved, active campaign is in the same matcher. Testing against the real competitive set is more useful than a private sandbox that doesn't reflect how matching actually works.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-grid">
+        <div>
+          <p>&copy; 2026 Prism Publication.</p>
+          <p>Chat ads are labelled sponsored placements with the advertiser's brand or product name.</p>
+        </div>
+        <ul>
+          <li><a href="https://prismpublication.com/">Home</a></li>
+          <li><a href="https://prismpublication.com/demo/">Demo</a></li>
+          <li><a href="https://prismpublication.com/ad-submission/">Ad submission</a></li>
+          <li><a href="https://prismpublication.com/developers/">Developers</a></li>
+          <li><a href="https://prismpublication.com/blog/">Blog</a></li>
+          <li><a href="mailto:info@prismpublication.com">info@prismpublication.com</a></li>
+        </ul>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        var log = document.getElementById("chat-log");
+        var form = document.getElementById("chat-form");
+        var input = document.getElementById("chat-input");
+
+        function escapeHtml(s) {
+          return String(s == null ? "" : s)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+        }
+
+        function appendBubble(role, text) {
+          var el = document.createElement("div");
+          el.className = "bubble " + role;
+          el.textContent = text;
+          log.appendChild(el);
+          log.scrollTop = log.scrollHeight;
+        }
+
+        function appendCard(ad) {
+          var el = document.createElement("article");
+          el.className = "match-card";
+          el.innerHTML =
+            '<span class="badge">Sponsored · ' + escapeHtml(ad.brand) + "</span>" +
+            "<h4>" + escapeHtml(ad.title) + "</h4>" +
+            "<p>" + escapeHtml(ad.description) + "</p>" +
+            '<p><a class="btn primary" href="' + escapeHtml(ad.destinationUrl) + '" target="_blank" rel="sponsored noopener noreferrer">' +
+            escapeHtml(ad.ctaText) + "</a></p>";
+          log.appendChild(el);
+          log.scrollTop = log.scrollHeight;
+        }
+
+        function appendNote(text) {
+          var el = document.createElement("p");
+          el.className = "meta";
+          el.style.padding = "0 0.25rem";
+          el.textContent = text;
+          log.appendChild(el);
+          log.scrollTop = log.scrollHeight;
+        }
+
+        form.addEventListener("submit", async function (event) {
+          event.preventDefault();
+          var topic = input.value.trim();
+          if (!topic) return;
+          appendBubble("user", topic);
+          input.value = "";
+          input.disabled = true;
+
+          try {
+            var res = await fetch("/api/match", {
+              method: "POST",
+              headers: { "content-type": "application/json" },
+              body: JSON.stringify({ topic: topic }),
+            });
+            var data = await res.json();
+            if (!res.ok) {
+              appendNote("Error: " + (data.error || "Something went wrong."));
+            } else if (data.ad) {
+              appendCard(data.ad);
+            } else {
+              appendNote("No sponsored card matched this question. That turn would not be billed.");
+            }
+          } catch (err) {
+            appendNote("Could not reach the matcher. Try again in a moment.");
+          } finally {
+            input.disabled = false;
+            input.focus();
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
