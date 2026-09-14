@@ -16,6 +16,22 @@ A separate branch/PR (`cursor/prefilled-demo-thread`, PR #12) rebuilt this homep
 
 New pages are additive — their own files. They do not touch `index.html`, `css/styles.css`, or `js/demo.js`'s existing content, beyond adding a nav/footer link to the new pages if asked (done for `blog/` in PR #15 — every page's nav and footer now links to it).
 
+## Next up, blocked on Daniel (14 September 2026)
+
+Decided: submitting a campaign becomes a paid step, **$5.00 flat fee**,
+via PayPal. Covers review + unlimited testing on that campaign in
+`/run-ads/`. Not built yet -- blocked on Daniel creating a PayPal app
+(Client ID + Secret, from the PayPal Developer Dashboard) and providing
+them. Client ID is safe in page code; Secret goes into Cloudflare's
+environment variables (dashboard step, not code). Do not build this with
+placeholder/fake credentials -- wait for the real ones.
+
+Once unblocked, the shape: gate `ad_submissions` on a `paid` status (or
+similar), collect payment via PayPal's checkout on the submission form
+before the row is written (or immediately after, held pending payment),
+verify server-side via PayPal's Orders API in a new Pages Function
+before flipping status to reviewable.
+
 ## Backend (added 14 September 2026)
 
 This site is no longer *pure* static. `ad-submission/index.html` now posts to
