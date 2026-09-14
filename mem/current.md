@@ -16,21 +16,28 @@ A separate branch/PR (`cursor/prefilled-demo-thread`, PR #12) rebuilt this homep
 
 New pages are additive — their own files. They do not touch `index.html`, `css/styles.css`, or `js/demo.js`'s existing content, beyond adding a nav/footer link to the new pages if asked (done for `blog/` in PR #15 — every page's nav and footer now links to it).
 
-## Next up, blocked on Daniel (14 September 2026)
+## Payment (built 14 September 2026)
 
-Decided: submitting a campaign becomes a paid step, **$5.00 flat fee**,
-via PayPal. Covers review + unlimited testing on that campaign in
-`/run-ads/`. Not built yet -- blocked on Daniel creating a PayPal app
-(Client ID + Secret, from the PayPal Developer Dashboard) and providing
-them. Client ID is safe in page code; Secret goes into Cloudflare's
-environment variables (dashboard step, not code). Do not build this with
-placeholder/fake credentials -- wait for the real ones.
+Submitting a campaign is a paid step: **$5.00 flat fee via PayPal**,
+verified server-side before the D1 row is ever written. Covers review +
+unlimited testing on that campaign in `/run-ads/`. PayPal Client ID and
+Secret are in Cloudflare Pages production environment variables
+(Secret-type), account dan73ros@gmail.com, currently in **Sandbox mode**
+(`PAYPAL_MODE` unset defaults to sandbox) -- no real money moves yet.
 
-Once unblocked, the shape: gate `ad_submissions` on a `paid` status (or
-similar), collect payment via PayPal's checkout on the submission form
-before the row is written (or immediately after, held pending payment),
-verify server-side via PayPal's Orders API in a new Pages Function
-before flipping status to reviewable.
+How it works: `ad-submission/`'s form validates client-side, then shows
+PayPal Buttons (`functions/api/paypal/config.js` serves the public
+Client ID, `functions/api/paypal/create-order.js` creates a
+server-authoritative $5.00 order). On approval, `functions/api/submit.js`
+calls `captureOrder` (`functions/api/paypal/_shared.js`) to verify the
+capture actually completed at exactly $5.00 USD *before* touching D1 --
+a submission is never written on unverified payment. `paypal_order_id`
+and `amount_paid_cents` are stored per row and shown in `/admin/`.
+
+**Not yet done:** switch `PAYPAL_MODE` to `live` when ready for real
+money (one Cloudflare env var, no code change) -- do this only when
+Daniel explicitly says to, and only after at least one real sandbox
+test transaction has been run end-to-end.
 
 ## Backend (added 14 September 2026)
 

@@ -1,9 +1,11 @@
 // Public endpoint: POST /api/submit
-// Receives an advertiser's creative, checks it against the approved category
-// list from docs/ad-submission.md, and stores it in D1. Auto-cleared
-// submissions still wait for a human to actually add them to sdk/catalog.json
-// -- this endpoint only removes the manual "read an email" step, it does not
-// put anything live on its own.
+// Receives an advertiser's creative, verifies the $5 PayPal payment for it,
+// checks the category against the approved list from docs/ad-submission.md,
+// and stores it in D1. Auto-cleared submissions still wait for a human to
+// actually add them to sdk/catalog.json -- this endpoint only removes the
+// manual "read an email" step, it does not put anything live on its own.
+
+import { captureOrder } from "./paypal/_shared.js";
 
 const APPROVED_CATEGORIES = new Set(["fitness", "sleep", "productivity"]);
 
@@ -53,14 +55,29 @@ export async function onRequestPost(context) {
     return json({ error: "email does not look valid." }, 400);
   }
 
+  const paypalOrderId = String(body.paypalOrderId || "").trim();
+  if (!paypalOrderId) {
+    return json({ error: "Missing paypalOrderId. Payment must complete before submitting." }, 400);
+  }
+
+  let capture;
+  try {
+    capture = await captureOrder(env, paypalOrderId);
+  } catch {
+    return json({ error: "Could not verify payment with PayPal right now. Try again in a moment." }, 502);
+  }
+  if (!capture.ok) {
+    return json({ error: `Payment could not be verified: ${capture.reason}` }, 402);
+  }
+
   const status = APPROVED_CATEGORIES.has(category) ? "auto_cleared" : "needs_review";
 
   await env.DB.prepare(
     `INSERT INTO ad_submissions
-      (status, brand, email, category, title, description, destination_url, cta_text, budget_note, keywords)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      (status, brand, email, category, title, description, destination_url, cta_text, budget_note, keywords, paypal_order_id, amount_paid_cents)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   )
-    .bind(status, brand, email, category, title, description, destinationUrl, ctaText, budgetNote || null, keywords || null)
+    .bind(status, brand, email, category, title, description, destinationUrl, ctaText, budgetNote || null, keywords || null, paypalOrderId, capture.amountCents)
     .run();
 
   return json({

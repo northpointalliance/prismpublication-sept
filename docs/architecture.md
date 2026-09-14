@@ -27,7 +27,7 @@ Single-product static site plus a server-side chat-ad client, now with a real (C
 | Live ad testing (14 Sept 2026) | `run-ads/index.html` — a second phone-UI chat, separate from the frozen homepage demo. Free-text input calls `functions/api/match.js`, which runs the real cosine matcher against **approved** D1 submissions only. | No fake LLM-generated bot reply (would need a third-party AI API); no login — advertisers just type questions and watch for their own brand |
 | Analytics | Google Analytics (GA4, property `G-22TDLD3N4E`) on every public page except `admin/`. Restored 14 Sept 2026 after being found missing from the live repo (lost in an earlier rebuild). Cloudflare's own Pages/Web Analytics also runs, dashboard-native, no code. | — |
 | Auth | None on the public site. Catalog is public JSON. `/admin/*` and `/api/submissions*` are gated by Cloudflare Access (dashboard-configured) plus a header check in the Function itself. | No Bearer key store; no custom login system |
-| Payments | Not built. Decided: $5.00 flat fee per submission via PayPal, covers review + unlimited `/run-ads/` testing. Blocked on Daniel providing a PayPal Client ID + Secret. See [mem/current.md](../mem/current.md) "Next up, blocked on Daniel". | No Stripe (doesn't work in Israel) |
+| Payments (14 Sept 2026) | `functions/api/paypal/{config,create-order,_shared}.js`. $5.00 flat fee per submission, PayPal Orders API v2, server-authoritative amount, capture verified before `functions/api/submit.js` writes to D1. Currently **Sandbox mode** (`PAYPAL_MODE` unset = sandbox). Client ID/Secret in Cloudflare Pages production env vars (Secret type). | No Stripe (doesn't work in Israel); no client-trusted amount |
 
 Default catalog: `PRISM_CATALOG_URL` or `https://prismpublication.com/sdk/catalog.json`. Third-party wiring and smoke results: [publisher-key.md](publisher-key.md).
 
@@ -151,7 +151,7 @@ Approving in `/admin/` only updates the D1 row's status — it does **not** add 
 
 See [pricing.md](pricing.md). Buyer is an **active AI campaign** owner. Bill rendered labeled cards (CPC preferred, then rendered impression, then IO budget transfer). Amazon Associates tag `prismpublicat-20` is fallback catalog, not the intercept product. Split lives on the insertion order; do not invent a take rate on the homepage.
 
-**Submission/testing tier (decided 14 Sept 2026, not built):** $5.00 flat fee per campaign submission via PayPal, covering review plus unlimited `/run-ads/` testing on that campaign. Separate from the IO-negotiated rate above — this is a low, near-cost fee meant to validate whether anyone uses the flow at all, not the real ad-serving price. `ad-submission/` and `run-ads/` currently say testing is free; that copy needs to change once payment ships.
+**Submission/testing tier (built 14 Sept 2026, live in Sandbox):** $5.00 flat fee per campaign submission via PayPal, covering review plus unlimited `/run-ads/` testing on that campaign. Separate from the IO-negotiated rate above — this is a low, near-cost fee meant to validate whether anyone uses the flow at all, not the real ad-serving price. `ad-submission/` and `run-ads/` copy reflects the $5 fee.
 
 ## Key files
 
