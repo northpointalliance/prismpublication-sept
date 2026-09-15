@@ -2,22 +2,117 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://prismpublication.com/</loc>
-    <lastmod>2026-09-10</lastmod>
+    <lastmod>2026-09-14</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://prismpublication.com/ad-submission/</loc>
-    <lastmod>2026-09-10</lastmod>
+    <lastmod>2026-09-14</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://prismpublication.com/developers/</loc>
-    <lastmod>2026-09-10</lastmod>
+    <lastmod>2026-09-14</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://prismpublication.com/demo/</loc>
-    <lastmod>2026-09-10</lastmod>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://prismpublication.com/run-ads/</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://prismpublication.com/privacy/</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://prismpublication.com/terms/</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://prismpublication.com/blog/</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://prismpublication.com/blog/why-the-question-is-the-ad/</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://prismpublication.com/blog/how-native-ads-in-ai-chatbots-actually-work/</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://prismpublication.com/blog/what-ai-chat-ads-actually-are/</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://prismpublication.com/blog/how-ad-matching-works/</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://prismpublication.com/blog/contextual-ads-ai-chatbots/</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://prismpublication.com/blog/native-sdk-monetization-for-chat-interfaces/</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://prismpublication.com/blog/why-is-the-click-becoming-the-exception/</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://prismpublication.com/blog/who-gets-left-in-the-cold-warm-leads/</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://prismpublication.com/blog/stand-out-when-everyone-sells-the-same-playbook/</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://prismpublication.com/blog/how-do-you-get-cited-without-writing-like-a-citation-machine/</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://prismpublication.com/blog/why-prompted-copy-still-tastes-like-slop/</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://prismpublication.com/blog/unique-voice-while-using-llm/</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://prismpublication.com/blog/how-do-you-make-an-llm-keep-two-plus-two-equal-to-four/</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://prismpublication.com/blog/why-llm-rules-follow-car-laws/</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://prismpublication.com/blog/after-the-page-ships-who-fixes-the-missing-word/</loc>
+    <lastmod>2026-09-14</lastmod>
     <changefreq>monthly</changefreq>
   </url>
 </urlset>
