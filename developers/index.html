@@ -41,17 +41,17 @@
             "dateModified": "2026-09-10",
             "author": { "@type": "Person", "name": "Daniel Rosenthal" },
             "publisher": { "@id": "https://prismpublication.com/#org" },
-            "description": "How a publisher attaches an independent chatbot to Prism on Cloudflare Pages, with no secret key server."
+            "description": "How a publisher attaches an independent chatbot to Prism, from any backend, with no secret key server."
           },
           {
             "@type": "FAQPage",
             "mainEntity": [
               {
                 "@type": "Question",
-                "name": "Where does matching run on Cloudflare Pages?",
+                "name": "Does my bot need to run on Cloudflare Pages?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "On the publisher's server. displayAd reads https://prismpublication.com/sdk/catalog.json, a static file on this Pages site. There is no key server and no database on this host. Do not load the client in the chat widget."
+                  "text": "No. displayAd runs on your own server, on whatever backend you already use: Node, a Worker, anything that can make an HTTPS request. It just reads https://prismpublication.com/sdk/catalog.json, a public static file hosted on this Pages site. There is no key server and no database on this host. Do not load the client in the chat widget."
                 }
               },
               {
@@ -92,7 +92,7 @@
         <nav class="primary" aria-label="Primary">
           <a href="/run-ads/">Run ads</a>
           <a href="/demo/">Demo</a>
-          <a href="/ad-submission/">Ad submission</a>
+          <a href="/ad-submission/">Ad submission</a>
           <a href="/developers/">Developers</a>
           <a href="/blog/">Blog</a>
           <a href="mailto:info@prismpublication.com">Contact</a>
@@ -104,10 +104,10 @@
       <section class="hero page-hero">
         <div class="container">
           <p class="audience-kicker">For publishers wiring a bot</p>
-          <h1>How do you attach Prism on Cloudflare Pages?</h1>
+          <h1>How do you attach Prism to your bot?</h1>
           <p class="subhead">
-            <strong>There is no Prism-hosted secret key. This site is static Pages, not a Worker and not a database.</strong>
-            After the bot finishes a reply, call displayAd from your server. It reads the public catalog on this host. The chat widget only draws HTML you already trust.
+            <strong>Your bot runs on whatever backend you already use. There is no Prism-hosted secret key, and nothing to install on your side beyond one function call.</strong>
+            After the bot finishes a reply, call displayAd from your server. It reads a public catalog file hosted on this site. The chat widget only draws HTML you already trust.
           </p>
           <div class="cta-group">
             <a class="btn primary" href="mailto:info@prismpublication.com?subject=Wire%20a%20chatbot">Email to wire a bot</a>
@@ -140,10 +140,10 @@
 
       <section class="aeo">
         <div class="container">
-          <h2>Where does matching run on Cloudflare Pages?</h2>
+          <h2>Does my bot need to run on Cloudflare Pages?</h2>
           <p>
-            <strong>On the publisher's server. displayAd reads a static catalog on this Pages site. There is no key server and no database on this host.</strong>
-            Call it after the assistant reply. Do not load the client in the chat widget. The file is
+            <strong>No. displayAd runs on your own server, on whatever backend you already use: Node, a Worker, anything that can make an HTTPS request.</strong>
+            It just reads a static catalog file hosted on this Pages site. There is no key server and no database on this host. Call it after the assistant reply. Do not load the client in the chat widget. The file is
             <a href="/sdk/catalog.json"><code>/sdk/catalog.json</code></a>.
           </p>
 
@@ -233,7 +233,7 @@ if (!card) {
         </div>
         <ul>
           <li><a href="/">Home</a></li>
-          <li><a href="/ad-submission/">Ad submission</a></li>
+          <li><a href="/ad-submission/">Ad submission</a></li>
           <li><a href="/developers/">Developers</a></li>
           <li><a href="/blog/">Blog</a></li>
           <li><a href="mailto:info@prismpublication.com">info@prismpublication.com</a></li>
