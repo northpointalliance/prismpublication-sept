@@ -84,7 +84,7 @@ Serve the repo root over HTTP (any static server) for the static pages. `wrangle
 
 ## Known gaps
 
-- **Stage 5's credit-purchase flow hasn't been tested end to end yet** (buy credit -> card goes live -> click deducts -> auto-deactivates) -- built and reasoned through carefully on the `claude/phone-ui-mvp-arch-ellybt` branch, not yet clicked through live. Test before merging.
+- **Stage 5's billing logic is verified, the PayPal round-trip itself isn't.** The exact SQL `credit/purchase.js` and `c/[id].js` run was tested directly against production D1 (purchase → balance → click → auto-deactivate, all correct, test data cleaned up after). What's still unclicked: an actual PayPal order create → approve → capture, since that needs a human in a browser and this environment can't reach either `prismpublication.com` or PayPal's API to drive it. Confirmed acceptable to ship without that click-through for now -- do a real one whenever convenient.
 - **Real pricing numbers are still placeholders** -- `functions/api/_lib/pricing.js`.
 - **Approving a submission doesn't make it live on `sdk/catalog.json`.** That's a separate, unused-by-the-main-loop catalog for third-party publishers; a real third-party integration would still need `sdk/catalog.json` edited by hand, or a new endpoint matching against it instead of D1.
 - **No non-JS publisher integration.** `sdk/prismClient.js` requires the publisher's own server to be Node/JS.
