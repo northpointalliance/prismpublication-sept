@@ -51,47 +51,12 @@
         </div>
       </section>
 
-      <section class="advertisers" id="build-ad">
-        <div class="container">
-          <h2>Build an ad from your product page</h2>
-          <p class="section-lead">
-            Paste a product URL and we'll draft a sponsored card from it. Edit anything, then test it for free in the chat below -- nothing goes live, and nobody else can see it, until you choose to submit it for review.
-          </p>
-          <form id="draft-form" class="card" style="max-width: 640px; text-align: left;" novalidate>
-            <label for="draft-url">Product URL (https)</label><br />
-            <input id="draft-url" name="url" type="url" required pattern="https://.*" placeholder="https://example.com/your-product" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
-            <button type="submit" id="draft-submit-btn" class="btn primary">Draft my ad</button>
-            <p class="meta" id="draft-status" role="status" style="margin-top: 0.75rem;"></p>
-          </form>
-
-          <form id="draft-card" class="card" style="max-width: 640px; text-align: left; display: none; margin-top: 1rem;" novalidate>
-            <label for="draft-brand">Brand</label><br />
-            <input id="draft-brand" type="text" required maxlength="80" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
-
-            <label for="draft-title">Card title</label><br />
-            <input id="draft-title" type="text" required maxlength="80" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
-
-            <label for="draft-description">Short description</label><br />
-            <textarea id="draft-description" required maxlength="200" rows="2" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;"></textarea>
-
-            <label for="draft-cta">Button text</label><br />
-            <input id="draft-cta" type="text" required maxlength="30" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
-
-            <div class="row-actions" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-              <button type="submit" id="draft-test-btn" class="btn primary">Test in the chat below</button>
-              <a id="draft-submit-link" class="btn secondary" href="/ad-submission/">Submit this ad for review (free)</a>
-            </div>
-            <p class="meta" id="draft-test-status" role="status" style="margin-top: 0.75rem;"></p>
-          </form>
-        </div>
-      </section>
-
       <section class="demo-board">
         <div class="container demo-stage">
           <div class="demo-controls">
             <p class="demo-scenario">
               This chat answers anything, like a normal assistant. Sponsored cards come only from the live
-              <strong>approved</strong> pool (plus your own draft above, visible only to you, while you're testing it), and only when a question is a close enough match.
+              <strong>approved</strong> pool (plus your own draft below, visible only to you, while you're testing it), and only when a question is a close enough match.
               Questions are stored anonymously to improve matching -- see
               <a href="/privacy/">privacy</a>.
             </p>
@@ -118,6 +83,41 @@
               <p class="phone-home" aria-hidden="true"></p>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section class="advertisers" id="build-ad">
+        <div class="container">
+          <h2>Build an ad from your product page</h2>
+          <p class="section-lead">
+            Paste a product URL and we'll draft a sponsored card from it. Edit anything, then test it for free in the chat above -- nothing goes live, and nobody else can see it, until you choose to submit it for review.
+          </p>
+          <form id="draft-form" class="card" style="max-width: 640px; text-align: left;" novalidate>
+            <label for="draft-url">Product URL (https)</label><br />
+            <input id="draft-url" name="url" type="url" required pattern="https://.*" placeholder="https://example.com/your-product" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
+            <button type="submit" id="draft-submit-btn" class="btn primary">Draft my ad</button>
+            <p class="meta" id="draft-status" role="status" style="margin-top: 0.75rem;"></p>
+          </form>
+
+          <form id="draft-card" class="card" style="max-width: 640px; text-align: left; display: none; margin-top: 1rem;" novalidate>
+            <label for="draft-brand">Brand</label><br />
+            <input id="draft-brand" type="text" required maxlength="80" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
+
+            <label for="draft-title">Card title</label><br />
+            <input id="draft-title" type="text" required maxlength="80" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
+
+            <label for="draft-description">Short description</label><br />
+            <textarea id="draft-description" required maxlength="200" rows="2" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;"></textarea>
+
+            <label for="draft-cta">Button text</label><br />
+            <input id="draft-cta" type="text" required maxlength="30" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
+
+            <div class="row-actions" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <button type="submit" id="draft-test-btn" class="btn primary">Test in the chat above</button>
+              <a id="draft-submit-link" class="btn secondary" href="/ad-submission/">Submit this ad for review (free)</a>
+            </div>
+            <p class="meta" id="draft-test-status" role="status" style="margin-top: 0.75rem;"></p>
+          </form>
         </div>
       </section>
 
