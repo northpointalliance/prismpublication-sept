@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Metrics | Prism Publication</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <style>
+      /* Admin-only, additive. Does not touch styles.css or any public page. */
+      table.metrics { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+      table.metrics th, table.metrics td { text-align: left; padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; }
+      table.metrics th { color: var(--text-main); }
+      table.metrics td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site">
+      <div class="container">
+        <a class="brand" href="/">Prism Publication</a>
+        <nav class="primary" aria-label="Primary">
+          <a href="/admin/">Submissions</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero page-hero">
+        <div class="container">
+          <p class="audience-kicker">Internal, protected by Cloudflare Access</p>
+          <h1>Funnel and revenue</h1>
+          <p class="subhead">
+            Computed live from the real tables (no rollup, no estimate) -- refresh for current numbers.
+          </p>
+        </div>
+      </section>
+
+      <section class="advertisers">
+        <div class="container">
+          <p id="status-line">Loading…</p>
+          <table class="metrics" id="metrics-table" hidden>
+            <thead>
+              <tr>
+                <th>Step</th>
+                <th class="num">Last 7 days</th>
+                <th class="num">Last 30 days</th>
+              </tr>
+            </thead>
+            <tbody id="metrics-body"></tbody>
+          </table>
+          <p class="meta" id="revenue-line" style="margin-top: 1.5rem;"></p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-grid">
+        <div>
+          <p>&copy; 2026 Prism Publication.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const statusLine = document.getElementById("status-line");
+      const table = document.getElementById("metrics-table");
+      const tbody = document.getElementById("metrics-body");
+      const revenueLine = document.getElementById("revenue-line");
+
+      function usd(cents) {
+        return "$" + (cents / 100).toFixed(2);
+      }
+
+      function row(label, a, b) {
+        var tr = document.createElement("tr");
+        tr.innerHTML = "<td>" + label + "</td><td class=\"num\">" + a + "</td><td class=\"num\">" + b + "</td>";
+        return tr;
+      }
+
+      async function load() {
+        statusLine.textContent = "Loading…";
+        table.hidden = true;
+        try {
+          const res = await fetch("/api/metrics");
+          if (res.status === 403) {
+            statusLine.textContent = "Not authorized. This page must be accessed through Cloudflare Access.";
+            return;
+          }
+          if (!res.ok) {
+            statusLine.textContent = "Failed to load metrics (" + res.status + ").";
+            return;
+          }
+          const data = await res.json();
+          const l7 = data.last7, l30 = data.last30;
+
+          tbody.innerHTML = "";
+          tbody.appendChild(row("Page views (/run-ads)", l7.pageViews, l30.pageViews));
+          tbody.appendChild(row("Chats started (unique sessions)", l7.chatSessions, l30.chatSessions));
+          tbody.appendChild(row("Chat turns", l7.chatTurns, l30.chatTurns));
+          tbody.appendChild(row("Match rate", l7.matchRate == null ? "--" : (l7.matchRate * 100).toFixed(1) + "%", l30.matchRate == null ? "--" : (l30.matchRate * 100).toFixed(1) + "%"));
+          tbody.appendChild(row("Test ads created", l7.testAdsCreated, l30.testAdsCreated));
+          tbody.appendChild(row("Submissions", l7.submissions, l30.submissions));
+          tbody.appendChild(row("Approved", l7.approved, l30.approved));
+          tbody.appendChild(row("Credit purchases (campaigns)", l7.creditPurchases, l30.creditPurchases));
+          tbody.appendChild(row("Card clicks", l7.clicks, l30.clicks));
+          tbody.appendChild(row("Credit revenue", usd(l7.revenueCents), usd(l30.revenueCents)));
+
+          revenueLine.textContent = "All-time credit revenue: " + usd(data.revenueAllTimeCents);
+          statusLine.textContent = "";
+          table.hidden = false;
+        } catch (err) {
+          statusLine.textContent = "Error loading metrics: " + err.message;
+        }
+      }
+
+      load();
+    </script>
+  </body>
+</html>

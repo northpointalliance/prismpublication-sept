@@ -47,6 +47,7 @@
             <strong>A live chat, not a script.</strong>
             Ask a real question, on any topic. A sponsored card only appears when it clears the 0.65 similarity floor against the live approved pool, labeled exactly as it would in a real chat -- no card is also useful information. Have your own product? <a href="/ad-submission/">Submit an ad</a> and test it right here, free, before you pay to run it.
           </p>
+          <p class="meta" id="reach-line"></p>
         </div>
       </section>
 
@@ -172,6 +173,25 @@
             return crypto.randomUUID();
           }
         })();
+
+        // Fire-and-forget -- a failed page_view log should never block or
+        // slow down the actual page.
+        fetch("/api/track", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ kind: "page_view", sessionId: sessionId }),
+        }).catch(function () {});
+
+        fetch("/api/reach")
+          .then(function (res) { return res.json(); })
+          .then(function (data) {
+            var el = document.getElementById("reach-line");
+            if (!el) return;
+            el.textContent = data.lowVolume
+              ? "Early stage, low volume -- real numbers once there's enough traffic to show."
+              : data.questionsLast7Days + " real questions asked in the last 7 days.";
+          })
+          .catch(function () {});
 
         function escapeHtml(s) {
           return String(s == null ? "" : s)

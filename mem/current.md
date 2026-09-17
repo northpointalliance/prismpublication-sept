@@ -249,8 +249,41 @@ handling (reused the existing direct-capture-and-verify pattern instead,
 consistent with how the old $5 flow worked); a refund *request* UI on the
 campaign page (added a plain "email us" line instead -- refunds are still
 manual, handled by Daniel); showing credit balance/active state in
-`/admin/` (nice-to-have, not required for the loop to work); Stage 6
-metrics.
+`/admin/` (nice-to-have, not required for the loop to work).
+
+**Stage 6, built 17 September 2026: funnel/revenue dashboard, no new
+infra.** Deliberately leaner than the original plan -- no `daily_stats`
+rollup table, no `prism-jobs` scheduled Worker. Everything's computed
+live at request time from tables that already exist for other reasons
+(`chat_events`, `test_ads`, `ad_submissions`, `credit_ledger`); traffic
+is nowhere near the volume where that would be slow. No per-niche
+breakdown either, consistent with niches being "nearly irrelevant" now.
+
+- `functions/api/track.js` -- the *only* new event-logging endpoint,
+  and it logs exactly one kind (`page_view`), since every other funnel
+  step already has a natural place it happens server-side (a chat turn,
+  a click, a `test_ads` insert, an `ad_submissions` insert, a
+  `credit_ledger` purchase row) and didn't need duplicate tracking.
+- `functions/api/metrics.js` -- GET, Access-gated (same header-check
+  pattern as `/api/submissions`), 7-day and 30-day windows: page views,
+  chats started, chat turns, match rate, test ads created, submissions,
+  approvals, credit purchases, clicks, revenue.
+- `admin/metrics/index.html` -- the dashboard itself, same
+  self-contained fetch-and-render pattern as `admin/index.html`.
+- `functions/api/reach.js` -- the one number safe to show publicly (not
+  the whole funnel): questions asked in the last 7 days, on `/run-ads`'s
+  hero. Below 20/week it shows "early stage, low volume" instead of the
+  real number, so a near-zero count early on doesn't undermine trust.
+- `privacy/index.html` updated for the new `page_view` logging -- same
+  pattern as the chat-logging disclosure added for Stage 2 (hashed IP,
+  random session id, no identity link).
+
+**One dashboard step Daniel still needs to do:** add a Cloudflare Access
+path rule for `/api/metrics` (Zero Trust -> Access -> Applications --
+same application or a new path rule alongside the existing
+`/api/submissions*` one, same email-only policy). `/api/track` and
+`/api/reach` are deliberately public -- don't gate those, every visitor's
+browser calls them.
 
 ## Rejected (do not restore)
 
