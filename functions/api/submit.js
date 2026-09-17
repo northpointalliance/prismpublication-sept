@@ -1,13 +1,12 @@
 // Public endpoint: POST /api/submit
 // Receives an advertiser's creative, verifies the $5 PayPal payment for it,
-// checks the category against the approved list from docs/ad-submission.md,
-// and stores it in D1. Auto-cleared submissions still wait for a human to
-// actually add them to sdk/catalog.json -- this endpoint only removes the
-// manual "read an email" step, it does not put anything live on its own.
+// and stores it in D1 for manual review. Category is free text -- there is
+// no automated category whitelist. A person reviews every submission
+// against the brand-safety rules on the ad-submission page before it can
+// go live; this endpoint only removes the manual "read an email" step, it
+// does not put anything live on its own.
 
 import { captureOrder } from "./paypal/_shared.js";
-
-const APPROVED_CATEGORIES = new Set(["fitness", "travel", "health_wellness"]);
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -70,23 +69,17 @@ export async function onRequestPost(context) {
     return json({ error: `Payment could not be verified: ${capture.reason}` }, 402);
   }
 
-  const status = APPROVED_CATEGORIES.has(category) ? "auto_cleared" : "needs_review";
-
   await env.DB.prepare(
     `INSERT INTO ad_submissions
-      (status, brand, email, category, title, description, destination_url, cta_text, budget_note, keywords, paypal_order_id, amount_paid_cents)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      (brand, email, category, title, description, destination_url, cta_text, budget_note, keywords, paypal_order_id, amount_paid_cents)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   )
-    .bind(status, brand, email, category, title, description, destinationUrl, ctaText, budgetNote || null, keywords || null, paypalOrderId, capture.amountCents)
+    .bind(brand, email, category, title, description, destinationUrl, ctaText, budgetNote || null, keywords || null, paypalOrderId, capture.amountCents)
     .run();
 
   return json({
     ok: true,
-    status,
-    message:
-      status === "auto_cleared"
-        ? "Category is pre-approved. A person still reviews the creative before it goes live."
-        : "This category needs manual review before anything can run.",
+    message: "Submitted. A person reviews every campaign against the brand-safety rules before it can run.",
   });
 }
 
