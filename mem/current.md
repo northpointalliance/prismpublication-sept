@@ -2,6 +2,8 @@
 
 This repo is the live static site. It is not the hub. There is no `apps/memory` Worker here. Next session starts from this file, not from another rebuild.
 
+For a narrative account of how the site got to its current state, read [docs/handoff-2026-09-17.md](../docs/handoff-2026-09-17.md) and [docs/architecture.md](../docs/architecture.md) -- this file is the decision log (what's locked, what's rejected, what's still open), those two are the "what actually exists right now" reference.
+
 ## FROZEN (13 September 2026) — read this before touching anything
 
 Daniel has spent repeated sessions rebuilding this homepage across different tools (Cursor, Cowork, Gemini) and wants that to stop. **The homepage exactly as it exists on `main` right now — this `index.html`, `css/styles.css`, `js/demo.js`, nav, copy, colors, and the phone demo — is the permanent baseline.** Do not redesign it, restructure it, re-theme it, or rewrite its copy on your own initiative, no matter how it was reached ("this is more correct," "this reads better," matching a mockup someone pasted in). If a task seems to require changing the homepage's look, structure, or copy, stop and ask first.
