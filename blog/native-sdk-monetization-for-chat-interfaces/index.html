@@ -42,12 +42,12 @@
     <a class="skip" href="#main">Skip to content</a>
     <header class="site">
       <div class="container">
-        <a class="brand" href="https://prismpublication.com/">Prism Publication</a>
+        <a class="brand" href="/">Prism Publication</a>
         <nav class="primary" aria-label="Primary">
-          <a href="https://prismpublication.com/run-ads/">Run ads</a>
-          <a href="https://prismpublication.com/demo/">Demo</a>
-          <a href="https://prismpublication.com/ad-submission/">Ad submission</a>
-          <a href="https://prismpublication.com/developers/">Developers</a>
+          <a href="/run-ads/">Run ads</a>
+          <a href="/demo/">Demo</a>
+          <a href="/ad-submission/">Ad submission</a>
+          <a href="/developers/">Developers</a>
           <a href="../">Blog</a>
           <a href="mailto:info@prismpublication.com">Contact</a>
         </nav>
@@ -91,7 +91,7 @@
 <p>Keep the key on the server. Call <code>getAd</code> from the same process that already holds your model key. Pass <code>format: "card"</code> and <code>context: { topic: userMessage }</code>. If a card comes back, serialize the title, description, link, and advertiser label to the client. If <code>null</code> comes back, send the reply alone.</p>
 <p>Three lines is not a metaphor. Import <code>getAd</code> from <code>@prismpublication/sdk</code>. Await it with <code>apiKey</code> from <code>process.env.PRISM_API_KEY</code>, <code>format: "card"</code>, and <code>context: { topic: userMessage }</code>. Same contract as the public SDK page.</p>
 <p>No pixel in the page. No third-party script in the chat widget. The browser only draws HTML you already trust. That is the difference between an SDK and an ad tag. An ad tag is a guest in the user's machine. This call is a guest in your Worker.</p>
-<p>Email <a href="mailto:info@prismpublication.com">info@prismpublication.com</a> if you are building the bot and need that path. The <a href="https://prismpublication.com/developers/">SDK page</a> has the same snippet next to the constraints.</p>
+<p>Email <a href="mailto:info@prismpublication.com">info@prismpublication.com</a> if you are building the bot and need that path. The <a href="/developers/">SDK page</a> has the same snippet next to the constraints.</p>
 <h2 id="when-should-the-ad-call-run-relative-to-the-model-reply">When should the ad call run relative to the model reply?</h2>
 <p>After the assistant answers, not before. Matching on the user turn plus the reply topic beats matching on the half-typed question. The card then follows the answer instead of interrupting the wait. Users forgive a labelled card under a useful answer. They do not forgive a spinner that delayed the answer so you could pick a sponsor.</p>
 <p>If your stack streams tokens, still wait for a complete thought before you request an offer. A card that arrives mid-sentence is a banner. A card that arrives when the answer is done is a next step. That timing rule is more important than shaving ten milliseconds off the HTTP call.</p>
@@ -126,7 +126,7 @@
 <p>I will not invent a click-through rate for chat cards. Unverified. What I will stand behind is the sequence: question, answer, optional labelled card, continue. If your logs cannot tell those four events apart, you are not measuring native ads. You are measuring hope.</p>
 <p>When inference cost per turn is the actual wound, put the ad revenue next to that number, not next to vanity impressions. ConvoMargin exists for the margin per turn. The SDK exists for the labelled card. Do not mash the dashboards into one lie.</p>
 <h2 id="where-do-you-start-this-week">Where do you start this week?</h2>
-<p>Read the <a href="https://prismpublication.com/developers/">chat ads SDK</a>. Copy the three lines into the handler that already holds your model key. Render only when a card returns. Watch one real conversation in staging. If the card would embarrass you in front of the user, keep <code>null</code> until the topic tags are honest.</p>
+<p>Read the <a href="/developers/">chat ads SDK</a>. Copy the three lines into the handler that already holds your model key. Render only when a card returns. Watch one real conversation in staging. If the card would embarrass you in front of the user, keep <code>null</code> until the topic tags are honest.</p>
 <p>Then email <a href="mailto:info@prismpublication.com">info@prismpublication.com</a> with what the bot actually does, not a pitch deck. Indie volume is the audience. ChatGPT-scale deals are not. If you need the card path, say so. If you need support-bot scoring, that is Signals, and you should not mix the two in one call.</p>
     </section>
         </div>
@@ -137,7 +137,7 @@
           <h2>A chat-ad path that is not ChatGPT-priced</h2>
           <p>Indie chatbot apps still need labelled partner offers. ChatGPT-scale ad deals are out of reach. The SDK returns a labelled card or nothing. Three lines. The key stays on your server.</p>
           <div class="cta-group">
-            <a class="btn primary" href="https://prismpublication.com/developers/">Open the developer guide</a>
+            <a class="btn primary" href="/developers/">Open the developer guide</a>
           </div>
         </div>
       </section>
@@ -150,14 +150,14 @@
           <p>Chat ads are labelled sponsored placements. Nothing on this page is a live auction.</p>
         </div>
         <ul>
-          <li><a href="https://prismpublication.com/">Home</a></li>
+          <li><a href="/">Home</a></li>
           <li><a href="../">Blog</a></li>
-          <li><a href="https://prismpublication.com/demo/">Demo</a></li>
-          <li><a href="https://prismpublication.com/ad-submission/">Ad submission</a></li>
-          <li><a href="https://prismpublication.com/developers/">Developers</a></li>
+          <li><a href="/demo/">Demo</a></li>
+          <li><a href="/ad-submission/">Ad submission</a></li>
+          <li><a href="/developers/">Developers</a></li>
           <li><a href="mailto:info@prismpublication.com">info@prismpublication.com</a></li>
-                  <li><a href="https://prismpublication.com/privacy/">Privacy</a></li>
-          <li><a href="https://prismpublication.com/terms/">Terms</a></li>
+                  <li><a href="/privacy/">Privacy</a></li>
+          <li><a href="/terms/">Terms</a></li>
 </ul>
       </div>
     </footer>
