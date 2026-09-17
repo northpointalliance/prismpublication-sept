@@ -46,24 +46,31 @@ export function cosine(a, b) {
   return dot / (Math.sqrt(magA) * Math.sqrt(magB));
 }
 
-// Returns { ad, score } where ad is the raw D1 row (or null) and score is
-// the winning cosine similarity (0 when there's no pool or no match).
-export async function findBestAd(env, topic) {
+export function scoreAd(topic, row) {
+  const corpus = `${row.category || ""} ${row.title} ${row.description} ${row.keywords || ""}`;
+  return cosine(vector(tokenize(topic)), vector(tokenize(corpus)));
+}
+
+// Returns { ad, score } where ad is the raw row (or null) and score is the
+// winning cosine similarity (0 when there's no pool or no match). extraRows
+// (same shape as an ad_submissions row) are scored alongside the public
+// approved pool but never stored or shown outside the caller's own session
+// -- used for a visitor's private draft/test ad (see draft-ad.js).
+export async function findBestAd(env, topic, extraRows = []) {
   const { results } = await env.DB.prepare(
     `SELECT id, brand, category, title, description, destination_url, cta_text, keywords
      FROM ad_submissions
      WHERE status = 'approved'`
   ).all();
 
-  if (!results.length) return { ad: null, score: 0 };
+  const pool = [...results, ...extraRows];
+  if (!pool.length) return { ad: null, score: 0 };
 
-  const queryVec = vector(tokenize(topic));
   let best = null;
   let bestScore = 0;
 
-  for (const row of results) {
-    const corpus = `${row.category} ${row.title} ${row.description} ${row.keywords || ""}`;
-    const score = cosine(queryVec, vector(tokenize(corpus)));
+  for (const row of pool) {
+    const score = scoreAd(topic, row);
     if (score > bestScore) {
       bestScore = score;
       best = row;

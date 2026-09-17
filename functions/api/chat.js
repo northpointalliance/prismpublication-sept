@@ -8,7 +8,7 @@
 // a KV namespace -- at a few hundred visitors, a couple of extra D1 reads
 // per turn costs nothing and needed no new binding to ship.
 
-import { findBestAd } from "./_lib/matcher.js";
+import { findBestAd, scoreAd } from "./_lib/matcher.js";
 import { generateAnswer } from "./_lib/answer.js";
 import { hashIp } from "./_lib/hash.js";
 
@@ -82,29 +82,55 @@ export async function onRequestPost(context) {
     return json({ error: "You already asked that -- try a different question." }, 400);
   }
 
+  // A session's own draft ad (from /api/draft-ad) is scored alongside the
+  // public pool, but is only ever visible to the session that created it --
+  // findBestAd doesn't know or care whose session it is, it's just given
+  // as one more candidate for this one request.
+  const { results: testAdRows } = await env.DB.prepare(
+    `SELECT id, brand, category, title, description, destination_url, cta_text
+     FROM test_ads
+     WHERE session_id = ? AND expires_at > datetime('now')
+     ORDER BY created_at DESC LIMIT 1`
+  )
+    .bind(sessionId)
+    .all();
+  const testAd = testAdRows[0] || null;
+  const extraRows = testAd ? [{ ...testAd, __isTestAd: true }] : [];
+
   const [{ text: answer }, { ad, score }] = await Promise.all([
     generateAnswer(env, message),
-    findBestAd(env, message),
+    findBestAd(env, message, extraRows),
   ]);
+  const testAdScore = testAd ? scoreAd(message, testAd) : null;
 
   await env.DB.prepare(
     `INSERT INTO chat_events (kind, session_id, ip_hash, message, matched_ad_id, score, answer_chars)
      VALUES ('chat', ?, ?, ?, ?, ?, ?)`
   )
-    .bind(sessionId, ipHash, message, ad ? ad.id : null, score, answer.length)
+    .bind(sessionId, ipHash, message, ad && !ad.__isTestAd ? ad.id : null, score, answer.length)
     .run();
 
   return json({
     answer,
     matchScore: Number(score.toFixed(3)),
+    testAdScore: testAdScore == null ? null : Number(testAdScore.toFixed(3)),
     card: ad
-      ? {
-          id: ad.id,
-          brand: ad.brand,
-          title: ad.title,
-          description: ad.description,
-          ctaText: ad.cta_text,
-        }
+      ? ad.__isTestAd
+        ? {
+            isTestAd: true,
+            brand: ad.brand,
+            title: ad.title,
+            description: ad.description,
+            ctaText: ad.cta_text,
+            destinationUrl: ad.destination_url,
+          }
+        : {
+            id: ad.id,
+            brand: ad.brand,
+            title: ad.title,
+            description: ad.description,
+            ctaText: ad.cta_text,
+          }
       : null,
   });
 }

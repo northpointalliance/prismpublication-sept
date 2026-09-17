@@ -288,6 +288,25 @@
         var titlePreview = document.getElementById("payment-title-preview");
         if (!form) return;
 
+        // Prefill from /run-ads' ad builder, e.g. ?brand=...&title=...
+        (function prefillFromQuery() {
+          var params = new URLSearchParams(window.location.search);
+          var map = {
+            brand: "f-brand",
+            title: "f-title",
+            description: "f-description",
+            destinationUrl: "f-destination",
+            ctaText: "f-cta",
+            category: "f-category",
+          };
+          Object.keys(map).forEach(function (param) {
+            var value = params.get(param);
+            if (!value) return;
+            var field = document.getElementById(map[param]);
+            if (field) field.value = value;
+          });
+        })();
+
         var formFields = [
           "f-brand", "f-email", "f-category", "f-title", "f-description",
           "f-destination", "f-cta", "f-keywords", "f-budget",

@@ -44,3 +44,28 @@ CREATE TABLE IF NOT EXISTS chat_events (
 
 CREATE INDEX IF NOT EXISTS idx_chat_events_ip_hash_created ON chat_events (ip_hash, created_at);
 CREATE INDEX IF NOT EXISTS idx_chat_events_session ON chat_events (session_id, created_at);
+
+-- Added 17 September 2026, for the "paste a product URL, get a draft ad"
+-- builder on /run-ads (Stage 3 of docs/run-ads-strategy-2026-09-16.md).
+-- A draft here is private to the session that created it -- functions/api/
+-- chat.js scores it alongside the public approved pool but never returns
+-- it to any other session. Expired rows are deleted lazily by draft-ad.js
+-- on each call (no separate cleanup Worker at this traffic level).
+-- Run once against the real database:
+--   wrangler d1 execute prism-crm --remote --file d1/schema.sql
+CREATE TABLE IF NOT EXISTS test_ads (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  expires_at TEXT NOT NULL,
+  session_id TEXT NOT NULL,
+  source_url TEXT NOT NULL,
+  brand TEXT NOT NULL,
+  title TEXT NOT NULL,
+  description TEXT NOT NULL,
+  cta_text TEXT NOT NULL,
+  category TEXT,
+  destination_url TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_test_ads_session ON test_ads (session_id, created_at);
+CREATE INDEX IF NOT EXISTS idx_test_ads_expires ON test_ads (expires_at);

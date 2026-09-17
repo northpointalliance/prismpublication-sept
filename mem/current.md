@@ -132,6 +132,36 @@ Workers AI. Without the `AI` binding live and no `OPENAI_API_KEY` set,
 placeholder instead of a real answer -- check which is true before calling
 the chat "live."
 
+**Stage 3, built 17 September 2026: the ad-from-URL builder, on `/run-ads`
+above the chat.** Paste a product URL -> `functions/api/draft-ad.js`
+fetches it (`_lib/urlFetch.js`: https only, blocks localhost/private IPs,
+5s timeout, 1MB cap, HTMLRewriter pulls just `<title>`, meta description,
+first `<h1>` -- nothing else is read) -> the shared model helper
+(`_lib/model.js`, same OpenAI-or-Workers-AI choice as chat) drafts brand/
+title/description/CTA/category as JSON -> returned to the browser as a
+suggestion only, nothing saved yet. The visitor edits it in the form, then
+"Test in the chat below" calls `functions/api/test-ad.js`, which saves the
+(possibly edited) fields as that session's one active test ad in the new
+`test_ads` D1 table (one per session -- saving again replaces the last
+one). `/api/chat` scores that test ad alongside the public approved pool
+on every message (`_lib/matcher.js`'s `findBestAd` now takes an
+`extraRows` array for exactly this) and always reports `testAdScore`
+separately, even on messages where a different ad's card actually shows or
+no card shows at all -- so the person testing sees their own number every
+time, not just when they "win." A test ad is never returned to, or
+scored for, any other session. "Submit this ad for review ($5)" prefills
+`/ad-submission/`'s form via query params (`?brand=...&title=...` etc. --
+see the `prefillFromQuery` block near the top of that page's script) so
+the loop is draft -> edit -> test free -> submit -> pay -> (later stages)
+go live.
+
+Not built: automated brand-safety screening before submission (still
+fully manual review in `/admin/`, same as before this stage), and the
+`prism-jobs`-style scheduled cleanup Worker the original plan called for --
+expired `test_ads` rows are deleted lazily instead (on the next
+`/api/draft-ad` or `/api/test-ad` call), which is enough at this traffic
+level and needed no new Worker.
+
 ## Locked public site
 
 - Origin: https://prismpublication.com/

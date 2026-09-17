@@ -50,15 +50,49 @@
         </div>
       </section>
 
+      <section class="advertisers" id="build-ad">
+        <div class="container">
+          <h2>Build an ad from your product page</h2>
+          <p class="section-lead">
+            Paste a product URL and we'll draft a sponsored card from it. Edit anything, then test it for free in the chat below -- nothing goes live, and nobody else can see it, until you choose to submit it for review.
+          </p>
+          <form id="draft-form" class="card" style="max-width: 640px; text-align: left;" novalidate>
+            <label for="draft-url">Product URL (https)</label><br />
+            <input id="draft-url" name="url" type="url" required pattern="https://.*" placeholder="https://example.com/your-product" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
+            <button type="submit" id="draft-submit-btn" class="btn primary">Draft my ad</button>
+            <p class="meta" id="draft-status" role="status" style="margin-top: 0.75rem;"></p>
+          </form>
+
+          <form id="draft-card" class="card" style="max-width: 640px; text-align: left; display: none; margin-top: 1rem;" novalidate>
+            <label for="draft-brand">Brand</label><br />
+            <input id="draft-brand" type="text" required maxlength="80" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
+
+            <label for="draft-title">Card title</label><br />
+            <input id="draft-title" type="text" required maxlength="80" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
+
+            <label for="draft-description">Short description</label><br />
+            <textarea id="draft-description" required maxlength="200" rows="2" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;"></textarea>
+
+            <label for="draft-cta">Button text</label><br />
+            <input id="draft-cta" type="text" required maxlength="30" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
+
+            <div class="row-actions" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <button type="submit" id="draft-test-btn" class="btn primary">Test in the chat below</button>
+              <a id="draft-submit-link" class="btn secondary" href="https://prismpublication.com/ad-submission/">Submit this ad for review ($5)</a>
+            </div>
+            <p class="meta" id="draft-test-status" role="status" style="margin-top: 0.75rem;"></p>
+          </form>
+        </div>
+      </section>
+
       <section class="demo-board">
         <div class="container demo-stage">
           <div class="demo-controls">
             <p class="demo-scenario">
               This chat answers anything, like a normal assistant. Sponsored cards come only from the live
-              <strong>approved</strong> pool, and only when a question is a close enough match.
+              <strong>approved</strong> pool (plus your own draft above, visible only to you, while you're testing it), and only when a question is a close enough match.
               Questions are stored anonymously to improve matching -- see
-              <a href="https://prismpublication.com/privacy/">privacy</a>. Want to see your own ad here first?
-              <a href="https://prismpublication.com/ad-submission/">Submit it</a>, free to test once approved.
+              <a href="https://prismpublication.com/privacy/">privacy</a>.
             </p>
           </div>
 
@@ -158,12 +192,15 @@
         function appendCard(card) {
           var el = document.createElement("article");
           el.className = "match-card";
-          var href = "/c/" + encodeURIComponent(card.id) + "?s=" + encodeURIComponent(sessionId);
+          var href = card.isTestAd
+            ? card.destinationUrl
+            : "/c/" + encodeURIComponent(card.id) + "?s=" + encodeURIComponent(sessionId);
+          var label = card.isTestAd ? "Sponsored · " + escapeHtml(card.brand) + " (your draft)" : "Sponsored · " + escapeHtml(card.brand);
           el.innerHTML =
-            '<span class="badge">Sponsored · ' + escapeHtml(card.brand) + "</span>" +
+            '<span class="badge">' + label + "</span>" +
             "<h4>" + escapeHtml(card.title) + "</h4>" +
             "<p>" + escapeHtml(card.description) + "</p>" +
-            '<p><a class="btn primary" href="' + href + '" target="_blank" rel="sponsored noopener noreferrer">' +
+            '<p><a class="btn primary" href="' + escapeHtml(href) + '" target="_blank" rel="sponsored noopener noreferrer">' +
             escapeHtml(card.ctaText) + "</a></p>";
           log.appendChild(el);
           log.scrollTop = log.scrollHeight;
@@ -200,6 +237,9 @@
             } else {
               appendBubble("bot", data.answer);
               if (data.card) appendCard(data.card);
+              if (data.testAdScore != null && !(data.card && data.card.isTestAd)) {
+                appendNote("Your draft ad scored " + data.testAdScore + " on this question (needs 0.65+ to show).");
+              }
             }
           } catch (err) {
             typingEl.remove();
@@ -207,6 +247,99 @@
           } finally {
             input.disabled = false;
             input.focus();
+          }
+        });
+
+        var draftForm = document.getElementById("draft-form");
+        var draftUrlInput = document.getElementById("draft-url");
+        var draftSubmitBtn = document.getElementById("draft-submit-btn");
+        var draftStatus = document.getElementById("draft-status");
+        var draftCard = document.getElementById("draft-card");
+        var draftBrandInput = document.getElementById("draft-brand");
+        var draftTitleInput = document.getElementById("draft-title");
+        var draftDescriptionInput = document.getElementById("draft-description");
+        var draftCtaInput = document.getElementById("draft-cta");
+        var draftTestBtn = document.getElementById("draft-test-btn");
+        var draftTestStatus = document.getElementById("draft-test-status");
+        var draftSubmitLink = document.getElementById("draft-submit-link");
+        var draftSourceUrl = "";
+        var draftCategory = "";
+
+        draftForm.addEventListener("submit", async function (event) {
+          event.preventDefault();
+          var url = draftUrlInput.value.trim();
+          if (!url) return;
+          draftSubmitBtn.disabled = true;
+          draftStatus.textContent = "Reading that page…";
+
+          try {
+            var res = await fetch("/api/draft-ad", {
+              method: "POST",
+              headers: { "content-type": "application/json" },
+              body: JSON.stringify({ url: url, sessionId: sessionId }),
+            });
+            var data = await res.json();
+            if (!res.ok) {
+              draftStatus.textContent = data.error || "Could not draft an ad from that page.";
+            } else {
+              draftSourceUrl = data.sourceUrl;
+              draftCategory = data.category || "";
+              draftBrandInput.value = data.brand;
+              draftTitleInput.value = data.title;
+              draftDescriptionInput.value = data.description;
+              draftCtaInput.value = data.ctaText;
+              draftCard.style.display = "";
+              draftTestStatus.textContent = "";
+              draftStatus.textContent = "Drafted. Edit anything below, then test it.";
+            }
+          } catch (err) {
+            draftStatus.textContent = "Could not reach the ad builder. Try again in a moment.";
+          } finally {
+            draftSubmitBtn.disabled = false;
+          }
+        });
+
+        draftCard.addEventListener("submit", async function (event) {
+          event.preventDefault();
+          draftTestBtn.disabled = true;
+          draftTestStatus.textContent = "Saving your draft…";
+
+          var payload = {
+            sessionId: sessionId,
+            brand: draftBrandInput.value.trim(),
+            title: draftTitleInput.value.trim(),
+            description: draftDescriptionInput.value.trim(),
+            ctaText: draftCtaInput.value.trim(),
+            category: draftCategory,
+            sourceUrl: draftSourceUrl,
+          };
+
+          try {
+            var res = await fetch("/api/test-ad", {
+              method: "POST",
+              headers: { "content-type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            var data = await res.json();
+            if (!res.ok) {
+              draftTestStatus.textContent = data.error || "Could not save that draft.";
+            } else {
+              var params = new URLSearchParams({
+                brand: payload.brand,
+                title: payload.title,
+                description: payload.description,
+                ctaText: payload.ctaText,
+                category: payload.category,
+                destinationUrl: payload.sourceUrl,
+              });
+              draftSubmitLink.href = "https://prismpublication.com/ad-submission/?" + params.toString();
+              draftTestStatus.textContent = "Saved -- ask a question about it in the chat below.";
+              input.focus();
+            }
+          } catch (err) {
+            draftTestStatus.textContent = "Could not reach the server. Try again in a moment.";
+          } finally {
+            draftTestBtn.disabled = false;
           }
         });
       })();
