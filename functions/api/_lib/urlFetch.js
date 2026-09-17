@@ -4,7 +4,10 @@
 // this is a sanity check against a lazy paste (localhost, a bare private
 // IP), not a full SSRF defense against DNS rebinding.
 
-const MAX_BYTES = 1024 * 1024; // 1MB
+// Raised from 1MB: modern product pages (Shein, Amazon) often carry
+// several MB of inline JS/data, and the old cap was throwing "too large"
+// on completely normal pages before it ever reached the title/description.
+const MAX_BYTES = 6 * 1024 * 1024; // 6MB
 const FETCH_TIMEOUT_MS = 12000; // real product pages (Amazon especially) are heavy; 5s was too tight
 
 const BLOCKED_HOSTNAMES = new Set(["localhost", "0.0.0.0", "::1"]);
