@@ -406,7 +406,9 @@
             });
             var body = await res.json();
             if (!res.ok) {
-              statusEl.textContent = "Payment succeeded, but the submission failed: " + (body.error || "Something went wrong.") + ". Email info@prismpublication.com with your payment confirmation.";
+              statusEl.textContent = body.charged === false
+                ? "Not approved: " + (body.error || "Something went wrong.") + " You have not been charged."
+                : "Payment succeeded, but the submission failed: " + (body.error || "Something went wrong.") + ". Email info@prismpublication.com with your payment confirmation.";
               return;
             }
             statusEl.textContent = body.message;

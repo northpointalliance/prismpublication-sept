@@ -1,12 +1,14 @@
 // Public endpoint: POST /api/submit
-// Receives an advertiser's creative, verifies the $5 PayPal payment for it,
-// and stores it in D1 for manual review. Category is free text -- there is
-// no automated category whitelist. A person reviews every submission
-// against the brand-safety rules on the ad-submission page before it can
-// go live; this endpoint only removes the manual "read an email" step, it
-// does not put anything live on its own.
+// Screens the campaign, THEN verifies the $5 PayPal payment for it, THEN
+// stores it in D1 (Stage 4 of docs/run-ads-strategy-2026-09-16.md) --
+// screening runs before payment capture specifically so an outright
+// rejection is never charged. Clear passes (auto_cleared) and unclear
+// ones (needs_review) both still go to a person in /admin/ before
+// anything can actually go live; screening only decides how urgently and
+// whether it was charged, not whether a human ever looks at it.
 
 import { captureOrder } from "./paypal/_shared.js";
+import { screenAd } from "./_lib/screening.js";
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -59,6 +61,11 @@ export async function onRequestPost(context) {
     return json({ error: "Missing paypalOrderId. Payment must complete before submitting." }, 400);
   }
 
+  const screening = await screenAd(env, { brand, category, title, description, keywords, destinationUrl });
+  if (screening.status === "rejected") {
+    return json({ error: screening.reason, rejected: true, charged: false }, 422);
+  }
+
   let capture;
   try {
     capture = await captureOrder(env, paypalOrderId);
@@ -71,15 +78,19 @@ export async function onRequestPost(context) {
 
   await env.DB.prepare(
     `INSERT INTO ad_submissions
-      (brand, email, category, title, description, destination_url, cta_text, budget_note, keywords, paypal_order_id, amount_paid_cents)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      (status, brand, email, category, title, description, destination_url, cta_text, budget_note, review_notes, keywords, paypal_order_id, amount_paid_cents)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   )
-    .bind(brand, email, category, title, description, destinationUrl, ctaText, budgetNote || null, keywords || null, paypalOrderId, capture.amountCents)
+    .bind(screening.status, brand, email, category, title, description, destinationUrl, ctaText, budgetNote || null, screening.reason, keywords || null, paypalOrderId, capture.amountCents)
     .run();
 
   return json({
     ok: true,
-    message: "Submitted. A person reviews every campaign against the brand-safety rules before it can run.",
+    charged: true,
+    message:
+      screening.status === "auto_cleared"
+        ? "Submitted and cleared automated review. A person still checks it before it can run."
+        : "Submitted. This one needs a manual look before it can run -- usually within 2 business days.",
   });
 }
 

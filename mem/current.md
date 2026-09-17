@@ -175,6 +175,31 @@ level and needed no new Worker.
 - Hierarchy: h1 800, h2 700, labels 700, CTAs 700 and ≥44px tall, body 400. Underlined in-copy links. That order is how attention should move.
 - Phone stays a centered object; bubbles inside it stay left.
 
+**Stage 4, built 17 September 2026: light-touch automated screening on
+submission.** No separate "go live" step exists yet, so `functions/api/
+submit.js` is the actual gate now, not a future one. Screening
+(`functions/api/_lib/screening.js`) runs before PayPal payment is
+captured -- an outright rejection is never charged, the PayPal order is
+just left uncaptured and expires on its own. Deliberately light-touch,
+per Daniel: only the genuinely non-negotiable prohibited-category list
+(weapons, political campaigning, gambling, impersonation, etc. -- same
+list as the "What will you not run?" prose on `/ad-submission/`) blocks
+a submission outright. Everything else -- health claims, misleading
+claims, low model confidence -- routes to `needs_review` instead of
+blocking anyone; a `needs_review` submission is still charged and still
+stored, just flagged for Daniel to check in `/admin/` before approving.
+No rule-based checks (price text, ALL CAPS, link shorteners) -- tried
+those first, cut them because an automated false positive blocking a
+real advertiser was exactly the wrong kind of friction for this MVP.
+No email-notification step from the original plan (a signed one-tap
+approve/reject link) -- that would need a third-party email service,
+which this repo's own rule above says not to add without asking; the
+existing `/admin/` review queue already covers `needs_review` without one.
+
+`ad_submissions.status` is now actually set on insert (`auto_cleared` or
+`needs_review`) instead of always defaulting to `pending` -- `review_notes`
+is populated with the screening model's one-sentence reason too.
+
 ## Rejected (do not restore)
 
 - Homepage matcher form (`#sandbox-form`, category select, Fitness/Sleep fill buttons)
