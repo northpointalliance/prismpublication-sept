@@ -113,13 +113,24 @@ credit/pay-per-click pricing model Daniel says is coming (not built yet,
 still the flat $5 submission fee) -- built now because retrofitting click
 tracking after ads start running is worse than having it from the start.
 
-**Production bindings still needed for `/api/chat` to actually answer**
-(dashboard-only, `wrangler.toml` is local-dev emulation): a Workers AI
-binding named `AI` (Pages project -> Settings -> Functions -> Bindings),
-and ideally a real `IP_HASH_SALT` secret. Without the `AI` binding (and no
-`OPENAI_API_KEY`), `/api/chat` still matches ads correctly but returns a
-"not configured yet" answer text instead of a real one -- check this is
-set before calling the chat "live."
+**Correction, 17 September 2026: this Pages project runs Build System v3,
+which reads bindings from `wrangler.toml` in the repo, not the dashboard.**
+Confirmed directly -- Settings -> Bindings -> Add now shows "managed by
+Wrangler" and refuses manual additions; the existing `DB` binding just
+predates that lockdown. So the `[ai]` binding added to `wrangler.toml` for
+Stage 2 applies automatically on deploy: to preview builds of whichever
+branch has it, to production once that branch reaches `main`. Don't send
+anyone to the dashboard to add a binding by hand again -- add it to
+`wrangler.toml` and let it deploy. Secrets are the exception: those still
+go in the dashboard, but under **Variables and secrets**, a different
+section from Bindings. `IP_HASH_SALT` (any random string) needs setting
+there for real rate-limit security (works without it, just with a
+guessable fallback salt -- see `functions/api/_lib/hash.js`); optional
+`OPENAI_API_KEY` switches `/api/chat`'s answers to OpenAI instead of
+Workers AI. Without the `AI` binding live and no `OPENAI_API_KEY` set,
+`/api/chat` still matches ads correctly but returns a "not configured yet"
+placeholder instead of a real answer -- check which is true before calling
+the chat "live."
 
 ## Locked public site
 

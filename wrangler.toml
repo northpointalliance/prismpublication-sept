@@ -1,16 +1,22 @@
-# Local development only. Cloudflare Pages' Git-connected build does not read
-# this file -- production bindings are configured in the dashboard
-# (Pages project -> Settings -> Functions -> Bindings), not here.
-# This exists so `wrangler pages dev .` can emulate those bindings locally.
+# Corrected 17 September 2026: this file is NOT local-dev-only. This Pages
+# project runs Build System v3, which reads bindings (D1, AI, etc.) straight
+# from this file on every Git-connected build -- confirmed by the dashboard
+# itself: Settings -> Bindings -> Add now shows "managed by Wrangler" and
+# refuses manual dashboard additions. (`wrangler pages dev .` also reads
+# this file, to emulate the same bindings locally -- that part was correct.)
+# Whatever's declared below applies to whichever branch is building --
+# production bindings come from this file on `main`, preview deployments
+# from this file on their own branch. Add new resource bindings here, not
+# in the dashboard; it'll refuse you anyway.
 #
-# Production still needs, added in the dashboard (not here):
-#   - This same [ai] binding, named AI (used by functions/api/_lib/answer.js
-#     to power the /run-ads chat; no secret needed for Workers AI itself).
-#   - Secret IP_HASH_SALT (any random string) -- without it, chat rate
-#     limiting still works but with a guessable fallback salt (see
+# Secrets are the one thing NOT in this file (never commit a secret) --
+# those still go in the dashboard, but a different section than Bindings:
+# Settings -> Variables and secrets -> Add, type "Secret". Needed there:
+#   - IP_HASH_SALT (any random string) -- without it, chat rate limiting
+#     still works but with a guessable fallback salt (see
 #     functions/api/_lib/hash.js).
-#   - Optional secret OPENAI_API_KEY -- if set, the chat answers with
-#     OpenAI (gpt-4o-mini) instead of Workers AI. Not required to ship.
+#   - Optional OPENAI_API_KEY -- if set, the chat answers with OpenAI
+#     (gpt-4o-mini) instead of Workers AI. Not required to ship.
 name = "prismpublication-sept"
 compatibility_date = "2026-09-11"
 pages_build_output_dir = "."
