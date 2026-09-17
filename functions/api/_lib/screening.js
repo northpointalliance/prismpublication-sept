@@ -31,9 +31,11 @@ const SYSTEM_PROMPT =
   '"confidence": 0.0 to 1.0, "reason": "one sentence"}. ' +
   "Set blockedCategory true, with blockedReason naming which, only for: " +
   "impersonation of an AI assistant; weapons or explosives; political " +
-  "campaigning; gambling; alcohol or adult products (unless clearly " +
-  "age-gated 18+ in the copy); or medical/legal advice sold as a " +
-  "recommendation. Set healthClaim true for any medical, cure, diagnosis, " +
+  "campaigning; gambling ONLY if the campaign's own category or context " +
+  "is health/wellness related (gambling is otherwise permitted -- it is " +
+  "not banned generally, only kept off wellness bots); alcohol or adult " +
+  "products (unless clearly age-gated 18+ in the copy); or medical/legal " +
+  "advice sold as a recommendation. Set healthClaim true for any medical, cure, diagnosis, " +
   "or treatment claim, even mild ones (\"clinically proven\", \"relieves " +
   "pain\"). Set misleadingClaim true for exaggerated, unverifiable, or " +
   "bait-and-switch claims. confidence is your confidence in this " +
