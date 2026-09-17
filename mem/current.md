@@ -188,9 +188,11 @@ submit.js` is the actual gate now, not a future one. Screening
 captured -- an outright rejection is never charged, the PayPal order is
 just left uncaptured and expires on its own. Deliberately light-touch,
 per Daniel: only the genuinely non-negotiable prohibited-category list
-(weapons, political campaigning, gambling, impersonation, etc. -- same
-list as the "What will you not run?" prose on `/ad-submission/`) blocks
-a submission outright. Everything else -- health claims, misleading
+(weapons, explosives, political campaigning, impersonation, etc., in
+that priority order -- same list as the "What will you not run?" prose
+on `/ad-submission/`) blocks a submission outright. Gambling is not on
+this list -- it never blocks, it always routes to `needs_review` (see
+Payment/Stage 4 notes above). Everything else -- health claims, misleading
 claims, low model confidence -- routes to `needs_review` instead of
 blocking anyone; a `needs_review` submission is still charged and still
 stored, just flagged for Daniel to check in `/admin/` before approving.

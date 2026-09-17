@@ -33,7 +33,7 @@ Advertisers, agencies, and publishers wiring the SDK. If a category is not liste
 
 ## Brand safety (review queue)
 
-Reject impersonation of the assistant, weapons, explosives, political campaigning, alcohol or adult products on bots that are not age-gated 18+, and medical or legal advice sold as a bot recommendation. Gambling is not rejected -- it's permitted with proper licensing, KYC compliance, and confirmed legality in the advertiser's state/country, and always routes to manual review (see functions/api/_lib/screening.js), never auto-approved.
+Reject weapons, explosives, political campaigning, impersonation of the assistant, alcohol or adult products on bots that are not age-gated 18+, and medical or legal advice sold as a bot recommendation. Gambling is not rejected -- it's permitted with proper licensing, KYC compliance, and confirmed legality in the advertiser's state/country, and always routes to manual review (see functions/api/_lib/screening.js), never auto-approved.
 
 ## Review path
 

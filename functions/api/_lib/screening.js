@@ -37,8 +37,8 @@ const SYSTEM_PROMPT =
   '"healthClaim": true|false, "misleadingClaim": true|false, ' +
   '"confidence": 0.0 to 1.0, "reason": "one sentence"}. ' +
   "Set blockedCategory true, with blockedReason naming which, only for: " +
-  "impersonation of an AI assistant; weapons or explosives; political " +
-  "campaigning; alcohol or adult products (unless clearly age-gated 18+ " +
+  "weapons or explosives; political campaigning; impersonation of an AI " +
+  "assistant; alcohol or adult products (unless clearly age-gated 18+ " +
   "in the copy); or medical/legal advice sold as a recommendation. " +
   "Gambling is NOT in that blocked list -- it is permitted, but only " +
   "with proper licensing, KYC compliance, and confirmed legality in the " +
