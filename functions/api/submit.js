@@ -1,13 +1,11 @@
 // Public endpoint: POST /api/submit
-// Screens the campaign, THEN verifies the $5 PayPal payment for it, THEN
-// stores it in D1 (Stage 4 of docs/run-ads-strategy-2026-09-16.md) --
-// screening runs before payment capture specifically so an outright
-// rejection is never charged. Clear passes (auto_cleared) and unclear
-// ones (needs_review) both still go to a person in /admin/ before
-// anything can actually go live; screening only decides how urgently and
-// whether it was charged, not whether a human ever looks at it.
+// Screens the campaign, then stores it in D1 for review. Free -- Stage 5
+// (docs/run-ads-strategy-2026-09-16.md) retired the $5 submission fee;
+// the only charge now is prepaid click credit, bought later via the
+// token-based campaign page once a submission is approved. Generates
+// that access token here and returns it -- there's no account system, so
+// this link is the advertiser's only way back to check status or pay.
 
-import { captureOrder } from "./paypal/_shared.js";
 import { screenAd } from "./_lib/screening.js";
 
 function json(data, status = 200) {
@@ -56,37 +54,24 @@ export async function onRequestPost(context) {
     return json({ error: "email does not look valid." }, 400);
   }
 
-  const paypalOrderId = String(body.paypalOrderId || "").trim();
-  if (!paypalOrderId) {
-    return json({ error: "Missing paypalOrderId. Payment must complete before submitting." }, 400);
-  }
-
   const screening = await screenAd(env, { brand, category, title, description, keywords, destinationUrl });
   if (screening.status === "rejected") {
-    return json({ error: screening.reason, rejected: true, charged: false }, 422);
+    return json({ error: screening.reason, rejected: true }, 422);
   }
 
-  let capture;
-  try {
-    capture = await captureOrder(env, paypalOrderId);
-  } catch {
-    return json({ error: "Could not verify payment with PayPal right now. Try again in a moment." }, 502);
-  }
-  if (!capture.ok) {
-    return json({ error: `Payment could not be verified: ${capture.reason}` }, 402);
-  }
+  const accessToken = crypto.randomUUID();
 
   await env.DB.prepare(
     `INSERT INTO ad_submissions
-      (status, brand, email, category, title, description, destination_url, cta_text, budget_note, review_notes, keywords, paypal_order_id, amount_paid_cents)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      (status, brand, email, category, title, description, destination_url, cta_text, budget_note, review_notes, keywords, access_token)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   )
-    .bind(screening.status, brand, email, category, title, description, destinationUrl, ctaText, budgetNote || null, screening.reason, keywords || null, paypalOrderId, capture.amountCents)
+    .bind(screening.status, brand, email, category, title, description, destinationUrl, ctaText, budgetNote || null, screening.reason, keywords || null, accessToken)
     .run();
 
   return json({
     ok: true,
-    charged: true,
+    accessToken,
     message:
       screening.status === "auto_cleared"
         ? "Submitted and cleared automated review. A person still checks it before it can run."

@@ -31,7 +31,7 @@ export async function onRequestPost(context) {
     return json({ error: "Topic is too long." }, 400);
   }
 
-  const { ad } = await findBestAd(env, topic);
+  const { ad } = await findBestAd(env, topic, [], { requireActive: false });
   if (!ad) {
     return json({ ad: null });
   }

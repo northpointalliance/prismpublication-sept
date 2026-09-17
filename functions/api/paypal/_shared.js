@@ -4,8 +4,14 @@
 // secrets (Settings -> Environment variables -> Secret). PAYPAL_MODE
 // ("sandbox" | "live") is optional, defaults to "sandbox" -- flip it when
 // ready to take real money, no code change needed.
-
-export const SUBMISSION_FEE_USD = "5.00";
+//
+// Generalized for Stage 5 (credit packs, variable amount) -- submitting a
+// campaign is free now, so the fixed $5.00 order this used to always
+// create no longer applies anywhere. createOrder/captureOrder take/return
+// a plain amount; the caller (functions/api/credit/purchase.js) is
+// responsible for checking the captured amount is one of the allowed
+// credit packs in _lib/pricing.js, since this file has no opinion on
+// what a valid amount is.
 
 export function paypalBaseUrl(env) {
   return env.PAYPAL_MODE === "live"
@@ -40,9 +46,10 @@ export async function getAccessToken(env) {
   return data.access_token;
 }
 
-export async function createOrder(env) {
+export async function createOrder(env, { amountCents, description }) {
   const base = paypalBaseUrl(env);
   const token = await getAccessToken(env);
+  const value = (amountCents / 100).toFixed(2);
   const res = await fetch(`${base}/v2/checkout/orders`, {
     method: "POST",
     headers: {
@@ -53,8 +60,8 @@ export async function createOrder(env) {
       intent: "CAPTURE",
       purchase_units: [
         {
-          description: "Prism Publication ad submission review",
-          amount: { currency_code: "USD", value: SUBMISSION_FEE_USD },
+          description,
+          amount: { currency_code: "USD", value },
         },
       ],
     }),
@@ -66,9 +73,11 @@ export async function createOrder(env) {
   return data.id;
 }
 
-// Captures the order and returns { ok, amountCents } if the payment is real
-// and matches the expected fee. Throws only on a genuine network/API error;
-// a declined/mismatched payment returns { ok: false }, it doesn't throw.
+// Captures the order and returns { ok, amountCents } for whatever amount
+// was actually paid -- this file doesn't know what amount is "expected",
+// the caller checks amountCents against its own allowed values. Throws
+// only on a genuine network/API error; a declined payment or one that
+// never completed returns { ok: false }, it doesn't throw.
 export async function captureOrder(env, orderId) {
   const base = paypalBaseUrl(env);
   const token = await getAccessToken(env);
@@ -94,11 +103,9 @@ export async function captureOrder(env, orderId) {
   }
 
   const amount = capture.amount;
-  const expectedCents = Math.round(Number(SUBMISSION_FEE_USD) * 100);
-  const actualCents = Math.round(Number(amount?.value) * 100);
-  if (amount?.currency_code !== "USD" || actualCents !== expectedCents) {
-    return { ok: false, reason: `unexpected amount: ${amount?.currency_code} ${amount?.value}` };
+  if (amount?.currency_code !== "USD") {
+    return { ok: false, reason: `unexpected currency: ${amount?.currency_code}` };
   }
 
-  return { ok: true, amountCents: actualCents };
+  return { ok: true, amountCents: Math.round(Number(amount.value) * 100) };
 }

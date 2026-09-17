@@ -56,11 +56,17 @@ export function scoreAd(topic, row) {
 // (same shape as an ad_submissions row) are scored alongside the public
 // approved pool but never stored or shown outside the caller's own session
 // -- used for a visitor's private draft/test ad (see draft-ad.js).
-export async function findBestAd(env, topic, extraRows = []) {
+//
+// requireActive gates on credit_active (live, spending credit per click) --
+// true for the visitor-facing chat (_lib/chat.js), which is real serving.
+// match.js sets it false: an advertiser testing their own already-approved
+// ad is checking content match, not billing state, and should be able to
+// do that before ever buying credit -- testing stays free either way.
+export async function findBestAd(env, topic, extraRows = [], { requireActive = true } = {}) {
   const { results } = await env.DB.prepare(
     `SELECT id, brand, category, title, description, destination_url, cta_text, keywords
      FROM ad_submissions
-     WHERE status = 'approved'`
+     WHERE status = 'approved' ${requireActive ? "AND credit_active = 1" : ""}`
   ).all();
 
   const pool = [...results, ...extraRows];

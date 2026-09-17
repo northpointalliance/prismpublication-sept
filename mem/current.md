@@ -200,6 +200,56 @@ existing `/admin/` review queue already covers `needs_review` without one.
 `needs_review`) instead of always defaulting to `pending` -- `review_notes`
 is populated with the screening model's one-sentence reason too.
 
+**Stage 5, built 17 September 2026: free submission, prepaid click credit
+to go live.** The $5-at-submission fee is retired -- confirmed directly
+with Daniel this should be a real removal, not additive. Submitting and
+testing (both `/api/match` and the `/run-ads` chat) are free with no
+payment step anywhere in that path. The only charge now: once Daniel
+approves a submission in `/admin/`, the advertiser buys prepaid click
+credit to actually go live.
+
+No account system exists, so `functions/api/submit.js` generates a random
+`access_token` on insert and returns it -- that's the advertiser's only
+way back. `functions/campaign/[token].js` (GET `/campaign/:token`) is
+their one page: shows current status, and once approved, credit-pack
+PayPal buttons to go live. Credit balance is never a stored running total
+-- always `SUM(amount_cents)` over the new `credit_ledger` table (purchase
+rows positive, click rows negative), so it can't drift from the actual
+history. `ad_submissions.credit_active` is the fast-path flag the matcher
+actually reads (`_lib/matcher.js`'s `findBestAd` now takes a
+`requireActive` option, default true) -- set to 1 on a credit purchase,
+flipped back to 0 in `functions/c/[id].js` the moment a click would drop
+the balance below one more click's cost. `functions/api/match.js` (the
+advertiser's own self-test) explicitly passes `requireActive: false`,
+since testing your own already-approved ad is a content-match question,
+not a billing-state one -- it should work before credit is ever bought.
+
+Pricing lives in one place, `functions/api/_lib/pricing.js`
+(`CREDIT_PACKS_CENTS`, `PRICE_PER_CLICK_CENTS`) -- **both are explicitly
+placeholder values**, not numbers Daniel has actually set. Change them
+there; nothing else needs touching, every page/endpoint that quotes a
+price reads from this file.
+
+`functions/api/paypal/_shared.js`'s `createOrder`/`captureOrder` were
+generalized to take/return a plain amount instead of the old hardcoded
+$5 -- the caller (`credit/purchase.js`) checks the captured amount
+against `CREDIT_PACKS_CENTS` itself now.
+
+Site copy updated everywhere the $5 fee was mentioned: `ad-submission/
+index.html`, `terms/index.html`, `privacy/index.html`, `run-ads/
+index.html`. **Not updated**: `docs/pricing.md` and `docs/ad-submission.md`
+(the stale operator docs already flagged in earlier sessions as
+describing an older third-party-SDK sales motion) are now even further
+out of sync -- still worth a real rewrite pass, not attempted here.
+
+**Not built, deliberately out of scope for this pass:** PayPal webhook
+handling (reused the existing direct-capture-and-verify pattern instead,
+consistent with how the old $5 flow worked); a refund *request* UI on the
+campaign page (added a plain "email us" line instead -- refunds are still
+manual, handled by Daniel); showing credit balance/active state in
+`/admin/` (nice-to-have, not required for the loop to work); Stage 6
+metrics.
+
 ## Rejected (do not restore)
 
 - Homepage matcher form (`#sandbox-form`, category select, Fitness/Sleep fill buttons)
