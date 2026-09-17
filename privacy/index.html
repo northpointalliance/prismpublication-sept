@@ -48,7 +48,7 @@
           </p>
           <p class="meta">
             By Daniel Rosenthal.
-            Last updated <time datetime="2026-09-14">14 September 2026</time>.
+            Last updated <time datetime="2026-09-17">17 September 2026</time>.
           </p>
         </div>
       </section>
@@ -63,7 +63,10 @@
             <strong>If you pay the $5.00 submission fee:</strong> the payment itself is handled entirely by PayPal. This site never sees or stores your card number, PayPal password, or any other payment credential. What we do store is the PayPal order ID and the confirmed amount, so a submission can be tied to a verified payment.
           </p>
           <p>
-            <strong>If you type a question into the phone UI on <a href="https://prismpublication.com/run-ads/">run-ads</a> or the homepage demo:</strong> that text is sent to the matching function to compare against approved ad creative, and the result is returned to your browser. It is not written to any database or log. It is not stored anywhere after the request completes.
+            <strong>If you use the "test your ad" checker on <a href="https://prismpublication.com/run-ads/">run-ads</a> or the homepage demo:</strong> that text is sent to the matching function to compare against approved ad creative, and the result is returned to your browser. It is not written to any database or log. It is not stored anywhere after the request completes.
+          </p>
+          <p>
+            <strong>If you use the live chat on <a href="https://prismpublication.com/run-ads/">run-ads</a>:</strong> your question text, a hashed version of your IP address (not the IP address itself), a random session ID generated in your browser, and whether a sponsored card matched are stored in the same Cloudflare D1 database, so matching quality can be reviewed and improved. Nothing about this is linked to your email, name, or any account -- there is no account. Don't type anything into the chat you wouldn't want stored as text.
           </p>
           <p>
             <strong>General site visits:</strong> Google Analytics (a standard, cookie-based analytics tool) runs on every public page except the internal admin review page. It collects the usual aggregate signals -- pages visited, rough location, device/browser type, referring site -- the same as most websites. Cloudflare, our host, also collects its own basic traffic analytics (visit counts, page views) automatically; this is separate from Google Analytics and doesn't involve any code on this site.
@@ -77,7 +80,7 @@
           <h2>How long is it kept?</h2>
           <p>
             <strong>Ad submissions are kept until you ask for deletion or the campaign is clearly no longer active.</strong>
-            There's no automatic expiry built into the system yet -- if you want a submission removed, email <a href="mailto:info@prismpublication.com">info@prismpublication.com</a> and it will be deleted from the database directly. Analytics data retention follows Google Analytics' and Cloudflare's own standard retention settings, not anything custom to this site.
+            There's no automatic expiry built into the system yet -- if you want a submission removed, email <a href="mailto:info@prismpublication.com">info@prismpublication.com</a> and it will be deleted from the database directly. Live-chat logs (question text, hashed IP, session ID) follow the same rule -- no automatic expiry yet, deleted on request, though since they're not linked to an email or name there's no way to find a specific chat log without you telling us roughly when you sent it. Analytics data retention follows Google Analytics' and Cloudflare's own standard retention settings, not anything custom to this site.
           </p>
 
           <h2>What are your rights?</h2>

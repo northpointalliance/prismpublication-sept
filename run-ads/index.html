@@ -12,10 +12,10 @@
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Test your ad | Prism Publication</title>
+    <title>Live chat, real ads | Prism Publication</title>
     <meta
       name="description"
-      content="Type a real question and see whether your approved ad gets matched, how it's labeled, and how it looks -- against the live cosine matcher, not a script."
+      content="Chat about anything. A sponsored card only shows up when your question clears the live 0.65 similarity floor against an approved ad -- not a script."
     />
     <link rel="canonical" href="https://prismpublication.com/run-ads/" />
     <meta name="author" content="Daniel Rosenthal" />
@@ -41,11 +41,11 @@
     <main id="main">
       <section class="hero page-hero demo-hero">
         <div class="container">
-          <p class="audience-kicker">For advertisers with an approved ad</p>
-          <h1>Type a real question. See if your ad shows up.</h1>
+          <p class="audience-kicker">Open to everyone, no account needed</p>
+          <h1>Ask anything. See when a sponsored card fits.</h1>
           <p class="subhead">
-            <strong>This runs the live matcher against your approved creative, not a script.</strong>
-            Type something a real customer might ask. If your ad clears the 0.65 similarity floor, it shows up labeled exactly as it would in a real chat. If it doesn't, you'll see that too -- no card is also useful information. <strong>Testing here is included in your $5.00 submission fee</strong> -- no separate charge for typing questions and watching your card appear.
+            <strong>A live chat, not a script.</strong>
+            Ask a real question, on any topic. A sponsored card only appears when it clears the 0.65 similarity floor against the live approved pool, labeled exactly as it would in a real chat -- no card is also useful information. Have your own product? <a href="https://prismpublication.com/ad-submission/">Submit an ad</a> and test it right here, free, before you pay to run it.
           </p>
         </div>
       </section>
@@ -54,9 +54,11 @@
         <div class="container demo-stage">
           <div class="demo-controls">
             <p class="demo-scenario">
-              Only <strong>approved</strong> submissions are in this pool. If you haven't submitted a campaign yet, start at
-              <a href="https://prismpublication.com/ad-submission/">ad submission</a>. If you submitted and don't see your ad here yet, it's likely still in review -- check with
-              <a href="mailto:info@prismpublication.com">info@prismpublication.com</a>.
+              This chat answers anything, like a normal assistant. Sponsored cards come only from the live
+              <strong>approved</strong> pool, and only when a question is a close enough match.
+              Questions are stored anonymously to improve matching -- see
+              <a href="https://prismpublication.com/privacy/">privacy</a>. Want to see your own ad here first?
+              <a href="https://prismpublication.com/ad-submission/">Submit it</a>, free to test once approved.
             </p>
           </div>
 
@@ -66,8 +68,8 @@
               <div class="demo-chat">
                 <header class="demo-chat-head">
                   <div>
-                    <h2>Test your ad</h2>
-                    <p>Live matcher, approved pool</p>
+                    <h2>Live chat</h2>
+                    <p>Ask anything · sponsored cards from the approved pool</p>
                   </div>
                   <p class="demo-live">Live</p>
                 </header>
@@ -125,6 +127,18 @@
         var form = document.getElementById("chat-form");
         var input = document.getElementById("chat-input");
 
+        var sessionId = (function () {
+          try {
+            var existing = sessionStorage.getItem("prism-chat-session");
+            if (existing) return existing;
+            var fresh = crypto.randomUUID();
+            sessionStorage.setItem("prism-chat-session", fresh);
+            return fresh;
+          } catch (err) {
+            return crypto.randomUUID();
+          }
+        })();
+
         function escapeHtml(s) {
           return String(s == null ? "" : s)
             .replace(/&/g, "&amp;")
@@ -138,17 +152,19 @@
           el.textContent = text;
           log.appendChild(el);
           log.scrollTop = log.scrollHeight;
+          return el;
         }
 
-        function appendCard(ad) {
+        function appendCard(card) {
           var el = document.createElement("article");
           el.className = "match-card";
+          var href = "/c/" + encodeURIComponent(card.id) + "?s=" + encodeURIComponent(sessionId);
           el.innerHTML =
-            '<span class="badge">Sponsored · ' + escapeHtml(ad.brand) + "</span>" +
-            "<h4>" + escapeHtml(ad.title) + "</h4>" +
-            "<p>" + escapeHtml(ad.description) + "</p>" +
-            '<p><a class="btn primary" href="' + escapeHtml(ad.destinationUrl) + '" target="_blank" rel="sponsored noopener noreferrer">' +
-            escapeHtml(ad.ctaText) + "</a></p>";
+            '<span class="badge">Sponsored · ' + escapeHtml(card.brand) + "</span>" +
+            "<h4>" + escapeHtml(card.title) + "</h4>" +
+            "<p>" + escapeHtml(card.description) + "</p>" +
+            '<p><a class="btn primary" href="' + href + '" target="_blank" rel="sponsored noopener noreferrer">' +
+            escapeHtml(card.ctaText) + "</a></p>";
           log.appendChild(el);
           log.scrollTop = log.scrollHeight;
         }
@@ -164,28 +180,30 @@
 
         form.addEventListener("submit", async function (event) {
           event.preventDefault();
-          var topic = input.value.trim();
-          if (!topic) return;
-          appendBubble("user", topic);
+          var message = input.value.trim();
+          if (!message) return;
+          appendBubble("user", message);
           input.value = "";
           input.disabled = true;
+          var typingEl = appendBubble("bot", "…");
 
           try {
-            var res = await fetch("/api/match", {
+            var res = await fetch("/api/chat", {
               method: "POST",
               headers: { "content-type": "application/json" },
-              body: JSON.stringify({ topic: topic }),
+              body: JSON.stringify({ message: message, sessionId: sessionId }),
             });
             var data = await res.json();
+            typingEl.remove();
             if (!res.ok) {
-              appendNote("Error: " + (data.error || "Something went wrong."));
-            } else if (data.ad) {
-              appendCard(data.ad);
+              appendNote(data.error || "Something went wrong.");
             } else {
-              appendNote("No sponsored card matched this question. That turn would not be billed.");
+              appendBubble("bot", data.answer);
+              if (data.card) appendCard(data.card);
             }
           } catch (err) {
-            appendNote("Could not reach the matcher. Try again in a moment.");
+            typingEl.remove();
+            appendNote("Could not reach the chat. Try again in a moment.");
           } finally {
             input.disabled = false;
             input.focus();

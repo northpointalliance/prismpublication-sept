@@ -1,7 +1,16 @@
 # Local development only. Cloudflare Pages' Git-connected build does not read
-# this file -- the production D1 binding is configured in the dashboard
-# (Pages project -> Settings -> Functions -> D1 database bindings), not here.
-# This exists so `wrangler pages dev .` can emulate that binding locally.
+# this file -- production bindings are configured in the dashboard
+# (Pages project -> Settings -> Functions -> Bindings), not here.
+# This exists so `wrangler pages dev .` can emulate those bindings locally.
+#
+# Production still needs, added in the dashboard (not here):
+#   - This same [ai] binding, named AI (used by functions/api/_lib/answer.js
+#     to power the /run-ads chat; no secret needed for Workers AI itself).
+#   - Secret IP_HASH_SALT (any random string) -- without it, chat rate
+#     limiting still works but with a guessable fallback salt (see
+#     functions/api/_lib/hash.js).
+#   - Optional secret OPENAI_API_KEY -- if set, the chat answers with
+#     OpenAI (gpt-4o-mini) instead of Workers AI. Not required to ship.
 name = "prismpublication-sept"
 compatibility_date = "2026-09-11"
 pages_build_output_dir = "."
@@ -10,3 +19,6 @@ pages_build_output_dir = "."
 binding = "DB"
 database_name = "prism-crm"
 database_id = "52f65e4f-0cca-4111-bc87-9cfab575600b"
+
+[ai]
+binding = "AI"
