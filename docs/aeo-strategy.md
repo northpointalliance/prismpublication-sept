@@ -41,6 +41,8 @@ Target 120–180 words per H2 block. Refresh or re-evaluate inside three months.
 
 Prefer commas, colons, periods, and `|` in titles. Grep for `—` before ship. Keep the count near zero.
 
+**This applies to body copy too, and to the ASCII `" -- "` substitute, not just the real em dash.** A real `—` reads as an AI-writing tell; a literal `" -- "` rendered in a sentence a visitor reads reads as a typo instead, which is arguably worse. Neither belongs in visible copy on a public page -- write two sentences, or use a comma, colon, or semicolon. Grep `grep -rn ' -- ' --include="*.html"` (excluding JS `//` comments, which aren't visitor-facing) before shipping copy changes, same as the em-dash grep. This rule is public-copy only: internal docs (this file included), `mem/current.md`, commit messages, and code comments can read however's clearest -- `" -- "` there is fine and expected.
+
 ## Demo vs production claims
 
 Public floors to print: cosine similarity **0.65**, matching budget **under 120ms**. The homepage/`/demo/` thread is a scripted, local-catalog playback (Play/Reset, no free-text input) that shows message/ad counts only, not a score or timing readout. It is not a live auction. Do not invent fill rate or monthly visitor counts.
