@@ -15,7 +15,7 @@
     <title>Live chat, real ads | Prism Publication</title>
     <meta
       name="description"
-      content="Chat about anything. A sponsored card only shows up when your question clears the live 0.65 similarity floor against an approved ad -- not a script."
+      content="Chat about anything. A sponsored card only shows up when your question clears the live 0.65 similarity floor against an approved ad, not a script."
     />
     <link rel="canonical" href="https://prismpublication.com/run-ads/" />
     <meta name="author" content="Daniel Rosenthal" />
@@ -45,7 +45,7 @@
           <h1>Ask anything. See when a sponsored card fits.</h1>
           <p class="subhead">
             <strong>A live chat, not a script.</strong>
-            Ask a real question, on any topic. A sponsored card only appears when it clears the 0.65 similarity floor against the live approved pool, labeled exactly as it would in a real chat -- no card is also useful information. Have your own product? <a href="/ad-submission/">Submit an ad</a> and test it right here, free, before you pay to run it.
+            Ask a real question, on any topic. A sponsored card only appears when it clears the 0.65 similarity floor against the live approved pool, labeled exactly as it would in a real chat. No card is also useful information. Have your own product? <a href="/ad-submission/">Submit an ad</a> and test it right here, free, before you pay to run it.
           </p>
           <p class="meta" id="reach-line"></p>
         </div>
@@ -57,7 +57,7 @@
             <p class="demo-scenario">
               This chat answers anything, like a normal assistant. Sponsored cards come only from the live
               <strong>approved</strong> pool (plus your own draft below, visible only to you, while you're testing it), and only when a question is a close enough match.
-              Questions are stored anonymously to improve matching -- see
+              Questions are stored anonymously to improve matching. See
               <a href="/privacy/">privacy</a>.
             </p>
           </div>
@@ -90,7 +90,7 @@
         <div class="container">
           <h2>Build an ad from your product page</h2>
           <p class="section-lead">
-            Paste a product URL and we'll draft a sponsored card from it. Edit anything, then test it for free in the chat above -- nothing goes live, and nobody else can see it, until you choose to submit it for review.
+            Paste a product URL and we'll draft a sponsored card from it. Edit anything, then test it for free in the chat above. Nothing goes live, and nobody else can see it, until you choose to submit it for review.
           </p>
           <form id="draft-form" class="card" style="max-width: 640px; text-align: left;" novalidate>
             <label for="draft-url">Product URL (https)</label><br />
@@ -126,7 +126,7 @@
           <h2>What counts as a match?</h2>
           <p>
             <strong>Cosine similarity of 0.65 or higher between your question and the approved creative's category, title, and description.</strong>
-            The same floor quoted everywhere else on this site. No card means the question wasn't close enough -- that's not a bug, it's the point: no card, no bill, on a real campaign.
+            The same floor quoted everywhere else on this site. No card means the question wasn't close enough. That's not a bug, it's the point: no card, no bill, on a real campaign.
           </p>
           <h2>Why can I see other advertisers' ads too?</h2>
           <p>
@@ -188,7 +188,7 @@
             var el = document.getElementById("reach-line");
             if (!el) return;
             el.textContent = data.lowVolume
-              ? "Early stage, low volume -- real numbers once there's enough traffic to show."
+              ? "Early stage, low volume. Real numbers once there's enough traffic to show."
               : data.questionsLast7Days + " real questions asked in the last 7 days.";
           })
           .catch(function () {});
@@ -353,7 +353,7 @@
                 destinationUrl: payload.sourceUrl,
               });
               draftSubmitLink.href = "https://prismpublication.com/ad-submission/?" + params.toString();
-              draftTestStatus.textContent = "Saved -- ask a question about it in the chat below.";
+              draftTestStatus.textContent = "Saved. Ask a question about it in the chat below.";
               input.focus();
             }
           } catch (err) {
