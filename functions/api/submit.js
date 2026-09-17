@@ -7,7 +7,7 @@
 
 import { captureOrder } from "./paypal/_shared.js";
 
-const APPROVED_CATEGORIES = new Set(["fitness", "sleep", "productivity"]);
+const APPROVED_CATEGORIES = new Set(["fitness", "travel", "health_wellness"]);
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
