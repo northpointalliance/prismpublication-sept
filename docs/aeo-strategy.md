@@ -19,7 +19,7 @@ Operator notes. Do not paste this file onto the live homepage. The page must rea
 
 ## Page intent
 
-One commercial intent: **native ads and SDK matching for independent AI chatbots**. Do not mix support-bot scoring or other Prism product lines onto this homepage.
+One commercial intent, as of 17 September 2026: **the site's own live chat, open to any visitor, with contextual ads for advertisers who submit and test free before paying per click**. The SDK/GAM story for wiring ads onto someone else's chatbot still exists (`/developers/`), but it is not the homepage's focus and should not dominate this page's copy. Do not mix support-bot scoring or other Prism product lines onto this homepage either.
 
 ## Section pattern on `index.html`
 
