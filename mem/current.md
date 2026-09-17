@@ -83,6 +83,16 @@ here:
   it now, no duplicated logic). Open to any visitor, no account, no
   advertiser gate.
 
+**Watch for this recurring mistake:** fitness/travel/health-and-wellness
+example cards are fine to keep, but any sentence implying they're
+special -- "the categories we see most," "most common," a claim about
+volume or traffic by category -- is a leftover from the old
+chatbot-developer-niche build and has no data behind it now (caught and
+fixed twice on the same duplicated sentence, `index.html` and
+`/ad-submission/`, 17 September 2026). When editing this section again,
+grep the whole site for the phrase you're about to remove instead of
+fixing the first instance you find -- it is very likely duplicated.
+
 ## MVP repositioning (17 September 2026)
 
 The fitness/sleep/productivity niches were an artifact of the earlier
@@ -97,7 +107,8 @@ category field is now free text gated by the brand-safety rules on
 [docs/run-ads-strategy-2026-09-16.md](../docs/run-ads-strategy-2026-09-16.md)
 for the full planning record and the staged build plan (Stage 2, the chat
 itself, is what's described above; Stages 3-6 -- build-ad-from-URL,
-automated screening, paid go-live, metrics -- are not built yet). Daniel
+automated screening, free submission + prepaid credit go-live, metrics --
+all shipped later the same day, see the dated sections below). Daniel
 has also flagged that swapping the chat's answer model from Workers AI to
 OpenAI is on the table if quality needs it -- `_lib/answer.js` is written
 so that's an env-var change (`OPENAI_API_KEY`), not a rewrite.
