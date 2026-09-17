@@ -29,7 +29,10 @@ export async function complete(env, { system, user, maxTokens = 220 }) {
   }
 
   if (env.AI) {
-    const result = await env.AI.run("@cf/meta/llama-3.1-8b-instruct", {
+    // Not @cf/meta/llama-3.1-8b-instruct (no "-fast" suffix) -- that exact
+    // model id is marked Deprecated in Cloudflare's current catalog and
+    // silently returned no usable response when this was first wired up.
+    const result = await env.AI.run("@cf/meta/llama-3.1-8b-instruct-fast", {
       messages: [
         { role: "system", content: system },
         { role: "user", content: user },
