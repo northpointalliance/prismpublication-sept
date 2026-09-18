@@ -1,25 +1,26 @@
 # Prism Publication
 
-Native contextual ads for independent AI chatbots, and -- as of 17 September 2026 -- the site's own general-purpose phone UI where anyone can chat, draft an ad from a product URL, test it free, and go live on prepaid click credit (advertiser sets their own budget, $5.00 minimum, not a fixed pack). A labeled card when the user's message closely matches a product. Silence when it does not.
+A live, general-purpose AI chat that shows contextual ads, open to anyone, right on the homepage. A labeled card when the user's message closely matches a product. Silence when it does not. Advertisers write their own ad copy (or get one drafted from a product URL), test it free against real questions, and go live on prepaid click credit -- they set their own budget, $5.00 minimum, not a fixed pack.
 
 This repository is the **single-product** static site, a server-side SDK client, and a real Cloudflare-only backend (D1, Workers AI/OpenAI, PayPal). It is not a Workers-as-a-separate-project app and not a multi-product hub.
 
 **Live origin:** [https://prismpublication.com/](https://prismpublication.com/)
 **GitHub:** [northpointalliance/prismpublication-sept](https://github.com/northpointalliance/prismpublication-sept)
 
-> **Read [mem/current.md](mem/current.md) before changing public HTML or CSS.** The freeze, scope clarified 17 September 2026, is on the site's **visual identity** only: background color, font choice, base font sizes, site-wide. Copy, CTAs, and structure are not frozen and get corrected directly when wrong, already precedented repeatedly. Only a color/font/type-scale change needs asking first.
+> **Read [mem/current.md](mem/current.md) before changing public HTML or CSS.** Only the site's **visual identity** is frozen: background color, font choice, base font sizes, site-wide. Copy, CTAs, and structure are not frozen and get corrected or rebuilt directly when wrong -- `index.html` itself was restructured on 18 September 2026 (see "The homepage/run-ads merge" in [docs/architecture.md](docs/architecture.md)), not just text-edited. Only a color/font/type-scale change needs asking first.
 
 ## What it is
 
 - **Site:** Cloudflare Pages, files at repo root (`index.html`, `css/`, `js/`), **Build System v3** -- bindings come from `wrangler.toml` in the repo now, not the dashboard.
-- **Homepage demo:** phone-frame scripted thread (`js/demo.js`), not a free-text sandbox. Play/Reset replays a fixed script; the composer is disabled. Untouched by everything below.
-- **The MVP (repositioned 17 September 2026):** the site's own phone UI on `/run-ads/` -- a general-purpose chat, open to anyone, any topic, sized for roughly 300-500 visitors. Not a niche content site; the earlier fitness/sleep/productivity framing was an artifact of an abandoned third-party-chatbot-developer MVP with zero real installs. Ads still only show on real contextual match (cosine floor **0.65**, unchanged).
-- **Build your own ad ad on `/run-ads/`:** paste a product URL, get a drafted card, edit it, test it free in the same chat (scored privately, never shown to other visitors), then submit it for review -- free.
-- **Ad submission (free as of 17 September 2026):** `ad-submission/index.html` posts to `functions/api/submit.js`, which runs light-touch automated screening (`_lib/screening.js` -- only a genuinely prohibited category blocks outright; everything else routes to manual review) and writes to D1, no charge. Returns a bookmarkable `access_token` link -- there's no account system, so that link is the advertiser's only way back.
-- **Going live: prepaid click credit.** Once approved, the advertiser buys a credit pack on their own `/campaign/{token}` page via PayPal. Each click deducts from the balance; the card deactivates automatically when credit runs out. Pricing (`functions/api/_lib/pricing.js`) is **explicit placeholder** values, not real numbers yet.
+- **The homepage is the product (merged 18 September 2026):** `index.html` leads with an identity statement, then the live general chat -- open to anyone, any topic, not a niche content site -- then the ad-builder. `/run-ads/` no longer exists as a page; it 301-redirects to `/`. Ads only show on real contextual match (cosine floor **0.65**, unchanged).
+- **Scripted demo, unchanged:** `/demo/` still runs a phone-frame scripted thread (`js/demo.js`), Play/Reset, composer disabled, local catalog only. It moved off the homepage but otherwise wasn't touched.
+- **Build your own ad:** on the homepage's `#build-ad` section, "Write it myself" (primary) opens empty fields to type your own copy directly, no AI involved; "Draft my ad instead" (secondary) pastes a product URL and drafts a starting point to edit. Either way, test free in the live chat above -- scored privately, never shown to other visitors -- and a running "Your test results" table logs every question, score, and outcome for the session.
+- **Ad submission (free):** `ad-submission/index.html` posts to `functions/api/submit.js`, which runs light-touch automated screening (`_lib/screening.js` -- only a genuinely prohibited category blocks outright; everything else routes to manual review) and writes to D1, no charge. Returns a bookmarkable `access_token` link -- there's no account system, so that link is the advertiser's only way back.
+- **Going live: prepaid click credit.** Once approved, the advertiser sets their own budget on their own `/campaign/{token}` page via PayPal, $5.00 minimum, not a fixed pack. Each click deducts from the balance; the card deactivates automatically when credit runs out. Per-click price (`functions/api/_lib/pricing.js`) is still an **explicit placeholder**.
 - **SDK:** `sdk/prismClient.js`. Call `displayAd` from Node or a Worker after the assistant answers. Reads `sdk/catalog.json` on this Pages host -- a separate, unused-by-the-main-loop catalog. Optional Google Ad Manager fan-out via `sdk/gamClient.js`. No Prism-hosted secret key.
-- **Blog:** `blog/` -- 15 posts + index, own template instance of the same foundation.
+- **Blog:** `blog/` -- 17 posts + index, own template instance of the same foundation.
 - **Analytics:** Google Analytics (`G-22TDLD3N4E`) on every public page except `admin/`.
+- **Nav and footer are canonical across every non-admin page** (18 September 2026): same 5-item top nav (Chat, Run ads, Developers, Blog, Contact) and same 9-item footer link list everywhere, hand-copied per page since there is no shared template. A nav/footer change means editing all of them, not just one.
 
 ## Public contract (quote these)
 
@@ -34,13 +35,12 @@ Do not invent fill rate, visitor counts, or pricing numbers -- the two credit-pr
 ## Repo map
 
 ```
-index.html                     Product page + JSON-LD (frozen)
+index.html                     Product page: hero, live chat, ad-builder, JSON-LD (visual identity frozen, structure/copy not)
 css/styles.css                 Layout, demo card, chat bubbles
 css/blog.css                   Additive: cover image, pull-quote (blog/ only)
 js/demo.js                     Scripted phone-thread demo (frozen)
-blog/                          15 posts + index, same site foundation
+blog/                          17 posts + index, same site foundation
 ad-submission/index.html       Free, screened submission form -> functions/api/submit.js
-run-ads/index.html             General chat + advertiser self-test + ad-from-URL builder
 admin/index.html               Submission review UI (Access-protected)
 sdk/prismClient.js             Server matcher against sdk/catalog.json (separate, unused-by-main-loop)
 sdk/catalog.json               Public creatives on Pages, homepage-demo only
@@ -81,7 +81,7 @@ Rules that enforce the Pages-only part: `.cursor/rules/prism-pages-static.mdc`, 
 
 ## Local preview
 
-Serve the repo root over HTTP (any static server) for the static pages. `wrangler pages dev .` emulates the D1/AI bindings from `wrangler.toml` for the Functions. Open `/` and press Play on the phone demo to watch the scripted travel thread render two sponsored Amazon cards; Reset replays it. A fill must not show cosine or millisecond text on the sponsored card.
+Serve the repo root over HTTP (any static server) for the static pages. `wrangler pages dev .` emulates the D1/AI bindings from `wrangler.toml` for the Functions. Open `/` and type a real question into the live chat; a labeled card should only appear when it clears the 0.65 floor against the approved pool. For the zero-effort scripted version, open `/demo/` and press Play to watch the fixed travel thread render two sponsored Amazon cards; Reset replays it. Either way, a fill must not show cosine or millisecond text on the sponsored card.
 
 ## Known gaps
 
