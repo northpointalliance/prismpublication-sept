@@ -131,7 +131,12 @@ answer instead of deferring. Fixed in `_lib/answer.js`'s `SYSTEM_PROMPT`:
 added a short numbered ground-truth block (data IS stored for matching,
 it's an off-the-shelf model not custom-trained, real business model, ads
 can truthfully be confirmed to exist though never recommended by name)
-and an instruction to say "not sure" rather than guess beyond it. If the
+and an instruction to say "not sure" rather than guess beyond it. Added a
+fifth fact the same day, at Daniel's explicit wording: who built this
+site (Daniel Rosenthal, solo, AI-assisted tools, Cloudflare hosting),
+gated to only answer if asked directly, never volunteered, since he
+doesn't want the build process advertised but also doesn't want the
+chat inventing a fake origin story if someone does ask. If the
 chat's answers about itself ever drift from what's actually true on the
 site again, this is the file to check first, and the fix is updating this
 fact block, not just the tone/length instructions around it.
