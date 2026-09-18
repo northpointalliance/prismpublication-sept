@@ -151,6 +151,25 @@ chat's answers about itself ever drift from what's actually true on the
 site again, this is the file to check first, and the fix is updating this
 fact block, not just the tone/length instructions around it.
 
+**Content boundary added 18 September 2026.** Daniel flagged that "Ask
+anything" (the site's own framing, in the H1, chat header, and meta
+description on `/run-ads/`, plus similar "ask it anything"/"the same way
+you would ChatGPT" phrasing on the homepage) was too open an invitation,
+and that this UI phone isn't a real ChatGPT-equivalent product with
+ChatGPT's own safety layer behind it, it's a small off-the-shelf model
+(Workers AI Llama or OpenAI gpt-4o-mini) under a thin system prompt that,
+before this, literally said "answer whatever the visitor asks, on any
+topic" with zero content guardrail beyond medical/legal/financial advice.
+Two fixes: (1) swept "ask anything" style copy off `/run-ads/` and
+`index.html` (H1, meta description, chat header, subheads, FAQ JSON-LD),
+replaced with "ask a real question" / "general questions"; (2) added an
+explicit rule to `_lib/answer.js`'s `SYSTEM_PROMPT`: never produce sexual
+or explicit content, anything sexualizing minors, violence/weapons/illegal
+instructions, or anything else inappropriate for a general-audience site
+with no age gate, decline in one sentence and move on if asked. If the
+copy ever drifts back toward "ask anything" framing, re-check this rule
+is still in the system prompt too, they were fixed together on purpose.
+
 **New D1 table `chat_events`** (see `d1/schema.sql`, needs one manual
 `wrangler d1 execute prism-crm --remote` run against the real database):
 logs each chat turn and each sponsored-card click. Also doubles as the
