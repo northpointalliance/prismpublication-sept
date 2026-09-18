@@ -149,14 +149,14 @@
         <div class="container">
           <h2>Test your ad against real questions, live</h2>
           <p class="section-lead">
-            See exactly when your campaign surfaces based on what someone's actually asking, before you spend anything on clicks. Enter your ad's destination URL below, then either let us draft a starting point or write your own copy directly, no AI draft required. Nothing goes live, and nobody else can see it, until you choose to submit it for review. Want to skip testing and submit straight away? <a href="/ad-submission/">Submit your ad directly</a>.
+            See exactly when your campaign surfaces based on what someone's actually asking, before you spend anything on clicks. Enter your ad's destination URL below and write your own copy directly, no AI draft required. Don't have a draft yet? We can put one together to start from instead. Nothing goes live, and nobody else can see it, until you choose to submit it for review. Want to skip testing and submit straight away? <a href="/ad-submission/">Submit your ad directly</a>.
           </p>
           <form id="draft-form" class="card" style="max-width: 640px; text-align: left;" novalidate>
             <label for="draft-url">Destination URL (https)</label><br />
             <input id="draft-url" name="url" type="url" required pattern="https://.*" placeholder="https://example.com/your-product" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
             <div class="row-actions" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-              <button type="submit" id="draft-submit-btn" class="btn primary">Draft my ad</button>
-              <button type="button" id="write-own-btn" class="btn secondary">Write it myself</button>
+              <button type="button" id="write-own-btn" class="btn primary">Write it myself</button>
+              <button type="submit" id="draft-submit-btn" class="btn secondary">Draft my ad instead</button>
             </div>
             <p class="meta" id="draft-status" role="status" style="margin-top: 0.75rem;"></p>
           </form>
