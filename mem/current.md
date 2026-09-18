@@ -594,6 +594,21 @@ homepage section, a dedicated landing page, a line in `/developers/`,
 or outbound-only messaging with no site change at all) before writing
 anything.
 
+**Queued deliverable: a blog post, "Affiliate marketing in the
+contextualized ad era."** Blocked on the sourced deep-dive into the real
+state of the affiliate industry Daniel said is coming -- do not draft
+this post from the unsourced document above. When the sourced research
+lands, write it the same way the existing blog posts handle numbers
+(real source, real link, no bare stat -- see `blog/what-ai-chat-ads-
+actually-are/index.html`'s CPM/CPC section as the template) and follow
+the same house-style rules as every other post: question-based H2s,
+120-180 words per block, JSON-LD matching visible copy, no `--`/em dash
+in body copy (see `docs/aeo-strategy.md`). Likely angle, not yet
+confirmed with Daniel: affiliates losing organic/zero-click traffic need
+a place to prove ad copy still converts -- ties directly into the ICP
+idea above, but the blog post and the ICP/product decision are two
+separate deliverables, don't block one on the other.
+
 ## Rejected (do not restore)
 
 - Homepage matcher form (`#sandbox-form`, category select, Fitness/Sleep fill buttons)
