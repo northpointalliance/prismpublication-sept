@@ -91,7 +91,7 @@
         <a class="brand" href="/">Prism Publication</a>
         <nav class="primary" aria-label="Primary">
           <a href="/" aria-current="page">Chat</a>
-          <a href="/run-ads/">Run ads</a>
+          <a href="/#chat">Run ads</a>
           <a href="/developers/">Developers</a>
           <a href="/blog/">Blog</a>
           <a href="mailto:info@prismpublication.com">Contact</a>
@@ -102,40 +102,81 @@
     <main id="main">
       <section class="hero">
         <div class="container">
-          <h1>Chat here, or test your ad here, free</h1>
+          <p class="audience-kicker">Open to everyone, no account needed</p>
+          <h1>Ask a real question. See when a sponsored card fits.</h1>
           <p class="subhead">
-            <strong>Ask this assistant a real question, the same way you'd use any AI chat.</strong>
-            When you are already asking about a product, a labeled sponsored card can show under the reply. If you asked about the weather, we stay out of the chat. Advertisers submit a campaign free and test it live before they ever pay to go live.
+            <strong>A live chat, not a script.</strong>
+            A sponsored card only appears when your question clears the 0.65 similarity floor against the live approved pool, labeled exactly as it would in a real chat. No card is also useful information. Have your own product? <a href="/ad-submission/">Submit an ad</a> and test it right here, free, before you pay to run it.
           </p>
-          <div class="cta-group">
-            <a class="btn primary" href="/run-ads/">Try the live chat</a>
-            <a class="btn secondary" href="/ad-submission/">Submit your ad</a>
+          <p class="meta" id="reach-line"></p>
+        </div>
+      </section>
+      <section class="demo-board" id="chat">
+        <div class="container demo-stage">
+          <div class="demo-controls">
+            <p class="demo-scenario">
+              This chat answers general questions, like a normal assistant. Sponsored cards come only from the live
+              <strong>approved</strong> pool (plus your own draft below, visible only to you, while you're testing it), and only when a question is a close enough match.
+              Questions are stored anonymously to improve matching. See
+              <a href="/privacy/">privacy</a>.
+            </p>
           </div>
-          <p class="meta">Not sure where to start? <a href="/demo/">See a 30-second scripted demo</a> first.</p>
-          <p class="highlights-kicker">For media and brand teams</p>
-          <div class="grid highlights">
-            <article class="card">
-              <h3>They're already asking</h3>
-              <p>You show up when someone asks for a protein goal, a packing cube, or a sleep sound machine, not as a banner on a random turn.</p>
-            </article>
-            <article class="card">
-              <h3>No card, no bill</h3>
-              <p>If we do not show a sponsored card, that turn does not cost you anything.</p>
-            </article>
-            <article class="card">
-              <h3>Chat with it yourself</h3>
-              <p>This is a real, general-purpose assistant on our own site, not a demo of someone else's bot. Ask it a real question before you submit a campaign.</p>
-            </article>
-            <article class="card">
-              <h3>Always labeled</h3>
-              <p>Every card says sponsored and names your brand or product. If you take the card away, the bot's answer still has to make sense.</p>
-            </article>
+
+          <div class="phone" aria-label="Phone-sized live ad test">
+            <div class="phone-bezel">
+              <p class="phone-notch" aria-hidden="true"></p>
+              <div class="demo-chat">
+                <header class="demo-chat-head">
+                  <div>
+                    <h2>Live chat</h2>
+                    <p>Sponsored cards from the approved pool</p>
+                  </div>
+                  <p class="demo-live">Live</p>
+                </header>
+                <div class="demo-log" id="chat-log" aria-live="polite"></div>
+                <form class="demo-composer" id="chat-form">
+                  <label class="skip" for="chat-input">Message</label>
+                  <input id="chat-input" type="text" maxlength="240" placeholder="Ask a question your customer might ask" autocomplete="off" />
+                  <button class="btn primary" type="submit">Send</button>
+                </form>
+              </div>
+              <p class="phone-home" aria-hidden="true"></p>
+            </div>
           </div>
-          <p class="meta">
-            By Daniel Rosenthal.
-            Published <time datetime="2026-09-09">9 September 2026</time>.
-            Last updated <time datetime="2026-09-17">17 September 2026</time>.
+        </div>
+      </section>
+      <section class="advertisers" id="build-ad">
+        <div class="container">
+          <h2>Don't have ad copy yet? Draft one from your product page</h2>
+          <p class="section-lead">
+            Paste a product URL and we'll draft a sponsored card from it. Edit anything, then test it for free in the chat above. Nothing goes live, and nobody else can see it, until you choose to submit it for review. Already have finished ad copy from your own team? <a href="/ad-submission/">Skip this and submit it directly</a>, this tool never touches what you write there.
           </p>
+          <form id="draft-form" class="card" style="max-width: 640px; text-align: left;" novalidate>
+            <label for="draft-url">Product URL (https)</label><br />
+            <input id="draft-url" name="url" type="url" required pattern="https://.*" placeholder="https://example.com/your-product" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
+            <button type="submit" id="draft-submit-btn" class="btn primary">Draft my ad</button>
+            <p class="meta" id="draft-status" role="status" style="margin-top: 0.75rem;"></p>
+          </form>
+
+          <form id="draft-card" class="card" style="max-width: 640px; text-align: left; display: none; margin-top: 1rem;" novalidate>
+            <label for="draft-brand">Brand</label><br />
+            <input id="draft-brand" type="text" required maxlength="80" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
+
+            <label for="draft-title">Card title</label><br />
+            <input id="draft-title" type="text" required maxlength="80" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
+
+            <label for="draft-description">Short description</label><br />
+            <textarea id="draft-description" required maxlength="200" rows="2" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;"></textarea>
+
+            <label for="draft-cta">Button text</label><br />
+            <input id="draft-cta" type="text" required maxlength="30" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
+
+            <div class="row-actions" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <button type="submit" id="draft-test-btn" class="btn primary">Test in the chat above</button>
+              <a id="draft-submit-link" class="btn secondary" href="/ad-submission/">Submit this ad for review (free)</a>
+            </div>
+            <p class="meta" id="draft-test-status" role="status" style="margin-top: 0.75rem;"></p>
+          </form>
         </div>
       </section>
 
@@ -184,64 +225,6 @@
                 Practical wellness products when they are already asking. Not a clinical claim, not a diagnosis.
               </p>
             </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="sandbox-section" id="sandbox">
-        <div class="container">
-          <h2>What does someone in the chat see?</h2>
-          <p>
-            <strong>A labeled card under the reply when they already asked about that product. Nothing extra when they did not.</strong>
-            The phone below is a sample on this site, not where you run or host a campaign. Play watches that packed thread again.
-          </p>
-          <div class="demo-stage">
-            <div class="demo-controls">
-              <p class="demo-scenario">Someone is packing a carry-on and asking about the hotel plug. When the topic matches, a labeled partner card shows up in the thread.</p>
-              <div class="demo-actions">
-                <button class="btn primary" type="button" data-demo-play>Play</button>
-                <button class="btn secondary" type="button" data-demo-reset>Reset</button>
-              </div>
-              <p class="demo-hint"><span data-stat-messages>4</span> messages · <span data-stat-ads>2</span> ads served. Amazon links use tag prismpublicat-20.</p>
-            </div>
-            <div class="phone" aria-label="Phone-sized travel chat">
-              <div class="phone-bezel">
-                <p class="phone-notch" aria-hidden="true"></p>
-                <div class="demo-chat">
-                  <header class="demo-chat-head">
-                    <div>
-                      <h3>Travel assistant</h3>
-                      <p>Trips, packing, carry-on</p>
-                    </div>
-                    <p class="demo-live">Live</p>
-                  </header>
-                  <div class="demo-log" data-chat-log aria-live="polite">
-                    <div class="bubble user">I have a four-day trip and I refuse to check a bag.</div>
-                    <div class="bubble bot">A carry-on week is packing cubes, one pair of shoes that walk, and a charger that fits the seat.</div>
-                    <article class="match-card">
-                      <span class="badge">Sponsored · Amazon</span>
-                      <h4>Packing cubes for a carry-on week</h4>
-                      <p>Compress a short trip without checking a bag.</p>
-                      <p><a class="btn primary" href="https://www.amazon.com/s?k=packing%20cubes%20carry%20on&amp;tag=prismpublicat-20" target="_blank" rel="sponsored noopener noreferrer">Shop on Amazon</a></p>
-                    </article>
-                    <div class="bubble user">What about the hotel plug? I never remember the adapter.</div>
-                    <div class="bubble bot">If you don't know the hotel outlet, one adapter beats a bag of cables.</div>
-                    <article class="match-card">
-                      <span class="badge">Sponsored · Amazon</span>
-                      <h4>Universal travel adapter</h4>
-                      <p>One plug for hotel rooms when you already asked about the trip.</p>
-                      <p><a class="btn primary" href="https://www.amazon.com/s?k=universal%20travel%20adapter&amp;tag=prismpublicat-20" target="_blank" rel="sponsored noopener noreferrer">Shop on Amazon</a></p>
-                    </article>
-                  </div>
-                  <form class="demo-composer">
-                    <label class="skip" for="sandbox-demo-input">Message</label>
-                    <input id="sandbox-demo-input" data-demo-input type="text" maxlength="240" placeholder="Direct input disabled in this demo" autocomplete="off" disabled />
-                    <button class="btn primary" type="submit" data-demo-send disabled>Send</button>
-                  </form>
-                </div>
-                <p class="phone-home" aria-hidden="true"></p>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -305,6 +288,213 @@
 </ul>
       </div>
     </footer>
-    <script src="js/demo.js" defer></script>
+    <script>
+      (function () {
+        var log = document.getElementById("chat-log");
+        var form = document.getElementById("chat-form");
+        var input = document.getElementById("chat-input");
+
+        var sessionId = (function () {
+          try {
+            var existing = sessionStorage.getItem("prism-chat-session");
+            if (existing) return existing;
+            var fresh = crypto.randomUUID();
+            sessionStorage.setItem("prism-chat-session", fresh);
+            return fresh;
+          } catch (err) {
+            return crypto.randomUUID();
+          }
+        })();
+
+        // Fire-and-forget -- a failed page_view log should never block or
+        // slow down the actual page.
+        fetch("/api/track", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ kind: "page_view", sessionId: sessionId }),
+        }).catch(function () {});
+
+        fetch("/api/reach")
+          .then(function (res) { return res.json(); })
+          .then(function (data) {
+            var el = document.getElementById("reach-line");
+            if (!el) return;
+            el.textContent = data.lowVolume
+              ? "Early stage, low volume. Real numbers once there's enough traffic to show."
+              : data.questionsLast7Days + " real questions asked in the last 7 days.";
+          })
+          .catch(function () {});
+
+        function escapeHtml(s) {
+          return String(s == null ? "" : s)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+        }
+
+        function appendBubble(role, text) {
+          var el = document.createElement("div");
+          el.className = "bubble " + role;
+          el.textContent = text;
+          log.appendChild(el);
+          log.scrollTop = log.scrollHeight;
+          return el;
+        }
+
+        function appendCard(card) {
+          var el = document.createElement("article");
+          el.className = "match-card";
+          var href = card.isTestAd
+            ? card.destinationUrl
+            : "/c/" + encodeURIComponent(card.id) + "?s=" + encodeURIComponent(sessionId);
+          var label = card.isTestAd ? "Sponsored · " + escapeHtml(card.brand) + " (your draft)" : "Sponsored · " + escapeHtml(card.brand);
+          el.innerHTML =
+            '<span class="badge">' + label + "</span>" +
+            "<h4>" + escapeHtml(card.title) + "</h4>" +
+            "<p>" + escapeHtml(card.description) + "</p>" +
+            '<p><a class="btn primary" href="' + escapeHtml(href) + '" target="_blank" rel="sponsored noopener noreferrer">' +
+            escapeHtml(card.ctaText) + "</a></p>";
+          log.appendChild(el);
+          log.scrollTop = log.scrollHeight;
+        }
+
+        function appendNote(text) {
+          var el = document.createElement("p");
+          el.className = "meta";
+          el.style.padding = "0 0.25rem";
+          el.textContent = text;
+          log.appendChild(el);
+          log.scrollTop = log.scrollHeight;
+        }
+
+        form.addEventListener("submit", async function (event) {
+          event.preventDefault();
+          var message = input.value.trim();
+          if (!message) return;
+          appendBubble("user", message);
+          input.value = "";
+          input.disabled = true;
+          var typingEl = appendBubble("bot", "…");
+
+          try {
+            var res = await fetch("/api/chat", {
+              method: "POST",
+              headers: { "content-type": "application/json" },
+              body: JSON.stringify({ message: message, sessionId: sessionId }),
+            });
+            var data = await res.json();
+            typingEl.remove();
+            if (!res.ok) {
+              appendNote(data.error || "Something went wrong.");
+            } else {
+              appendBubble("bot", data.answer);
+              if (data.card) appendCard(data.card);
+              if (data.testAdScore != null && !(data.card && data.card.isTestAd)) {
+                appendNote("Your draft ad scored " + data.testAdScore + " on this question (needs 0.65+ to show).");
+              }
+            }
+          } catch (err) {
+            typingEl.remove();
+            appendNote("Could not reach the chat. Try again in a moment.");
+          } finally {
+            input.disabled = false;
+            input.focus();
+          }
+        });
+
+        var draftForm = document.getElementById("draft-form");
+        var draftUrlInput = document.getElementById("draft-url");
+        var draftSubmitBtn = document.getElementById("draft-submit-btn");
+        var draftStatus = document.getElementById("draft-status");
+        var draftCard = document.getElementById("draft-card");
+        var draftBrandInput = document.getElementById("draft-brand");
+        var draftTitleInput = document.getElementById("draft-title");
+        var draftDescriptionInput = document.getElementById("draft-description");
+        var draftCtaInput = document.getElementById("draft-cta");
+        var draftTestBtn = document.getElementById("draft-test-btn");
+        var draftTestStatus = document.getElementById("draft-test-status");
+        var draftSubmitLink = document.getElementById("draft-submit-link");
+        var draftSourceUrl = "";
+        var draftCategory = "";
+
+        draftForm.addEventListener("submit", async function (event) {
+          event.preventDefault();
+          var url = draftUrlInput.value.trim();
+          if (!url) return;
+          draftSubmitBtn.disabled = true;
+          draftStatus.textContent = "Reading that page…";
+
+          try {
+            var res = await fetch("/api/draft-ad", {
+              method: "POST",
+              headers: { "content-type": "application/json" },
+              body: JSON.stringify({ url: url, sessionId: sessionId }),
+            });
+            var data = await res.json();
+            if (!res.ok) {
+              draftStatus.textContent = data.error || "Could not draft an ad from that page.";
+            } else {
+              draftSourceUrl = data.sourceUrl;
+              draftCategory = data.category || "";
+              draftBrandInput.value = data.brand;
+              draftTitleInput.value = data.title;
+              draftDescriptionInput.value = data.description;
+              draftCtaInput.value = data.ctaText;
+              draftCard.style.display = "";
+              draftTestStatus.textContent = "";
+              draftStatus.textContent = "Drafted. Edit anything below, then test it.";
+            }
+          } catch (err) {
+            draftStatus.textContent = "Could not reach the ad builder. Try again in a moment.";
+          } finally {
+            draftSubmitBtn.disabled = false;
+          }
+        });
+
+        draftCard.addEventListener("submit", async function (event) {
+          event.preventDefault();
+          draftTestBtn.disabled = true;
+          draftTestStatus.textContent = "Saving your draft…";
+
+          var payload = {
+            sessionId: sessionId,
+            brand: draftBrandInput.value.trim(),
+            title: draftTitleInput.value.trim(),
+            description: draftDescriptionInput.value.trim(),
+            ctaText: draftCtaInput.value.trim(),
+            category: draftCategory,
+            sourceUrl: draftSourceUrl,
+          };
+
+          try {
+            var res = await fetch("/api/test-ad", {
+              method: "POST",
+              headers: { "content-type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            var data = await res.json();
+            if (!res.ok) {
+              draftTestStatus.textContent = data.error || "Could not save that draft.";
+            } else {
+              var params = new URLSearchParams({
+                brand: payload.brand,
+                title: payload.title,
+                description: payload.description,
+                ctaText: payload.ctaText,
+                category: payload.category,
+                destinationUrl: payload.sourceUrl,
+              });
+              draftSubmitLink.href = "https://prismpublication.com/ad-submission/?" + params.toString();
+              draftTestStatus.textContent = "Saved. Ask a question about it in the chat below.";
+              input.focus();
+            }
+          } catch (err) {
+            draftTestStatus.textContent = "Could not reach the server. Try again in a moment.";
+          } finally {
+            draftTestBtn.disabled = false;
+          }
+        });
+      })();
+    </script>
   </body>
 </html>
