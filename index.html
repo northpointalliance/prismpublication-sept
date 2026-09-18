@@ -184,12 +184,14 @@
           <div id="test-report" style="display: none; max-width: 640px; margin-top: 1.5rem;">
             <h3>Your test results</h3>
             <p class="meta" id="test-report-summary"></p>
+            <p class="meta" id="test-report-gaps"></p>
             <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
               <thead>
                 <tr>
                   <th style="text-align: left; padding: 0.4rem; border-bottom: 1px solid var(--border-color);">Question asked</th>
                   <th style="text-align: left; padding: 0.4rem; border-bottom: 1px solid var(--border-color);">Score</th>
                   <th style="text-align: left; padding: 0.4rem; border-bottom: 1px solid var(--border-color);">Result</th>
+                  <th style="text-align: left; padding: 0.4rem; border-bottom: 1px solid var(--border-color);">What to try</th>
                 </tr>
               </thead>
               <tbody id="test-report-rows"></tbody>
@@ -388,16 +390,51 @@
         var testReport = document.getElementById("test-report");
         var testReportRows = document.getElementById("test-report-rows");
         var testReportSummary = document.getElementById("test-report-summary");
+        var testReportGaps = document.getElementById("test-report-gaps");
         var testResults = [];
+        var missingWordCounts = {};
+
+        var REPORT_STOP_WORDS = ["any", "the", "and", "for", "you", "can", "so", "through", "what", "is", "in", "need", "help", "me", "this", "that", "with", "from", "your", "our", "are", "was", "have"];
+
+        function simpleTokenize(text) {
+          return String(text || "")
+            .toLowerCase()
+            .split(/[^a-z0-9]+/)
+            .filter(function (w) { return w.length > 2 && REPORT_STOP_WORDS.indexOf(w) === -1; });
+        }
 
         function resetTestReport() {
           testResults = [];
+          missingWordCounts = {};
           testReportRows.innerHTML = "";
           testReportSummary.textContent = "";
+          testReportGaps.textContent = "";
           testReport.style.display = "none";
         }
 
+        function suggestionFor(score, outcome, missingWords) {
+          if (score >= 0.65) {
+            if (outcome === "Your ad was shown") return "Cleared the floor and won the match. Keep this wording.";
+            return "Cleared the floor, but a different ad scored higher on this question. Weave in more of this question's own words.";
+          }
+          if (missingWords.length) {
+            return "Below the floor. Matching is based on shared words, not just topic. Consider adding: " + missingWords.join(", ");
+          }
+          return "Below the floor even though the wording overlaps. Try a shorter, more specific description focused on questions like this.";
+        }
+
         function logTestResult(question, score, outcome) {
+          var adText = [draftBrandInput.value, draftTitleInput.value, draftDescriptionInput.value, draftCtaInput.value].join(" ");
+          var adWords = simpleTokenize(adText);
+          var questionWords = simpleTokenize(question);
+          var missingWords = questionWords.filter(function (w) { return adWords.indexOf(w) === -1; });
+
+          if (score < 0.65) {
+            missingWords.forEach(function (w) {
+              missingWordCounts[w] = (missingWordCounts[w] || 0) + 1;
+            });
+          }
+
           testResults.push(score);
           var row = document.createElement("tr");
           var cell = function (text) {
@@ -410,9 +447,19 @@
           row.appendChild(cell(question));
           row.appendChild(cell(score.toFixed(2)));
           row.appendChild(cell(outcome));
+          row.appendChild(cell(suggestionFor(score, outcome, missingWords)));
           testReportRows.appendChild(row);
+
           var cleared = testResults.filter(function (s) { return s >= 0.65; }).length;
           testReportSummary.textContent = cleared + " of " + testResults.length + " questions cleared the 0.65 floor.";
+
+          var gapWords = Object.keys(missingWordCounts)
+            .sort(function (a, b) { return missingWordCounts[b] - missingWordCounts[a]; })
+            .slice(0, 8);
+          testReportGaps.textContent = gapWords.length
+            ? "Words that showed up in real questions but never in your ad copy: " + gapWords.join(", ")
+            : "";
+
           testReport.style.display = "";
         }
 
