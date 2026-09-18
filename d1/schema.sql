@@ -102,3 +102,34 @@ CREATE TABLE IF NOT EXISTS credit_ledger (
 );
 
 CREATE INDEX IF NOT EXISTS idx_credit_ledger_ad ON credit_ledger (ad_submission_id, created_at);
+
+-- Added 18 September 2026, on the ad-library branch (not merged to main,
+-- not deployed). Holds both affiliate ads and paid ads in one pool so the
+-- matcher can score them together. A paid ad links back to its
+-- ad_submissions row via ad_submission_id instead of duplicating brand/
+-- title/description/cta_text -- ad_submission_id is the source of truth
+-- for those fields on a paid row, this table only adds source/niche/
+-- promo_code/affiliate_program/active on top. An affiliate ad has no
+-- ad_submissions row at all (nobody submitted it through that flow), so
+-- it carries its own brand_name/title/description/destination_url/
+-- cta_text directly.
+-- Run once against the real database:
+--   wrangler d1 execute prism-crm --remote --file d1/schema.sql
+CREATE TABLE IF NOT EXISTS ad_library (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  source TEXT NOT NULL CHECK (source IN ('affiliate', 'paid')),
+  niche TEXT NOT NULL,
+  ad_submission_id INTEGER, -- set only when source = 'paid'; links instead of duplicating
+  brand_name TEXT, -- affiliate rows only; paid rows read brand from ad_submissions
+  title TEXT, -- affiliate rows only; paid rows read title from ad_submissions
+  description TEXT, -- affiliate rows only; paid rows read description from ad_submissions
+  destination_url TEXT, -- affiliate rows only, must be https; paid rows read from ad_submissions
+  cta_text TEXT, -- affiliate rows only; paid rows read cta_text from ad_submissions
+  promo_code TEXT,
+  affiliate_program TEXT, -- which program this affiliate row belongs to, e.g. "Amazon Associates"
+  active INTEGER NOT NULL DEFAULT 1
+);
+
+CREATE INDEX IF NOT EXISTS idx_ad_library_active ON ad_library (active, source);
+CREATE INDEX IF NOT EXISTS idx_ad_library_submission ON ad_library (ad_submission_id);
