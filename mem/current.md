@@ -621,6 +621,55 @@ usual "no promises this transfers to ChatGPT/Facebook/Amazon" caveat kept
 intact. The separate affiliate-marketers-as-ICP product/positioning
 decision above is still open and unrelated to this post being done.
 
+## Idea, not yet actioned: citation-testing-as-a-service, a different ICP than affiliates (18 September 2026)
+
+Sharper version of the idea above, called out by Daniel as a distinct
+concept, not a rephrasing of the affiliate-ICP note: the real product
+here may not be "run an ad" at all, it may be **proof**. Every SEO/AEO/GEO
+consultant and course-seller claims to know the steps to get a client
+cited by ChatGPT, Google AI Overviews, or the other AI answer engines.
+Almost none of them can hand a client a live system where you type real
+copy and get a real pass/fail against an actual matching algorithm,
+today, for free. Prism already has that system built, just not marketed
+that way yet.
+
+The pieces already exist, aimed at a different audience right now:
+- The matcher itself (`functions/api/_lib/matcher.js`) is a real,
+  working contextual relevance check, not a sales pitch about one.
+- The "robust and detailed" test-results report built earlier today
+  (see the `index.html` commit `6f8de5c`, "Turn the test-results report
+  into an actual coaching tool, not just a scoreboard") already does
+  word-gap analysis and per-question suggestions, exactly the kind of
+  artifact a GEO consultant would want to show a client as evidence,
+  just currently framed for advertisers testing an ad, not for a
+  consultant or content creator proving their copy is citation-ready.
+- Today's blog post (`blog/affiliate-marketing-in-the-contextualized-
+  ad-era/index.html`) already makes the underlying argument with real
+  sources: ranking position increasingly does not predict AI citation
+  (Ahrefs' 38%-vs-76% finding), so a live match test is more honest
+  proof than a ranking-based promise.
+
+The tradeoff Daniel and this session flagged directly: SEO/AEO/GEO
+consultants and their clients are a different buyer than "advertiser
+running an ad" or "affiliate marketer," with different messaging and
+maybe a different landing page, and bolting this on carelessly risks
+diluting the current advertiser-facing pitch rather than sharpening it.
+This also connects to the broader "2nd brain / wiki / vectorization /
+skills" work Daniel has referenced doing outside this repo, the ambition
+being that real, demonstrable value (a working system, not a claimed
+methodology) is the actual differentiator against everyone else
+"claiming to know the steps."
+
+Nothing built yet. No new page, no copy change, no outreach, no renamed
+ICP anywhere in the live product. Whoever picks this up next should
+scope it as its own decision, separate from the affiliate-ICP idea
+above: is this a new page (`/prove-it/`, `/geo-audit/`, something
+along those lines), a repositioning of the existing test-results report
+with different copy around it, or an entirely separate offering built
+on top of the same matcher. Do not conflate this with the affiliate-ICP
+note above when picking either one up, they are two different buyers
+even though they share the same underlying mechanism.
+
 ## Rejected (do not restore)
 
 - Homepage matcher form (`#sandbox-form`, category select, Fitness/Sleep fill buttons)
