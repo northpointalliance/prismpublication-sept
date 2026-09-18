@@ -54,17 +54,30 @@ export async function onRequestPost(context) {
 
   const sessionId = String(body.sessionId || "").trim().slice(0, 100);
   const ipHash = await hashIp(env, request);
-  const { results: recent } = await env.DB.prepare(
-    `SELECT COUNT(*) AS n FROM chat_events WHERE kind = 'draft' AND ip_hash = ? AND created_at > datetime('now', '-10 minutes')`
-  )
-    .bind(ipHash)
-    .all();
-  if ((recent[0]?.n || 0) >= PER_IP_10_MIN_LIMIT) {
-    return json({ error: "Too many draft attempts -- wait a few minutes and try again." }, 429);
+
+  // Unlike the fetch/AI steps below, this D1 round trip previously had no
+  // try/catch -- a hiccup here crashed the whole function with an
+  // unhandled exception, which Cloudflare turns into a generic non-JSON
+  // error page. The browser's res.json() then throws too, and the visitor
+  // sees a useless "Could not reach the ad builder" with no real reason
+  // (caught 18 September 2026, after a report against a real product URL
+  // whose D1 'draft' event row proved the request reached this far before
+  // failing somewhere unlogged).
+  try {
+    const { results: recent } = await env.DB.prepare(
+      `SELECT COUNT(*) AS n FROM chat_events WHERE kind = 'draft' AND ip_hash = ? AND created_at > datetime('now', '-10 minutes')`
+    )
+      .bind(ipHash)
+      .all();
+    if ((recent[0]?.n || 0) >= PER_IP_10_MIN_LIMIT) {
+      return json({ error: "Too many draft attempts -- wait a few minutes and try again." }, 429);
+    }
+    await env.DB.prepare(`INSERT INTO chat_events (kind, session_id, ip_hash) VALUES ('draft', ?, ?)`)
+      .bind(sessionId || null, ipHash)
+      .run();
+  } catch {
+    return json({ error: "Something went wrong starting that request. Try again in a moment." }, 502);
   }
-  await env.DB.prepare(`INSERT INTO chat_events (kind, session_id, ip_hash) VALUES ('draft', ?, ?)`)
-    .bind(sessionId || null, ipHash)
-    .run();
 
   let pageMeta;
   try {
@@ -83,6 +96,10 @@ export async function onRequestPost(context) {
   try {
     const { text } = await complete(env, { system: SYSTEM_PROMPT, user: pageText, maxTokens: 200 });
     draft = parseDraftJson(text);
+    // parseDraftJson only guarantees valid JSON, not an object -- "null" or
+    // a bare string/array parses fine but would crash draft.brand below
+    // uncaught. Treat that the same as any other bad model response.
+    if (!draft || typeof draft !== "object") throw new Error("Draft response wasn't a JSON object.");
   } catch {
     return json(
       { error: "Could not draft an ad from that page. Try a different URL, or fill it in yourself." },

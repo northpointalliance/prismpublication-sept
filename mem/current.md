@@ -229,8 +229,10 @@ the chat "live."
 **Stage 3, built 17 September 2026: the ad-from-URL builder, on `/run-ads`
 above the chat.** Paste a product URL -> `functions/api/draft-ad.js`
 fetches it (`_lib/urlFetch.js`: https only, blocks localhost/private IPs,
-5s timeout, 1MB cap, HTMLRewriter pulls just `<title>`, meta description,
-first `<h1>` -- nothing else is read) -> the shared model helper
+12s timeout, 6MB cap -- raised from an original 5s/1MB after real Amazon/
+Shein URLs kept failing on completely normal pages, HTMLRewriter pulls
+just `<title>`, meta description, first `<h1>` -- nothing else is read) ->
+the shared model helper
 (`_lib/model.js`, same OpenAI-or-Workers-AI choice as chat) drafts brand/
 title/description/CTA/category as JSON -> returned to the browser as a
 suggestion only, nothing saved yet. The visitor edits it in the form, then
@@ -243,15 +245,37 @@ on every message (`_lib/matcher.js`'s `findBestAd` now takes an
 separately, even on messages where a different ad's card actually shows or
 no card shows at all -- so the person testing sees their own number every
 time, not just when they "win." A test ad is never returned to, or
-scored for, any other session. "Submit this ad for review ($5)" prefills
+scored for, any other session. "Submit this ad for review" prefills
 `/ad-submission/`'s form via query params (`?brand=...&title=...` etc. --
 see the `prefillFromQuery` block near the top of that page's script) so
-the loop is draft -> edit -> test free -> submit -> pay -> (later stages)
-go live.
+the loop is draft -> edit -> test free -> submit (free) -> screening ->
+buy credit -> go live (Stages 4-5, built the same week, see below).
 
-Not built: automated brand-safety screening before submission (still
-fully manual review in `/admin/`, same as before this stage), and the
-`prism-jobs`-style scheduled cleanup Worker the original plan called for --
+**Bug fixed 18 September 2026:** Daniel pasted a real product URL
+(devorahsart.com) into the ad-from-URL builder and got a generic
+"Could not reach the ad builder" with no real reason -- that exact
+message only appears client-side when the server's response isn't
+valid JSON at all, not from any of `draft-ad.js`'s own error returns
+(those were all already handled and always returned proper JSON). Found
+two real gaps by checking `chat_events` directly (a `kind='draft'` row
+existed at the right timestamp, proving the request reached the server
+and passed the rate-limit check, so it broke somewhere after that,
+unlogged): (1) the D1 rate-limit check itself had no try/catch at
+all, unlike every other step in the file -- a hiccup there crashed the
+whole function into Cloudflare's generic non-JSON error page; (2) if
+the AI ever returned valid-but-unexpected JSON (a bare `null`, a
+string, an array), `draft.brand` right after would throw uncaught, same
+symptom. Both are now guarded, every path returns real JSON. Couldn't
+fully confirm from this environment (no live log access, and the
+sandbox can't reach either prismpublication.com or the reported
+product URL to reproduce it directly) whether this was the exact cause
+here or a platform-level timeout on a slow page load stacked on top of
+the AI drafting step -- if "Could not reach the ad builder" still shows
+up after this ships, the message itself should now be specific instead
+of generic, and that specific text is the next real lead.
+
+Older, still true: not built are the `prism-jobs`-style scheduled
+cleanup Worker the original plan called for --
 expired `test_ads` rows are deleted lazily instead (on the next
 `/api/draft-ad` or `/api/test-ad` call), which is enough at this traffic
 level and needed no new Worker.
