@@ -68,6 +68,7 @@ docs/ad-submission.md          Stale -- describes the old niche/fee model
 docs/aeo-strategy.md           Canonicals and crawler rules
 docs/publisher-key.md          How a third party wires fill on Pages
 docs/affiliate-tracker.md      House affiliate program tracker
+docs/ai-build-lessons.md       Portable, repo-agnostic AI-collaboration lessons -- share with other repos
 ```
 
 ## Deploy (Cloudflare Pages)
