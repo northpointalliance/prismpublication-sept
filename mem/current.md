@@ -561,6 +561,39 @@ same application or a new path rule alongside the existing
 `/api/reach` are deliberately public -- don't gate those, every visitor's
 browser calls them.
 
+## Idea, not yet actioned: affiliate marketers as an ICP (18 September 2026)
+
+Daniel's note for a future session (flagged "next Saturday night," not
+done now): consider **affiliate marketers/affiliate programs themselves**
+as an ICP who could use the site's own phone-UI live chat to run and test
+their affiliate ad copy -- not just seeding devorahsart/israelileads/the
+4 recovered affiliate ads (Searchable, AirOps, Shipper.now, Amazon) as
+inventory *in* the matcher (already done, 18 September, see `ad_library`
+above), but pitching the chat itself as a testing/distribution channel
+*to* affiliate marketers as customers, the same way the ad-builder already
+pitches to any advertiser.
+
+Context for why this came up: a pasted document (unclear origin, styled as
+an "AI Collaborator" writeup, not verified against any primary source)
+argues affiliate marketing is shifting from SEO-click-arbitrage toward
+"AI citation"/GEO and closed-loop channels because ~68% of Google searches
+now end without a click. **That 68% figure and the other stats in that
+document are unsourced and have not been independently verified here --
+do not repeat them publicly (on the site, in a blog post, in outbound
+copy) without checking a primary source first**, consistent with this
+repo's standing rule to cite real numbers (see the CPM/CPC pricing
+sections in the blog for the pattern to follow: real source, real link).
+The strategic idea itself (affiliates need new places to prove ad copy
+works, now that organic SEO traffic is eroding) doesn't depend on that
+specific stat being right, and is worth thinking through on its own
+merits.
+
+Nothing built yet. No new page, no copy change, no outreach. Whoever
+picks this up next should scope it as a real decision (is this a new
+homepage section, a dedicated landing page, a line in `/developers/`,
+or outbound-only messaging with no site change at all) before writing
+anything.
+
 ## Rejected (do not restore)
 
 - Homepage matcher form (`#sandbox-form`, category select, Fitness/Sleep fill buttons)
