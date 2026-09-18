@@ -2,7 +2,7 @@
 
 This repo is the live static site. It is not the hub. There is no `apps/memory` Worker here. Next session starts from this file, not from another rebuild.
 
-For a narrative account of how the site got to its current state, read [docs/handoff-2026-09-17.md](../docs/handoff-2026-09-17.md) and [docs/architecture.md](../docs/architecture.md) -- this file is the decision log (what's locked, what's rejected, what's still open), those two are the "what actually exists right now" reference.
+For a narrative account of how the site got to its current state, read [docs/handoff-2026-09-18.md](../docs/handoff-2026-09-18.md) and [docs/architecture.md](../docs/architecture.md) -- this file is the decision log (what's locked, what's rejected, what's still open), those two are the "what actually exists right now" reference. This file is more current than either: it carries changes made after the 18 September handoff doc was written (see "Homepage/run-ads merge" below), which is exactly why this file, not that one, wins on conflict.
 
 **No `" -- "` or `—` in visible public-page copy** (17 September 2026, confirmed directly after it shipped and had to be swept out of six pages). Neither belongs in a sentence a visitor actually reads -- a real em dash reads as an AI-writing tell, a literal `" -- "` reads as a typo, arguably worse. Write two sentences, or use a comma/colon/semicolon instead. Full rule: [docs/aeo-strategy.md](../docs/aeo-strategy.md)'s Punctuation section. This is public-copy only -- this file, other docs, commit messages, and code comments are unaffected, `" -- "` there is normal and fine.
 
@@ -22,7 +22,9 @@ A separate branch/PR (`cursor/prefilled-demo-thread`, PR #12) rebuilt this homep
 
 (The "only new work permitted right now" list from 14 September — blog + legal pages — is superseded; the Stage 0-6 rebuild on 17 September added `run-ads/`, `admin/metrics/`, and the full chat/credit backend on top of that, all confirmed with Daniel. New-page and new-feature work still needs an explicit ask; what changed 17 September is that copy/structure edits to *existing* pages no longer require one — see above.)
 
-**One foundation, no exceptions (14 September 2026):** every page on this site — the homepage, `demo/`, `run-ads/`, `ad-submission/`, `developers/`, `blog/`, `admin/`, and any future page — loads the same `css/styles.css` and reuses the same header/nav/footer HTML structure, fonts, and colors. A new page is new copy inside the existing template, never a new design. `blog/` follows this already: it loads `css/styles.css` plus a small *additive* `css/blog.css` for the few elements the homepage doesn't have (cover image, pull-quote), and nothing in `css/blog.css` overrides or duplicates a rule from `css/styles.css`. Any future add-on must work the same way.
+**One foundation, no exceptions (14 September 2026):** every page on this site — the homepage, `demo/`, `ad-submission/`, `developers/`, `blog/`, `admin/`, and any future page — loads the same `css/styles.css` and reuses the same header/nav/footer HTML structure, fonts, and colors. A new page is new copy inside the existing template, never a new design. `blog/` follows this already: it loads `css/styles.css` plus a small *additive* `css/blog.css` for the few elements the homepage doesn't have (cover image, pull-quote), and nothing in `css/blog.css` overrides or duplicates a rule from `css/styles.css`. Any future add-on must work the same way. (`run-ads/` dropped from this list 18 September 2026 -- it's a redirect now, not a page, see "Homepage/run-ads merge" below.)
+
+**Correction, 18 September 2026: "same header/nav/footer HTML structure" above was aspirational, not actually true, until today.** There is no shared partial or template anywhere in this repo -- every page hand-copies its own `<header>` and `<footer>` markup. An audit this session found the nav and footer had drifted per-page for a while: the top nav showed "Categories" on the homepage but "Ad submission" on every other page, "Demo" and "Ad submission" existed inconsistently across pages, and the footer link list differed page to page (some pages missing "Run ads" entirely, self-link omission handled three different ways). Fixed 18 September: same canonical nav and footer link list on every non-admin page now, see "Homepage/run-ads merge" below. It is still copy-pasted per page, not a real shared component -- if a future session wants a true single source of truth for the header/footer, that would need an actual build step or templating layer, which this static-Pages setup doesn't have.
 
 New pages are additive — their own files. They do not touch `index.html`, `css/styles.css`, or `js/demo.js`'s existing content, beyond adding a nav/footer link to the new pages if asked (done for `blog/` in PR #15 — every page's nav and footer now links to it).
 
@@ -56,8 +58,19 @@ decides when to stop showing the card, not when Daniel gets paid.
 
 **Not yet done:** switch `PAYPAL_MODE` to `live` when ready for real
 money (one Cloudflare env var, no code change) -- do this only when
-Daniel explicitly says to, and only after at least one real sandbox
-test transaction has been run end-to-end.
+Daniel explicitly says to, and needs a separate live REST app created
+directly in Daniel's PayPal dashboard first (sandbox credentials don't
+work against the live API).
+
+**Gap, confirmed 18 September 2026: the billing logic is verified, the
+PayPal round-trip itself isn't.** The exact SQL `credit/purchase.js` and
+`c/[id].js` run was tested directly against production D1 (purchase ->
+balance -> click -> auto-deactivate, all correct, test rows cleaned up
+after). What's still unclicked: an actual PayPal order create -> approve
+-> capture, since that needs a human in a browser and this environment
+can't reach either `prismpublication.com` or PayPal's API to drive it.
+Confirmed acceptable to ship without that click-through for now -- do a
+real one whenever convenient, before calling Stage 5 fully verified.
 
 **House ads / owner inventory (added 18 September 2026).** Daniel wants
 to run his own site (devorahsart.com, his daughter's art) as a
@@ -101,20 +114,36 @@ it matches against the D1 `ad_submissions` approved pool, not
 integration would need, but it is not that integration. Still not built: an
 endpoint that matches against `sdk/catalog.json` itself for publishers.
 
+**Two related gaps, confirmed 18 September 2026, worth stating plainly
+since nothing above says them directly:**
+- **Approving a submission in `/admin/` doesn't touch `sdk/catalog.json`.**
+  That file is a separate, hand-maintained catalog for third-party
+  publishers, unused by the main D1-backed loop (submit -> screen ->
+  approve -> buy credit -> go live). A real third-party integration would
+  need `sdk/catalog.json` edited by hand, or a new endpoint matching
+  against it instead of D1.
+- **No non-JS publisher integration exists.** `sdk/prismClient.js` requires
+  the publisher's own server to be Node/JS. A publisher on another
+  language would have to call `functions/api/match.js` directly (the
+  plain-HTTP endpoint above), there's no equivalent client library for
+  them.
+
 **`/run-ads/` (added 14 September 2026, rebuilt as a general chat 17
-September 2026):** a second, separate phone-UI page -- not the homepage
-demo, which stays exactly as frozen above. Two different things now live
-here:
-- `functions/api/match.js` -- advertiser self-test, unchanged. An advertiser
-  types a question relevant to their own product and sees if their own
-  approved card clears the floor. No account, ephemeral, nothing logged.
-- `functions/api/chat.js` -- the actual `/run-ads/` chat widget as of 17
-  September 2026. General-purpose, like a normal AI chat, not restricted to
-  any niche or topic (see "MVP repositioning" below). Answers via
-  `functions/api/_lib/answer.js`, matches via the same
+September 2026, merged into the homepage 18 September 2026 -- read the
+correction below before trusting the rest of this paragraph):** ~~a second,
+separate phone-UI page -- not the homepage demo, which stays exactly as
+frozen above.~~ Two different things live behind this:
+- `functions/api/match.js` -- advertiser self-test, unchanged by the merge.
+  An advertiser types a question relevant to their own product and sees if
+  their own approved card clears the floor. No account, ephemeral, nothing
+  logged.
+- `functions/api/chat.js` -- the general chat widget, as of 17 September
+  2026 also unrestricted to any niche or topic (see "MVP repositioning"
+  below). Answers via `functions/api/_lib/answer.js`, matches via the same
   `functions/api/_lib/matcher.js` cosine matcher `match.js` uses (both share
   it now, no duplicated logic). Open to any visitor, no account, no
-  advertiser gate.
+  advertiser gate. As of 18 September this widget lives on the homepage
+  itself, not a separate page, see below.
 
 **Watch for this recurring mistake:** fitness/travel/health-and-wellness
 example cards are fine to keep, but any sentence implying they're
@@ -330,12 +359,87 @@ expired `test_ads` rows are deleted lazily instead (on the next
 `/api/draft-ad` or `/api/test-ad` call), which is enough at this traffic
 level and needed no new Worker.
 
+## Homepage/run-ads merge + nav-footer standardization (18 September 2026)
+
+Two problems, fixed in one pass in the same session, after repeated
+rebuilds across different tools (Cursor, Cowork, this one) kept
+re-touching the header/nav/footer and the homepage without seeing each
+other's changes. Daniel does not want an eighth rebuild cycle; if you're
+about to touch the header, footer, or homepage hero/chat, read this whole
+section first, not just the nearest paragraph.
+
+**1. Nav and footer were quietly inconsistent across pages** (see the
+correction under "One foundation" above for the audit findings). Fixed:
+every non-admin page now has the same top nav, in this order: **Chat**
+(`/`), **Run ads** (`/#chat`), **Developers** (`/developers/`), **Blog**
+(page-relative: `/blog/` on top-level pages, `./` on `blog/index.html`,
+`../` on blog posts), **Contact** (`mailto:` link). "Demo" and "Ad
+submission" were removed from the top nav entirely -- both pages still
+exist and are still reachable from the footer, nothing 404s. `aria-current="page"`
+is set on whichever item matches the current route (nothing on `/demo/`,
+`/ad-submission/`, `/privacy/`, `/terms/`, since none of them have a
+matching nav item). The footer link list is now the same 9 items on
+every non-admin page too: Home, Run ads, Demo, Ad submission,
+Developers, Blog (page-relative, same rule as nav), Contact, Privacy,
+Terms -- no more self-link omitted on some pages and not others.
+`admin/index.html` and `admin/metrics/index.html` keep their own
+separate, minimal nav, untouched. Still no shared partial or template
+anywhere -- this is 21+ pages of consistent hand-copied markup, not a
+single source of truth. A future change to the nav or footer still means
+editing every page.
+
+**2. The homepage's own demo was dead, the real product was hidden at
+`/run-ads/`.** The homepage led with a scripted, non-interactive phone
+replay (composer disabled, Play/Reset only); the actual live chat only
+existed at `/run-ads/`. Anyone landing on the bare domain saw a fake demo
+instead of the product. Fixed: the live chat is now the first thing on
+`index.html`.
+- `index.html`'s hero is now `/run-ads/`'s old hero copy (open-to-everyone
+  eyebrow, "ask a real question" H1, "live chat, not a script" subhead).
+  The old hero's highlights grid and byline/dates paragraph are gone, not
+  preserved elsewhere -- if that content is missed, it needs a deliberate
+  decision to bring back, it wasn't kept by accident.
+- The live chat (`section.demo-board`, now also `id="chat"` so nav and
+  other pages can link straight to it) and the ad-from-URL draft tool
+  (`section.advertisers#build-ad`) moved from `run-ads/index.html` into
+  `index.html`, directly after the hero. Every id and data attribute is
+  unchanged, so `/api/chat`, `/api/track`, `/api/reach`, and
+  `/api/draft-ad` all work exactly as before, just from the homepage now.
+  The inline chat/draft script moved with them and exists in exactly one
+  file.
+- The old scripted sandbox (`section.sandbox-section#sandbox`, disabled
+  composer, `js/demo.js`-driven Play/Reset) is deleted from `index.html`
+  entirely. `js/demo.js` itself is untouched and still loaded by
+  `demo/index.html`, which keeps its own separate scripted walkthrough --
+  don't delete that file, only `index.html`'s reference to it was removed.
+  `section.advertisers#advertisers`, `section.niches#niches`, and
+  `section.aeo#floors` kept their existing content and relative order.
+- `run-ads/index.html` no longer exists. `_redirects` gained two lines,
+  `/run-ads` and `/run-ads/` both 301 to `/`, so old links, bookmarks, and
+  the sitemap entry (not yet updated, still lists `/run-ads/`, harmless
+  since it now redirects) don't 404. Body-copy links to `/run-ads/` on
+  `privacy/`, `terms/`, `ad-submission/`, `developers/`, and the footer
+  were deliberately left as literal `/run-ads/` rather than rewritten,
+  since they still resolve correctly through the redirect and weren't
+  asked to change.
+
+**Known gaps, current as of 18 September 2026** (the fuller version of
+some of these lives inline above, this is the flat list):
+1. PayPal round-trip (order create -> approve -> capture) still unclicked, billing logic verified against D1 directly instead, confirmed acceptable to ship without it for now.
+2. `PRICE_PER_CLICK_CENTS` still a placeholder ($0.50); `MIN_CREDIT_PURCHASE_CENTS` ($5.00) is real.
+3. `sdk/catalog.json` not wired to approvals.
+4. No non-JS publisher integration.
+5. `docs/ad-submission.md` still stale; `docs/pricing.md` is current as of today.
+6. PayPal still in sandbox mode, needs a live REST app from Daniel plus `PAYPAL_MODE=live`.
+7. `devorahsart-notify` Worker still orphaned (separate repo/resource), no decision made.
+8. No automated alerting on click-volume anomalies.
+
 ## Locked public site
 
 - Origin: https://prismpublication.com/
 - Host: Cloudflare Pages on GitHub `main`. Build `echo "Building static site"`. Never `wrangler pages deploy` or `wrangler deploy` -- Git push is the only deploy path. `wrangler pages dev` locally is fine (it's not a deploy).
-- Pages: `index.html`, `demo/index.html`, `developers/index.html`, `ad-submission/index.html`, `blog/` (index + 15 posts), `admin/index.html` (Access-protected), `run-ads/index.html` (general live chat + advertiser ad-testing, separate from the homepage demo), `privacy/index.html`, `terms/index.html`, `css/styles.css`.
-- Visitor demo is the **phone thread** (Play/Reset, composer off). Not the category form.
+- Pages: `index.html` (now the general live chat + advertiser ad-testing itself, see "Homepage/run-ads merge" below), `demo/index.html` (still the scripted Play/Reset walkthrough, untouched), `developers/index.html`, `ad-submission/index.html`, `blog/` (index + 15 posts), `admin/index.html` (Access-protected), `privacy/index.html`, `terms/index.html`, `css/styles.css`. `run-ads/index.html` no longer exists as a file -- `/run-ads` and `/run-ads/` 301-redirect to `/` via `_redirects`.
+- **Corrected 18 September 2026, was wrong above:** the homepage's visitor experience is now the **live chat** (real composer, posts to `/api/chat`, `/api/track`, `/api/reach`), not the scripted phone thread. The scripted Play/Reset thread with the disabled composer was deleted from the homepage entirely and only still exists on `/demo/`. Do not "fix" the homepage back to a disabled scripted demo, that would be undoing 18 September's actual, requested change.
 - One page paint only: `#f0f9ff` on html, body, header, main, footer, sections, containers, cards, tables. No `--section` / `--card-bg` second wash. Buttons may use accent. Phone chrome and in-thread cards stay device UI, not page paint.
 - Alignment: paragraphs and long copy **left**. Headlines (h1/h2) and CTA groups **center**. No justify. No right-aligned body.
 - Measure: body lines about **75ch**. Body type **1.125rem** (never under 16px), `#1e293b` on `#f0f9ff`.
@@ -407,10 +511,14 @@ against `CREDIT_PACKS_CENTS` itself now.
 
 Site copy updated everywhere the $5 fee was mentioned: `ad-submission/
 index.html`, `terms/index.html`, `privacy/index.html`, `run-ads/
-index.html`. **Not updated**: `docs/pricing.md` and `docs/ad-submission.md`
-(the stale operator docs already flagged in earlier sessions as
-describing an older third-party-SDK sales motion) are now even further
-out of sync -- still worth a real rewrite pass, not attempted here.
+index.html` (now merged into `index.html`, see below). **Not updated**:
+`docs/pricing.md` and `docs/ad-submission.md` (the stale operator docs
+already flagged in earlier sessions as describing an older
+third-party-SDK sales motion) were further out of sync -- still worth a
+real rewrite pass, not attempted here. **Update, 18 September 2026:
+`docs/pricing.md` was rewritten and is current now. `docs/ad-submission.md`
+is still the stale one**, still describing the old niche/fee model, still
+needs the same treatment `pricing.md` already got.
 
 **Not built, deliberately out of scope for this pass:** PayPal webhook
 handling (reused the existing direct-capture-and-verify pattern instead,
