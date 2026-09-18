@@ -1,4 +1,4 @@
-# Architecture | Prism Publication (last updated 17 September 2026)
+# Architecture | Prism Publication (last updated 18 September 2026)
 
 Single-product static site plus a server-side chat-ad client, backed by a Cloudflare-only stack: D1 for storage, Workers AI (or OpenAI, provider-swappable) for the general chat, PayPal for payment. The product is the site's own phone UI -- a general-purpose chat, open to anyone -- not a third-party chatbot SDK play; see "The repositioning" below.
 
@@ -153,7 +153,13 @@ Approving in `/admin/` only updates the D1 row's status -- it does **not** add t
 
 ## Money path (operator)
 
-Retired the $5-at-submission fee (14 Sept) entirely as of 17 Sept -- confirmed directly this was a real removal, not additive. **Submitting and testing a campaign is free.** The only charge: prepaid click credit, bought via `/campaign/{token}` once approved, billed per click, tracked as a ledger (`credit_ledger` -- balance is always `SUM(amount_cents)`, never a stored running total). Both `CREDIT_PACKS_CENTS` and `PRICE_PER_CLICK_CENTS` in `functions/api/_lib/pricing.js` are **explicit placeholders**, not numbers Daniel has set. The older intercept/IO pricing model described in [pricing.md](pricing.md) predates the repositioning above and needs its own rewrite -- not attempted yet, flagged repeatedly.
+Retired the $5-at-submission fee (14 Sept) entirely as of 17 Sept -- confirmed directly this was a real removal, not additive. **Submitting and testing a campaign is free.** The only charge: prepaid click credit, bought via `/campaign/{token}` once approved, billed per click, tracked as a ledger (`credit_ledger` -- balance is always `SUM(amount_cents)`, never a stored running total).
+
+**18 September 2026: the advertiser sets their own budget, not a fixed pack.** `CREDIT_PACKS_CENTS` is gone -- replaced by `MIN_CREDIT_PURCHASE_CENTS` (500, i.e. $5.00, a real number Daniel confirmed) and `MAX_CREDIT_PURCHASE_CENTS` (a fat-finger guardrail, not a business limit) in `functions/api/_lib/pricing.js`. `PRICE_PER_CLICK_CENTS` is still an explicit placeholder. [pricing.md](pricing.md) was fully rewritten the same day to describe this real model -- no longer stale.
+
+**Click-fraud guard, same day:** `functions/c/[id].js` used to bill any GET request with zero verification. It now only bills a click if (1) the exact session actually got that exact ad served by `/api/chat` first, and (2) that session hasn't already billed a click on that ad. Neither check blocks the redirect, only the billing.
+
+**House ads, same day:** `/admin/` has a "Go live free (house ad)" action on any approved submission, for Daniel's own inventory (his other site, devorahsart.com) where buying PayPal credit from himself makes no sense. Inserts a normal `credit_ledger` purchase row with no PayPal capture behind it, admin picks the amount. Behaves identically to a paid campaign from that point on. See `functions/api/submissions/[id]/house-credit.js`.
 
 ## Key files
 
@@ -176,25 +182,26 @@ Retired the $5-at-submission fee (14 Sept) entirely as of 17 Sept -- confirmed d
 | `functions/api/test-ad.js` | Public: save the (edited) draft as the session's private test ad |
 | `functions/api/match.js` | Public: advertiser self-test, content match only, ignores credit state |
 | `functions/api/credit/purchase.js` | Public: verify token + approval, capture PayPal payment, credit the ledger |
-| `functions/c/[id].js` | Public: card-click redirect, logs + deducts credit, deactivates on exhaustion |
+| `functions/c/[id].js` | Public: card-click redirect, click-fraud-gated (needs a genuine prior chat match, one billable click per session per ad), deducts credit, deactivates on exhaustion |
 | `functions/api/submissions/{index,[id]}.js` | Access-gated: list / approve / reject |
+| `functions/api/submissions/[id]/house-credit.js` | Access-gated: grant no-charge credit to an approved submission (Daniel's own inventory) |
 | `functions/api/_lib/matcher.js` | Shared cosine matcher, `requireActive` option gates on credit |
 | `functions/api/_lib/screening.js` | Automated screening -- light-touch, prohibited-category block only |
-| `functions/api/_lib/model.js` | Shared "call whichever model is configured" (OpenAI or Workers AI) |
-| `functions/api/_lib/answer.js` | General chat answer, wraps `model.js` |
+| `functions/api/_lib/model.js` | Shared "call whichever model is configured" (OpenAI or Workers AI), both paths now timeout-bounded (15s) after an untimed hang crashed `draft-ad.js` with a useless generic error |
+| `functions/api/_lib/answer.js` | General chat answer, wraps `model.js`. System prompt carries a ground-truth fact block (self-corrects fabrication about the site/business) and an explicit content boundary (no sexual/explicit/violent/illegal content on this general-audience, no-age-gate chat) |
 | `functions/api/_lib/urlFetch.js` | Safe product-page fetch + HTMLRewriter extraction |
-| `functions/api/_lib/pricing.js` | Single source of truth for money amounts -- placeholders, not real numbers |
+| `functions/api/_lib/pricing.js` | Single source of truth for money amounts -- `MIN_CREDIT_PURCHASE_CENTS` (real, $5.00) and `MAX_CREDIT_PURCHASE_CENTS` (guardrail) replace the old fixed packs; `PRICE_PER_CLICK_CENTS` still a placeholder |
 | `functions/api/_lib/hash.js` | IP hashing for rate limiting / click dedup, raw IPs never stored |
 | `functions/api/paypal/_shared.js` | Generalized PayPal helpers -- plain amount in/out, no hardcoded fee |
 | `d1/schema.sql` | All tables -- `ad_submissions`, `chat_events`, `test_ads`, `credit_ledger` -- already applied to `prism-crm` |
 | `wrangler.toml` | **Real for production now** (Build System v3 reads it for bindings on every branch build), also used for local `wrangler pages dev` emulation |
 | `mem/current.md` | Locked decisions carry-forward -- **read this first**, especially the homepage freeze |
 | `docs/run-ads-strategy-2026-09-16.md` | Full planning record for everything in this doc dated 17 September |
-| `docs/handoff-2026-09-17.md` | Current handoff -- read this, not the 14 September one |
+| `docs/handoff-2026-09-18.md` | Current handoff -- read this, not the 17 or 14 September ones |
 | `docs/ad-submission-backend.md` | Original backend setup detail (14 Sept, now partly superseded by the free-submission change) |
 | `docs/publisher-key.md` | Third-party wiring and smoke test |
 | `docs/ad-submission.md` | Creative rules and 0.65 / 120ms floors -- stale, describes the old niche/fee model |
-| `docs/pricing.md` | Old intercept pricing model -- stale, predates the repositioning |
+| `docs/pricing.md` | Real pricing model as of 18 September -- rewritten, no longer stale |
 | `docs/aeo-strategy.md` | Canonical and crawler rules |
 | `.cursor/rules/prism-pages-static.mdc` | Pages-only deploy |
 | `.cursor/rules/cloudflare-pages-deploy.mdc` | Git via Pages tab, not Workers |

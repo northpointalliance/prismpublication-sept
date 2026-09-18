@@ -1,13 +1,13 @@
 # Prism Publication
 
-Native contextual ads for independent AI chatbots, and -- as of 17 September 2026 -- the site's own general-purpose phone UI where anyone can chat, draft an ad from a product URL, test it free, and go live on prepaid click credit. A labeled card when the user's message closely matches a product. Silence when it does not.
+Native contextual ads for independent AI chatbots, and -- as of 17 September 2026 -- the site's own general-purpose phone UI where anyone can chat, draft an ad from a product URL, test it free, and go live on prepaid click credit (advertiser sets their own budget, $5.00 minimum, not a fixed pack). A labeled card when the user's message closely matches a product. Silence when it does not.
 
 This repository is the **single-product** static site, a server-side SDK client, and a real Cloudflare-only backend (D1, Workers AI/OpenAI, PayPal). It is not a Workers-as-a-separate-project app and not a multi-product hub.
 
 **Live origin:** [https://prismpublication.com/](https://prismpublication.com/)
 **GitHub:** [northpointalliance/prismpublication-sept](https://github.com/northpointalliance/prismpublication-sept)
 
-> **Read [mem/current.md](mem/current.md) before changing public HTML or CSS.** The homepage is frozen as of 13 September 2026 -- no redesigns. New work is additive, own pages/files. Narrow, non-visual factual corrections (category names, brand-safety policy text) are an exception already made twice this session -- text only, never structure -- and still worth a heads-up first.
+> **Read [mem/current.md](mem/current.md) before changing public HTML or CSS.** The freeze, scope clarified 17 September 2026, is on the site's **visual identity** only: background color, font choice, base font sizes, site-wide. Copy, CTAs, and structure are not frozen and get corrected directly when wrong, already precedented repeatedly. Only a color/font/type-scale change needs asking first.
 
 ## What it is
 
@@ -60,9 +60,10 @@ wrangler.toml                  Real for production (Build System v3 reads it) + 
 mem/current.md                 Locked decisions carry-forward -- read before editing HTML/CSS
 docs/architecture.md           System design and diagrams -- current state
 docs/run-ads-strategy-2026-09-16.md  Full planning record for the 17 Sept rebuild
-docs/handoff-2026-09-17.md     Current handoff -- read this one first
+docs/handoff-2026-09-18.md     Current handoff -- read this one first
+docs/handoff-2026-09-17.md     Superseded -- kept for history
 docs/handoff-2026-09-14.md     Superseded -- kept for history
-docs/pricing.md                Stale -- predates the repositioning, needs a rewrite
+docs/pricing.md                Real pricing model as of 18 Sept -- rewritten, current
 docs/ad-submission.md          Stale -- describes the old niche/fee model
 docs/aeo-strategy.md           Canonicals and crawler rules
 docs/publisher-key.md          How a third party wires fill on Pages
@@ -85,11 +86,12 @@ Serve the repo root over HTTP (any static server) for the static pages. `wrangle
 ## Known gaps
 
 - **Stage 5's billing logic is verified, the PayPal round-trip itself isn't.** The exact SQL `credit/purchase.js` and `c/[id].js` run was tested directly against production D1 (purchase → balance → click → auto-deactivate, all correct, test data cleaned up after). What's still unclicked: an actual PayPal order create → approve → capture, since that needs a human in a browser and this environment can't reach either `prismpublication.com` or PayPal's API to drive it. Confirmed acceptable to ship without that click-through for now -- do a real one whenever convenient.
-- **Real pricing numbers are still placeholders** -- `functions/api/_lib/pricing.js`.
+- **`PRICE_PER_CLICK_CENTS` is still a placeholder** -- `functions/api/_lib/pricing.js`. `MIN_CREDIT_PURCHASE_CENTS` ($5.00) is real, confirmed 18 September.
 - **Approving a submission doesn't make it live on `sdk/catalog.json`.** That's a separate, unused-by-the-main-loop catalog for third-party publishers; a real third-party integration would still need `sdk/catalog.json` edited by hand, or a new endpoint matching against it instead of D1.
 - **No non-JS publisher integration.** `sdk/prismClient.js` requires the publisher's own server to be Node/JS.
-- **`docs/pricing.md` and `docs/ad-submission.md` are stale**, describing the pre-repositioning niche/fee model -- flagged repeatedly, not rewritten yet.
-- **Stage 6 (metrics dashboard)** from the original plan isn't built.
+- **`docs/ad-submission.md` is still stale**, describing the pre-repositioning niche/fee model -- `docs/pricing.md` was rewritten 18 September and is no longer on this list.
+- **PayPal is still in sandbox mode.** Going live needs a live PayPal REST app (separate credentials from the sandbox ones currently in `PAYPAL_CLIENT_ID`/`PAYPAL_CLIENT_SECRET`), created by Daniel directly in the PayPal dashboard, plus `PAYPAL_MODE=live`. Discussed 18 September, not yet done.
+- **The click-fraud guard doesn't stop a scripted attacker** who runs real chat turns through fresh session IDs in a loop -- `chat.js`'s own per-IP rate limits are the only thing bounding that, and there's no alerting if click volume looks suspicious, a manual admin-review gap.
 
 ## Contact
 
