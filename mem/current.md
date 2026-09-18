@@ -115,6 +115,27 @@ has also flagged that swapping the chat's answer model from Workers AI to
 OpenAI is on the table if quality needs it -- `_lib/answer.js` is written
 so that's an env-var change (`OPENAI_API_KEY`), not a rewrite.
 
+**Chat grounding fix (18 September 2026):** Daniel tested the live chat on
+his phone and found it confidently fabricating answers about the site
+itself, worst case, "are my questions stored?" got a flat "no, not
+stored," directly contradicting the "questions are stored anonymously"
+text sitting right above the phone UI on the same page. Also: claimed to
+be "a custom model... fine-tuning unique to this application" (false, it's
+an off-the-shelf Workers AI/OpenAI model with a system prompt only),
+invented a subscription/premium-content business model (real one is free
+submission + free testing + prepaid click billing), and flatly denied ads
+exist at all when asked directly. Root cause: the system prompt made it
+general-purpose with no grounding in the site's own facts, so on
+meta-questions about the site it confabulated a plausible SaaS-company
+answer instead of deferring. Fixed in `_lib/answer.js`'s `SYSTEM_PROMPT`:
+added a short numbered ground-truth block (data IS stored for matching,
+it's an off-the-shelf model not custom-trained, real business model, ads
+can truthfully be confirmed to exist though never recommended by name)
+and an instruction to say "not sure" rather than guess beyond it. If the
+chat's answers about itself ever drift from what's actually true on the
+site again, this is the file to check first, and the fix is updating this
+fact block, not just the tone/length instructions around it.
+
 **New D1 table `chat_events`** (see `d1/schema.sql`, needs one manual
 `wrangler d1 execute prism-crm --remote` run against the real database):
 logs each chat turn and each sponsored-card click. Also doubles as the
