@@ -86,6 +86,22 @@
                   "@type": "Answer",
                   "text": "Only when the user is already asking about that product. If the question is off-topic, the bot still answers and no card appears. That silent turn is not billed."
                 }
+              },
+              {
+                "@type": "Question",
+                "name": "Is the money I add already spent?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. What you add is your own prepaid credit, not Prism's revenue. It only counts as spent when a real click draws it down. Unused credit can be refunded on request."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How do you stop fake or fraudulent clicks from draining my credit?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "A click only bills your credit if it comes from a real chat session that was actually shown your card first. Each session can bill at most one click per ad, and the live chat itself is rate-limited per visitor."
+                }
               }
             ]
           }
@@ -295,6 +311,19 @@
               <h3>Is there bidding or an auction?</h3>
               <p>
                 No. The price per click is flat, not a bid, and you are not competing on price against other advertisers for the same click.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Is the money I add already spent?</h3>
+              <p>
+                No. What you add is your own prepaid credit, not our revenue. It only counts as spent when a real click draws it down. Unused credit can be refunded on request, see
+                <a href="/terms/">terms</a>.
+              </p>
+            </article>
+            <article class="card">
+              <h3>How do you stop fake or fraudulent clicks from draining my credit?</h3>
+              <p>
+                A click only bills your credit if it comes from a real chat session that was actually shown your card first, a cold hit on the click link with no real match behind it is never charged. Each session can bill at most one click per ad, so a refresh or repeat click on the same card doesn't charge twice. The live chat itself is also rate-limited per visitor, which caps how many billable clicks one source could ever generate.
               </p>
             </article>
           </div>

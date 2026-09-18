@@ -163,10 +163,30 @@ which stores nothing) -- `/run-ads/` now says so visibly, and
 
 **New route `/c/:id`** (`functions/c/[id].js`): every sponsored card in the
 chat links here instead of straight to the advertiser, so clicks get
-logged before redirecting to `destination_url`. Needed later for the
-credit/pay-per-click pricing model Daniel says is coming (not built yet,
-still the flat $5 submission fee) -- built now because retrofitting click
-tracking after ads start running is worse than having it from the start.
+logged before redirecting to `destination_url`. Built ahead of the
+credit/pay-per-click pricing model that shipped later the same week
+(Stage 5), because retrofitting click tracking after ads start running is
+worse than having it from the start.
+
+**Click-fraud guard added 18 September 2026**, after Daniel asked how
+this gets prevented, since it's a known PPC-era problem and the route
+above originally had zero protection: any GET to `/c/:id` billed a click,
+no check at all. Now a click only bills the advertiser's credit if (1)
+this exact session actually got this exact ad served by `/api/chat`
+first (`chat_events` has a matching `kind='chat'` row for that
+session_id + matched_ad_id -- blocks a cold curl/scraper/guessed-id hit
+with no real chat turn behind it), and (2) this session hasn't already
+billed a click on this same ad (`chat_events kind='click'` lookup --
+blocks refresh/double-tap/back-button repeat billing). Neither check
+blocks the redirect itself, a non-billable hit still sends the visitor
+to `destination_url`, it just writes nothing to `chat_events` or
+`credit_ledger`. This does not stop a determined attacker scripting
+fresh sessionIds through real `/api/chat` turns in a loop, but
+`chat.js`'s own per-IP rate limits (`PER_IP_10_MIN_LIMIT`,
+`PER_IP_DAILY_LIMIT`) already cap how many of those one IP can generate
+per day. If click volume ever looks suspicious, `chat_events` has
+`ip_hash` per click so a burst can be traced, but there's no automated
+alerting on this yet, it's a manual admin-review gap.
 
 **Correction, 17 September 2026: this Pages project runs Build System v3,
 which reads bindings from `wrangler.toml` in the repo, not the dashboard.**
