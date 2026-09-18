@@ -100,12 +100,34 @@
         load();
       }
 
+      async function grantHouseCredit(id) {
+        const dollars = window.prompt("House credit to add, in dollars (no PayPal charge -- for your own inventory):", "50");
+        if (dollars === null) return;
+        const amountCents = Math.round(Number(dollars) * 100);
+        if (!amountCents || amountCents <= 0) {
+          alert("Enter a positive dollar amount.");
+          return;
+        }
+        const res = await fetch("/api/submissions/" + id + "/house-credit", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ amountCents }),
+        });
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({}));
+          alert("Failed: " + (body.error || res.status));
+          return;
+        }
+        load();
+      }
+
       function renderRow(row) {
         const tr = document.createElement("tr");
         const created = new Date(row.created_at + "Z").toLocaleString();
         tr.innerHTML =
           "<td>" + escapeHtml(created) + "</td>" +
-          '<td><span class="status-pill status-' + escapeHtml(row.status) + '">' + escapeHtml(row.status) + "</span></td>" +
+          '<td><span class="status-pill status-' + escapeHtml(row.status) + '">' + escapeHtml(row.status) + "</span>" +
+            (row.credit_active ? "<br><small>Live</small>" : "") + "</td>" +
           "<td>" + (row.amount_paid_cents ? "$" + (row.amount_paid_cents / 100).toFixed(2) : "—") +
             (row.paypal_order_id ? "<br><small>" + escapeHtml(row.paypal_order_id) + "</small>" : "") + "</td>" +
           "<td>" + escapeHtml(row.brand) + "<br><small>" + escapeHtml(row.email) + "</small></td>" +
@@ -134,6 +156,17 @@
 
         actions.appendChild(approveBtn);
         actions.appendChild(rejectBtn);
+
+        if (row.status === "approved" && !row.credit_active) {
+          const houseCreditBtn = document.createElement("button");
+          houseCreditBtn.className = "btn secondary";
+          houseCreditBtn.type = "button";
+          houseCreditBtn.textContent = "Go live free (house ad)";
+          houseCreditBtn.title = "No PayPal charge -- for your own inventory only.";
+          houseCreditBtn.addEventListener("click", () => grantHouseCredit(row.id));
+          actions.appendChild(houseCreditBtn);
+        }
+
         return tr;
       }
 

@@ -59,6 +59,27 @@ money (one Cloudflare env var, no code change) -- do this only when
 Daniel explicitly says to, and only after at least one real sandbox
 test transaction has been run end-to-end.
 
+**House ads / owner inventory (added 18 September 2026).** Daniel wants
+to run his own site (devorahsart.com, his daughter's art) as a
+sponsored card without buying credit from himself -- "I am not going to
+buy credits for my own daughter's art." Rather than a one-off manual D1
+insert, built this as a real, repeatable admin action since he asked
+"how can I easily add... going forward": `/admin/` now has a "Go live
+free (house ad)" button on any `approved` submission that isn't already
+live. It POSTs to `functions/api/submissions/[id]/house-credit.js`
+(Access-gated, same pattern as the sibling `[id].js`), which inserts a
+normal `credit_ledger` purchase row (default $50, admin can type a
+different amount) with no PayPal capture behind it -- the ledger note
+says so explicitly -- and sets `credit_active = 1`. From that point on
+it behaves exactly like a real paying campaign: same matching, same
+per-click draw-down in `functions/c/[id].js`, same automatic stop if
+the balance ever runs out. `functions/api/submissions/index.js` (the
+admin list) now also returns `credit_active` and `access_token` so the
+UI can show which rows are live and conditionally render the button.
+The normal flow for this: submit like any advertiser at
+`/ad-submission/` (still free), approve it in `/admin/` as usual, then
+click "Go live free" instead of the advertiser ever touching PayPal.
+
 ## Backend (added 14 September 2026)
 
 This site is no longer *pure* static. `ad-submission/index.html` now posts to
