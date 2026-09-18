@@ -270,9 +270,38 @@ fully confirm from this environment (no live log access, and the
 sandbox can't reach either prismpublication.com or the reported
 product URL to reproduce it directly) whether this was the exact cause
 here or a platform-level timeout on a slow page load stacked on top of
-the AI drafting step -- if "Could not reach the ad builder" still shows
-up after this ships, the message itself should now be specific instead
-of generic, and that specific text is the next real lead.
+the AI drafting step.
+
+**Confirmed it wasn't that (still 18 September 2026):** Daniel retried
+immediately, still got the same generic message. Checked `chat_events`
+again -- two fresh `kind='draft'` rows, ~13 seconds apart, both AFTER
+the fix above shipped. That proves the D1 step was never actually the
+crash site (it wrote successfully every single time, before and after),
+so the real failure is downstream, in the page-fetch or AI step, in a
+way that bypasses even THEIR OWN try/catch blocks. The only thing that
+can do that is a hard platform-level kill. Found the real gap: the page
+fetch (`_lib/urlFetch.js`) has a 12s timeout, but `_lib/model.js`'s
+`complete()` (the AI drafting call) had **no timeout at all**, on
+either the OpenAI path or the Workers AI path. If that call hangs, even
+briefly, Cloudflare kills the whole request outside any try/catch in
+this codebase, producing exactly this symptom, a non-JSON response the
+browser can't parse. Fixed: added a 15s (`AI_TIMEOUT_MS`) bound to
+both paths in `_lib/model.js` -- an `AbortController` on the OpenAI
+fetch (same pattern as `urlFetch.js`), and a `Promise.race` against a
+timer for `env.AI.run()`, which takes no abort signal of its own, so
+racing it is the only way to make OUR code give up on time even though
+the orphaned call keeps running in the background. This is a real,
+general fix for any caller of `complete()` (chat.js's answers too, not
+just draft-ad.js), not a draft-ad-specific patch.
+
+If this still fails after shipping, the error message returned should
+now be one of `complete()`'s own clean strings ("OpenAI took too long to
+respond," "Workers AI took too long to respond," etc.) instead of the
+generic client-side catch-all -- if it's STILL the generic message even
+after this, that would point at something even further upstream (Pages
+Functions routing itself, or an account-level plan/CPU limit), which
+would need Cloudflare dashboard log access (Workers Logs / real-time
+logs) to diagnose further, not guessable from this repo alone.
 
 Older, still true: not built are the `prism-jobs`-style scheduled
 cleanup Worker the original plan called for --
