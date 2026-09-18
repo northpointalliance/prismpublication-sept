@@ -594,20 +594,32 @@ homepage section, a dedicated landing page, a line in `/developers/`,
 or outbound-only messaging with no site change at all) before writing
 anything.
 
-**Queued deliverable: a blog post, "Affiliate marketing in the
-contextualized ad era."** Blocked on the sourced deep-dive into the real
-state of the affiliate industry Daniel said is coming -- do not draft
-this post from the unsourced document above. When the sourced research
-lands, write it the same way the existing blog posts handle numbers
-(real source, real link, no bare stat -- see `blog/what-ai-chat-ads-
-actually-are/index.html`'s CPM/CPC section as the template) and follow
-the same house-style rules as every other post: question-based H2s,
-120-180 words per block, JSON-LD matching visible copy, no `--`/em dash
-in body copy (see `docs/aeo-strategy.md`). Likely angle, not yet
-confirmed with Daniel: affiliates losing organic/zero-click traffic need
-a place to prove ad copy still converts -- ties directly into the ICP
-idea above, but the blog post and the ICP/product decision are two
-separate deliverables, don't block one on the other.
+**Blog post written and shipped, 18 September 2026:
+`blog/affiliate-marketing-in-the-contextualized-ad-era/index.html`.**
+Daniel sent a second, more specific document with named sources
+(SparkToro/Similarweb, Pew Research Center, Ahrefs, Adobe Analytics,
+Wyzowl) instead of the first unsourced one. Every stat used in the post
+was independently re-verified with a live web search before writing,
+not taken on the document's own "verified" label -- one number in it was
+wrong (it claimed AI Overviews cause "a 58% drop in CTR"; Pew's real
+numbers are 8% vs 15% clicks, closer to 47% relative, so the post states
+the real 8%/15% figures directly instead of the inflated framing), and
+several other claims in that document (48% AIO trigger rate, per-category
+saturation numbers, the flat "30% citation" figure, the 38% pre-purchase
+AI-research stat) had no findable primary source, so none of those made
+it into the post. What did clear verification and is in the post: the
+68.01% zero-click rate (SparkToro/Similarweb), Pew's 8%/15%/1% click
+figures, Ahrefs' 38%-vs-76% AI Overview citation/top-10-ranking study,
+Adobe's 393% YoY Q1 2026 AI-referred retail traffic figure, Wyzowl's 85%
+video-conversion stat, and the 96% affiliate-creator AI-tool-adoption
+figure. Added to `blog/index.html`'s grid (front of list) and
+`sitemap.xml` (new entry plus bumped `blog/` lastmod). Ties the zero-click
+argument directly to Prism's own value prop: testing ad copy against a
+real contextual match is more reliable proof than optimizing for a
+ranking that increasingly does not predict AI citation anyway, with the
+usual "no promises this transfers to ChatGPT/Facebook/Amazon" caveat kept
+intact. The separate affiliate-marketers-as-ICP product/positioning
+decision above is still open and unrelated to this post being done.
 
 ## Rejected (do not restore)
 
