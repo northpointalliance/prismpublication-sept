@@ -180,6 +180,21 @@
             </div>
             <p class="meta" id="draft-test-status" role="status" style="margin-top: 0.75rem;"></p>
           </form>
+
+          <div id="test-report" style="display: none; max-width: 640px; margin-top: 1.5rem;">
+            <h3>Your test results</h3>
+            <p class="meta" id="test-report-summary"></p>
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
+              <thead>
+                <tr>
+                  <th style="text-align: left; padding: 0.4rem; border-bottom: 1px solid var(--border-color);">Question asked</th>
+                  <th style="text-align: left; padding: 0.4rem; border-bottom: 1px solid var(--border-color);">Score</th>
+                  <th style="text-align: left; padding: 0.4rem; border-bottom: 1px solid var(--border-color);">Result</th>
+                </tr>
+              </thead>
+              <tbody id="test-report-rows"></tbody>
+            </table>
+          </div>
         </div>
       </section>
 
@@ -370,6 +385,37 @@
           log.scrollTop = log.scrollHeight;
         }
 
+        var testReport = document.getElementById("test-report");
+        var testReportRows = document.getElementById("test-report-rows");
+        var testReportSummary = document.getElementById("test-report-summary");
+        var testResults = [];
+
+        function resetTestReport() {
+          testResults = [];
+          testReportRows.innerHTML = "";
+          testReportSummary.textContent = "";
+          testReport.style.display = "none";
+        }
+
+        function logTestResult(question, score, outcome) {
+          testResults.push(score);
+          var row = document.createElement("tr");
+          var cell = function (text) {
+            var td = document.createElement("td");
+            td.style.padding = "0.4rem";
+            td.style.borderBottom = "1px solid var(--border-color)";
+            td.textContent = text;
+            return td;
+          };
+          row.appendChild(cell(question));
+          row.appendChild(cell(score.toFixed(2)));
+          row.appendChild(cell(outcome));
+          testReportRows.appendChild(row);
+          var cleared = testResults.filter(function (s) { return s >= 0.65; }).length;
+          testReportSummary.textContent = cleared + " of " + testResults.length + " questions cleared the 0.65 floor.";
+          testReport.style.display = "";
+        }
+
         form.addEventListener("submit", async function (event) {
           event.preventDefault();
           var message = input.value.trim();
@@ -392,8 +438,16 @@
             } else {
               appendBubble("bot", data.answer);
               if (data.card) appendCard(data.card);
-              if (data.testAdScore != null && !(data.card && data.card.isTestAd)) {
-                appendNote("Your draft ad scored " + data.testAdScore + " on this question (needs 0.65+ to show).");
+              if (data.testAdScore != null) {
+                var outcome = data.card && data.card.isTestAd
+                  ? "Your ad was shown"
+                  : data.card
+                    ? "A different ad outranked yours"
+                    : "No card shown";
+                logTestResult(message, data.testAdScore, outcome);
+                if (!(data.card && data.card.isTestAd)) {
+                  appendNote("Your draft ad scored " + data.testAdScore + " on this question (needs 0.65+ to show).");
+                }
               }
             }
           } catch (err) {
@@ -505,7 +559,8 @@
                 destinationUrl: payload.sourceUrl,
               });
               draftSubmitLink.href = "https://prismpublication.com/ad-submission/?" + params.toString();
-              draftTestStatus.textContent = "Saved. Ask a question about it in the chat below.";
+              draftTestStatus.textContent = "Saved. Ask a question about it in the chat above.";
+              resetTestReport();
               input.focus();
             }
           } catch (err) {
