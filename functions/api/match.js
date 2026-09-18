@@ -43,6 +43,7 @@ export async function onRequestPost(context) {
       description: ad.description,
       destinationUrl: ad.destination_url,
       ctaText: ad.cta_text,
+      isAffiliate: ad.source === "affiliate",
     },
   });
 }

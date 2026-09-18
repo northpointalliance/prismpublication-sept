@@ -58,6 +58,8 @@ There is no client-side view toggle on the homepage itself -- it's still one sta
 
 Public floors: cosine **0.65**, match budget **under 120ms**. Miss or timeout: `null`. Null is not billable. `_lib/matcher.js` is shared by `/api/match` (advertiser self-test, `requireActive: false` -- content match, not billing state) and `/api/chat` (real serving, `requireActive: true` by default -- gated on `credit_active`).
 
+**Two-tier pool (18 Sept):** `findBestAd` checks `ad_submissions` (plus any private test/draft ad) first; only if nothing there clears 0.65 does it fall back to `ad_library` rows with `source = 'affiliate'`. Paid always wins a tie -- a paying advertiser's card can't be outscored off the slot by an affiliate link that happens to share more words with the question. Affiliate rows have no `credit_active`/billing; a winning affiliate match is logged to `chat_events.matched_library_id` instead of `matched_ad_id`, and its card renders with an "Affiliate" label and links straight to `destination_url` (no `/c/:id` click-billing redirect -- there's no credit to draw down). `ad_library` also holds `source = 'paid'` rows that link an already-live `ad_submissions` campaign into the same table via `ad_submission_id` for future catalog/listing use; those aren't separately scored today since the linked submission is already in the primary pool.
+
 ```
                     prompt + niche
                           │

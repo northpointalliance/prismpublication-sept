@@ -365,10 +365,14 @@
         function appendCard(card) {
           var el = document.createElement("article");
           el.className = "match-card";
-          var href = card.isTestAd
+          var href = card.isTestAd || card.isAffiliate
             ? card.destinationUrl
             : "/c/" + encodeURIComponent(card.id) + "?s=" + encodeURIComponent(sessionId);
-          var label = card.isTestAd ? "Sponsored · " + escapeHtml(card.brand) + " (your draft)" : "Sponsored · " + escapeHtml(card.brand);
+          var label = card.isTestAd
+            ? "Sponsored · " + escapeHtml(card.brand) + " (your draft)"
+            : card.isAffiliate
+              ? "Sponsored · Affiliate · " + escapeHtml(card.brand)
+              : "Sponsored · " + escapeHtml(card.brand);
           el.innerHTML =
             '<span class="badge">' + label + "</span>" +
             "<h4>" + escapeHtml(card.title) + "</h4>" +

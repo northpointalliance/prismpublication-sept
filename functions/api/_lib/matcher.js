@@ -51,6 +51,19 @@ export function scoreAd(topic, row) {
   return cosine(vector(tokenize(topic)), vector(tokenize(corpus)));
 }
 
+function pickBest(pool, topic) {
+  let best = null;
+  let bestScore = 0;
+  for (const row of pool) {
+    const score = scoreAd(topic, row);
+    if (score > bestScore) {
+      bestScore = score;
+      best = row;
+    }
+  }
+  return { ad: best, score: bestScore };
+}
+
 // Returns { ad, score } where ad is the raw row (or null) and score is the
 // winning cosine similarity (0 when there's no pool or no match). extraRows
 // (same shape as an ad_submissions row) are scored alongside the public
@@ -62,6 +75,12 @@ export function scoreAd(topic, row) {
 // match.js sets it false: an advertiser testing their own already-approved
 // ad is checking content match, not billing state, and should be able to
 // do that before ever buying credit -- testing stays free either way.
+//
+// Affiliate ads (ad_library, source = 'affiliate') are a separate, lower
+// tier: they're only considered when nothing in the paid pool (ad_submissions
+// plus extraRows) clears the floor. A paying advertiser's card should never
+// lose a slot to an affiliate link just because the affiliate copy happens
+// to score a little higher on cosine similarity.
 export async function findBestAd(env, topic, extraRows = [], { requireActive = true } = {}) {
   const { results } = await env.DB.prepare(
     `SELECT id, brand, category, title, description, destination_url, cta_text, keywords
@@ -69,20 +88,27 @@ export async function findBestAd(env, topic, extraRows = [], { requireActive = t
      WHERE status = 'approved' ${requireActive ? "AND credit_active = 1" : ""}`
   ).all();
 
-  const pool = [...results, ...extraRows];
-  if (!pool.length) return { ad: null, score: 0 };
+  const primary = pickBest([...results, ...extraRows], topic);
+  if (primary.ad && primary.score >= MATCH_THRESHOLD) return primary;
 
-  let best = null;
-  let bestScore = 0;
+  const { results: libraryRows } = await env.DB.prepare(
+    `SELECT id, niche, brand_name, title, description, destination_url, cta_text, keywords
+     FROM ad_library
+     WHERE active = 1 AND source = 'affiliate'`
+  ).all();
+  const affiliatePool = libraryRows.map((row) => ({
+    id: row.id,
+    brand: row.brand_name,
+    category: row.niche,
+    title: row.title,
+    description: row.description,
+    destination_url: row.destination_url,
+    cta_text: row.cta_text,
+    keywords: row.keywords,
+    source: "affiliate",
+  }));
+  const affiliate = pickBest(affiliatePool, topic);
+  if (affiliate.ad && affiliate.score >= MATCH_THRESHOLD) return affiliate;
 
-  for (const row of pool) {
-    const score = scoreAd(topic, row);
-    if (score > bestScore) {
-      bestScore = score;
-      best = row;
-    }
-  }
-
-  if (!best || bestScore < MATCH_THRESHOLD) return { ad: null, score: bestScore };
-  return { ad: best, score: bestScore };
+  return { ad: null, score: Math.max(primary.score, affiliate.score) };
 }

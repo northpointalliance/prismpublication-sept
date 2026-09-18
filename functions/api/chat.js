@@ -103,11 +103,15 @@ export async function onRequestPost(context) {
   ]);
   const testAdScore = testAd ? scoreAd(message, testAd) : null;
 
+  const isAffiliate = Boolean(ad && !ad.__isTestAd && ad.source === "affiliate");
+  const matchedSubmissionId = ad && !ad.__isTestAd && !isAffiliate ? ad.id : null;
+  const matchedLibraryId = isAffiliate ? ad.id : null;
+
   await env.DB.prepare(
-    `INSERT INTO chat_events (kind, session_id, ip_hash, message, matched_ad_id, score, answer_chars)
-     VALUES ('chat', ?, ?, ?, ?, ?, ?)`
+    `INSERT INTO chat_events (kind, session_id, ip_hash, message, matched_ad_id, matched_library_id, score, answer_chars)
+     VALUES ('chat', ?, ?, ?, ?, ?, ?, ?)`
   )
-    .bind(sessionId, ipHash, message, ad && !ad.__isTestAd ? ad.id : null, score, answer.length)
+    .bind(sessionId, ipHash, message, matchedSubmissionId, matchedLibraryId, score, answer.length)
     .run();
 
   return json({
@@ -124,13 +128,22 @@ export async function onRequestPost(context) {
             ctaText: ad.cta_text,
             destinationUrl: ad.destination_url,
           }
-        : {
-            id: ad.id,
-            brand: ad.brand,
-            title: ad.title,
-            description: ad.description,
-            ctaText: ad.cta_text,
-          }
+        : isAffiliate
+          ? {
+              isAffiliate: true,
+              brand: ad.brand,
+              title: ad.title,
+              description: ad.description,
+              ctaText: ad.cta_text,
+              destinationUrl: ad.destination_url,
+            }
+          : {
+              id: ad.id,
+              brand: ad.brand,
+              title: ad.title,
+              description: ad.description,
+              ctaText: ad.cta_text,
+            }
       : null,
   });
 }
