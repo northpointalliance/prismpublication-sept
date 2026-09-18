@@ -145,6 +145,11 @@ nav.primary a:hover {
     color: var(--text-main);
 }
 
+nav.primary a[aria-current="page"] {
+    color: var(--accent);
+    border-bottom: 2px solid var(--accent);
+}
+
 .hero {
     padding: 6rem 0 4rem 0;
     background: var(--bg-color);
