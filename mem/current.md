@@ -670,18 +670,17 @@ on top of the same matcher. Do not conflate this with the affiliate-ICP
 note above when picking either one up, they are two different buyers
 even though they share the same underlying mechanism.
 
-**Likely destination, per Daniel (18 September 2026): a separate repo,
-`daniels_corner`, not this one.** Daniel said this idea will probably go
-into `daniels_corner`, which is eventually meant to become its own
-website (this is the same "Daniel's Corner" branding seen earlier this
-session in an uploaded `affiliate-links.json`, so it is an existing
-name/identity, not a placeholder). Not confirmed as final, and
-`daniels_corner` was not accessible from this session (this session's
-GitHub scope is `northpointalliance/prismpublication-sept` only, and no
-local clone of `daniels_corner` exists here either). If a future session
-has access to that repo, that is almost certainly the right place to
-build this, not `prismpublication-sept` -- check with Daniel before
-building any part of this idea directly into this site.
+**Correction, same day: destination is `prismpublication.com`, not
+`daniels_corner`.** Daniel first said this idea would probably go into a
+separate repo, `daniels_corner` (eventually its own website, the same
+"Daniel's Corner" branding seen earlier this session in an uploaded
+`affiliate-links.json`). He then corrected that directly: **both this
+idea and the affiliate-marketers-as-ICP idea above are a second and
+third ICP to target FOR prismpublication.com itself**, not a separate
+product in another repo. Treat both ICP ideas above as in-scope for this
+site going forward. `daniels_corner` may still be a real, separate
+project of Daniel's, just not the destination for either of these two
+ideas specifically.
 
 ## Idea, not yet actioned: use this repo's lessons as an audit tool against Daniel's other domains (18 September 2026)
 
