@@ -683,6 +683,51 @@ has access to that repo, that is almost certainly the right place to
 build this, not `prismpublication-sept` -- check with Daniel before
 building any part of this idea directly into this site.
 
+## Idea, not yet actioned: use this repo's lessons as an audit tool against Daniel's other domains (18 September 2026)
+
+Daniel's idea: run this file's accumulated lessons against the other
+websites he owns or will build (`devorahsart.com`, `israelileads.com`,
+whatever `daniels_corner` becomes, future sites) to get concrete steps to
+improve their pages and copy, not just as a one-time doc dump but as a
+repeatable audit.
+
+**Honest caveat before anyone does this:** most of the content actually
+in *this* file (`mem/current.md`) is `prismpublication-sept`-specific and
+does not transfer directly, its frozen visual identity section names
+this site's exact hex codes and font stack, its D1 table names and
+matcher mechanics are this site's backend, none of that applies to a
+different domain. What genuinely *is* portable and worth running against
+another site:
+- `docs/aeo-strategy.md`'s section-format rules (question-based H2s,
+  direct-answer blockquote, key-takeaways list, 120-180 words per block,
+  FAQ section, JSON-LD matching visible copy) and its punctuation rule
+  (no real em dash or `" -- "` in visible public copy, see the top of
+  this file).
+- The accessibility bar this file holds `prismpublication-sept` to
+  (WCAG 2.1 AA: contrast, semantic headings, alt text, focus states,
+  skip link, labeled form fields) and the crawlability bar (robots.txt
+  allowing GPTBot/ClaudeBot/PerplexityBot/Google-Extended, sitemap,
+  JSON-LD).
+- `docs/ai-build-lessons.md` (already written portable, cross-repo, see
+  its own file for what it covers, mostly build-process pitfalls like
+  ghost files from vibe-coded tools and Cloudflare Pages-vs-Workers
+  confusion, not copy/AEO).
+- The sourcing discipline from today (verify every real-world stat
+  against a live search before writing it into copy, name the actual
+  source in the sentence, do not repeat a number just because a document
+  called itself "verified") -- this one is a practice, not a file, but
+  worth carrying to any future site's blog/content work the same way.
+
+Nothing built yet. No new file, no site actually audited. Before this
+gets acted on, it needs a decision: extract the portable pieces above
+into one new file (something like a `site-copy-audit-checklist.md`
+alongside `docs/ai-build-lessons.md`, both meant to travel to other
+repos), and then actually run it against a specific domain Daniel names,
+one at a time, rather than trying to build something generic against
+"any website" in the abstract. Whoever picks this up should ask Daniel
+which domain to start with before writing that checklist file, so it
+gets shaped by a real first use instead of guessed at in the abstract.
+
 ## Rejected (do not restore)
 
 - Homepage matcher form (`#sandbox-form`, category select, Fitness/Sleep fill buttons)
