@@ -106,7 +106,7 @@
           <p class="subhead">
             Ask a real question below. A labeled sponsored card only shows up when it's actually relevant to what you asked, never as a random interruption. Advertisers can test their own ad here free, before paying for a single click.
           </p>
-          <p class="meta"><a href="#build-ad">Have a product to sell? Paste the URL, test your ad here free</a></p>
+          <p class="meta"><a href="#build-ad">Already have an ad? Test it here, free</a></p>
           <p class="meta"><a href="/demo/">Not ready to type? See a 30-second example first</a></p>
           <p class="meta" id="reach-line"></p>
         </div>
@@ -147,14 +147,17 @@
       </section>
       <section class="advertisers" id="build-ad">
         <div class="container">
-          <h2>Don't have ad copy yet? Draft one from your product page</h2>
+          <h2>Test your ad against real questions, live</h2>
           <p class="section-lead">
-            Paste a product URL and we'll draft a sponsored card from it. Edit anything, then test it for free in the chat above. Nothing goes live, and nobody else can see it, until you choose to submit it for review. Already have finished ad copy from your own team? <a href="/ad-submission/">Skip this and submit it directly</a>, this tool never touches what you write there.
+            See exactly when your campaign surfaces based on what someone's actually asking, before you spend anything on clicks. Enter your ad's destination URL below, then either let us draft a starting point or write your own copy directly, no AI draft required. Nothing goes live, and nobody else can see it, until you choose to submit it for review. Want to skip testing and submit straight away? <a href="/ad-submission/">Submit your ad directly</a>.
           </p>
           <form id="draft-form" class="card" style="max-width: 640px; text-align: left;" novalidate>
-            <label for="draft-url">Product URL (https)</label><br />
+            <label for="draft-url">Destination URL (https)</label><br />
             <input id="draft-url" name="url" type="url" required pattern="https://.*" placeholder="https://example.com/your-product" style="width: 100%; padding: 0.6rem; margin: 0.25rem 0 1rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem;" />
-            <button type="submit" id="draft-submit-btn" class="btn primary">Draft my ad</button>
+            <div class="row-actions" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <button type="submit" id="draft-submit-btn" class="btn primary">Draft my ad</button>
+              <button type="button" id="write-own-btn" class="btn secondary">Write it myself</button>
+            </div>
             <p class="meta" id="draft-status" role="status" style="margin-top: 0.75rem;"></p>
           </form>
 
@@ -414,8 +417,25 @@
         var draftTestBtn = document.getElementById("draft-test-btn");
         var draftTestStatus = document.getElementById("draft-test-status");
         var draftSubmitLink = document.getElementById("draft-submit-link");
+        var writeOwnBtn = document.getElementById("write-own-btn");
         var draftSourceUrl = "";
         var draftCategory = "";
+
+        writeOwnBtn.addEventListener("click", function () {
+          if (!draftUrlInput.checkValidity()) {
+            draftUrlInput.reportValidity();
+            return;
+          }
+          draftSourceUrl = draftUrlInput.value.trim();
+          draftCategory = "";
+          draftBrandInput.value = "";
+          draftTitleInput.value = "";
+          draftDescriptionInput.value = "";
+          draftCtaInput.value = "";
+          draftCard.style.display = "";
+          draftTestStatus.textContent = "";
+          draftBrandInput.focus();
+        });
 
         draftForm.addEventListener("submit", async function (event) {
           event.preventDefault();
