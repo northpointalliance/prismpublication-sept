@@ -1,12 +1,14 @@
 // Public endpoint: POST /api/paypal/create-order
-// Creates a PayPal order for one of the fixed credit packs in _lib/
-// pricing.js -- the amount is never trusted from the client beyond
-// picking which pack, and is looked up server-side before creating the
-// order. Used only for buying ad-credit (Stage 5); submitting a campaign
-// is free and never calls this.
+// Creates a PayPal order for an advertiser-chosen credit amount -- the
+// advertiser sets their own budget, not a fixed pack. The amount is
+// still never trusted blindly: it's re-validated server-side against the
+// same min/max in _lib/pricing.js before creating the order, and
+// credit/purchase.js re-checks it again against the actual PayPal
+// capture before crediting anything. Used only for buying ad-credit
+// (Stage 5); submitting a campaign is free and never calls this.
 
 import { createOrder } from "./_shared.js";
-import { CREDIT_PACKS_CENTS, formatUsd } from "../_lib/pricing.js";
+import { MIN_CREDIT_PURCHASE_CENTS, MAX_CREDIT_PURCHASE_CENTS, formatUsd } from "../_lib/pricing.js";
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -25,15 +27,22 @@ export async function onRequestPost(context) {
     return json({ error: "Expected JSON body." }, 400);
   }
 
-  const packCents = Number(body.packCents);
-  if (!CREDIT_PACKS_CENTS.includes(packCents)) {
-    return json({ error: "Not a valid credit pack." }, 400);
+  const amountCents = Number(body.amountCents);
+  if (
+    !Number.isInteger(amountCents) ||
+    amountCents < MIN_CREDIT_PURCHASE_CENTS ||
+    amountCents > MAX_CREDIT_PURCHASE_CENTS
+  ) {
+    return json(
+      { error: `Amount must be between ${formatUsd(MIN_CREDIT_PURCHASE_CENTS)} and ${formatUsd(MAX_CREDIT_PURCHASE_CENTS)}.` },
+      400
+    );
   }
 
   try {
     const orderId = await createOrder(env, {
-      amountCents: packCents,
-      description: `Prism Publication ad credit -- ${formatUsd(packCents)}`,
+      amountCents,
+      description: `Prism Publication ad credit -- ${formatUsd(amountCents)}`,
     });
     return json({ orderId });
   } catch (err) {

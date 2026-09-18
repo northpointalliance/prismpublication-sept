@@ -4,7 +4,7 @@
 // and once approved, lets them buy prepaid click credit to go live
 // (Stage 5 of docs/run-ads-strategy-2026-09-16.md).
 
-import { CREDIT_PACKS_CENTS, PRICE_PER_CLICK_CENTS, formatUsd } from "../api/_lib/pricing.js";
+import { MIN_CREDIT_PURCHASE_CENTS, MAX_CREDIT_PURCHASE_CENTS, PRICE_PER_CLICK_CENTS, formatUsd } from "../api/_lib/pricing.js";
 
 function escapeHtml(s) {
   return String(s == null ? "" : s)
@@ -113,9 +113,8 @@ export async function onRequestGet(context) {
     ? `<p class="demo-live">Live</p><p class="meta">Credit remaining: <strong>${formatUsd(balanceCents)}</strong> (about ${Math.floor(balanceCents / PRICE_PER_CLICK_CENTS)} more clicks at ${formatUsd(PRICE_PER_CLICK_CENTS)}/click). Clicks so far: ${clicks}.</p>`
     : `<p class="meta">Approved, but not live -- buy credit below to start showing this card.</p>`;
 
-  const packButtons = CREDIT_PACKS_CENTS.map(
-    (cents) => `<button type="button" class="btn secondary pack-btn" data-cents="${cents}">${formatUsd(cents)}</button>`
-  ).join("");
+  const minDollars = (MIN_CREDIT_PURCHASE_CENTS / 100).toFixed(2);
+  const maxDollars = (MAX_CREDIT_PURCHASE_CENTS / 100).toFixed(2);
 
   return html(
     page({
@@ -125,8 +124,13 @@ export async function onRequestGet(context) {
         ${cardSummary}
         ${statusBlock}
         <div id="buy-credit" class="card" style="max-width: 480px; text-align: left; margin-top: 1rem;">
-          <p class="meta">${live ? "Add more credit:" : "Buy a credit pack to go live:"}</p>
-          <div class="row-actions" style="display: flex; gap: 0.5rem; flex-wrap: wrap;" id="pack-buttons">${packButtons}</div>
+          <p class="meta">${live ? "Add more credit, in whatever amount you want:" : "Set your own budget to go live:"}</p>
+          <label class="skip" for="credit-amount">Amount in US dollars</label>
+          <div class="row-actions" style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+            <input type="number" id="credit-amount" min="${minDollars}" max="${maxDollars}" step="1" value="${minDollars}" style="max-width: 7rem;" />
+            <button type="button" class="btn secondary" id="add-credit-btn">Continue to PayPal</button>
+          </div>
+          <p class="meta">${formatUsd(MIN_CREDIT_PURCHASE_CENTS)} minimum. This is a budget you draw down as clicks come in, not a subscription.</p>
           <p class="meta" id="pay-status" role="status" style="margin-top: 0.75rem;"></p>
           <div id="paypal-button-container"></div>
         </div>
@@ -136,6 +140,10 @@ export async function onRequestGet(context) {
             var token = ${JSON.stringify(token)};
             var payStatus = document.getElementById("pay-status");
             var container = document.getElementById("paypal-button-container");
+            var amountInput = document.getElementById("credit-amount");
+            var addCreditBtn = document.getElementById("add-credit-btn");
+            var minCents = ${MIN_CREDIT_PURCHASE_CENTS};
+            var maxCents = ${MAX_CREDIT_PURCHASE_CENTS};
             var selectedCents = null;
 
             function loadPayPalSdk() {
@@ -156,13 +164,18 @@ export async function onRequestGet(context) {
             }
 
             var rendered = false;
-            document.querySelectorAll(".pack-btn").forEach(function (btn) {
-              btn.addEventListener("click", function () {
-                selectedCents = Number(btn.dataset.cents);
-                payStatus.textContent = "Loading PayPal…";
-                if (rendered) return;
-                rendered = true;
-                loadPayPalSdk()
+            addCreditBtn.addEventListener("click", function () {
+              var dollars = Number(amountInput.value);
+              var cents = Math.round(dollars * 100);
+              if (!dollars || cents < minCents || cents > maxCents) {
+                payStatus.textContent = "Enter an amount between " + (minCents / 100).toFixed(2) + " and " + (maxCents / 100).toFixed(2) + " dollars.";
+                return;
+              }
+              selectedCents = cents;
+              payStatus.textContent = "Loading PayPal…";
+              if (rendered) return;
+              rendered = true;
+              loadPayPalSdk()
                   .then(function () {
                     payStatus.textContent = "";
                     window.paypal.Buttons({
@@ -170,7 +183,7 @@ export async function onRequestGet(context) {
                         return fetch("/api/paypal/create-order", {
                           method: "POST",
                           headers: { "content-type": "application/json" },
-                          body: JSON.stringify({ packCents: selectedCents }),
+                          body: JSON.stringify({ amountCents: selectedCents }),
                         })
                           .then(function (res) { return res.json(); })
                           .then(function (data) {
@@ -203,7 +216,6 @@ export async function onRequestGet(context) {
                   .catch(function (err) {
                     payStatus.textContent = "Error: " + err.message;
                   });
-              });
             });
           })();
         </script>

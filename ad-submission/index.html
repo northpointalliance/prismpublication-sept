@@ -39,7 +39,7 @@
             "name": "Submit a chat ad campaign | Prism Publication",
             "isPartOf": { "@id": "https://prismpublication.com/#website" },
             "datePublished": "2026-09-10",
-            "dateModified": "2026-09-10",
+            "dateModified": "2026-09-18",
             "author": { "@type": "Person", "name": "Daniel Rosenthal" },
             "publisher": { "@id": "https://prismpublication.com/#org" },
             "description": "How brands and agencies submit a labeled chat ad to independent AI chatbots."
@@ -49,18 +49,26 @@
             "mainEntity": [
               {
                 "@type": "Question",
-                "name": "What do you send to run a chat ad?",
+                "name": "How much does it cost to submit or test an ad?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "The campaign you already run: category, card title, short description, https destination, the brand or product name for the sponsored label, and a daily or lifetime cap. Email that package to info@prismpublication.com."
+                  "text": "Nothing. Submitting a campaign and testing it against real questions in the live chat are both free. You only pay if you choose to go live."
                 }
               },
               {
                 "@type": "Question",
-                "name": "What does the user see on the card?",
+                "name": "What does pay per click actually mean here?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "A sponsored label with your brand or product name, not Prism. The assistant reply still has to make sense if the card is removed."
+                  "text": "Once approved, you set your own budget: add prepaid credit in whatever amount you choose, $5.00 minimum. Every real click on your sponsored card deducts a flat amount from that credit. A card that shows but isn't clicked costs nothing."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Why isn't this priced per 1,000 impressions?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Impression pricing (CPM) charges you every time an ad is shown, whether or not anyone acts on it. Pay per click charges you only when someone actually follows through, since a card here only shows when a visitor is already asking about that exact product."
                 }
               },
               {
@@ -68,7 +76,7 @@
                 "name": "How does this sit next to Google Ad Manager?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Google Ad Manager is available. Keep GAM for sites and apps you already traffic. On chat, the publisher SDK fans out to GAM and Prism in the same 120ms budget. A GAM card wins if both fill. You still send category, creative, destination, brand name on the sponsored label, and budget caps."
+                  "text": "Google Ad Manager is available. Keep GAM for sites and apps you already traffic. On chat, the publisher SDK fans out to GAM and Prism in the same 120ms budget. A GAM card wins if both fill."
                 }
               },
               {
@@ -116,7 +124,7 @@
           <p class="meta">
             By Daniel Rosenthal.
             Published <time datetime="2026-09-10">10 September 2026</time>.
-            Last updated <time datetime="2026-09-10">10 September 2026</time>.
+            Last updated <time datetime="2026-09-18">18 September 2026</time>.
           </p>
         </div>
       </section>
@@ -250,13 +258,46 @@
           <h2>How does review work?</h2>
           <p>
             <strong>You draft. A person checks this list. We approve, reject with a reason, or ask for a rewrite.</strong>
-            After approval, you buy prepaid click credit on your campaign's own page (the link you got when you submitted) to go live. It serves while credit lasts and it's close enough to the user's question. No separate insertion order, no public rate card beyond the credit packs shown on that page.
+            After approval, you set your own budget and buy prepaid click credit on your campaign's own page (the link you got when you submitted) to go live. It serves while credit lasts and it's close enough to the user's question. No separate insertion order, no fixed rate card, you choose the amount on that page.
           </p>
-          <p>
-            Email
-            <a href="mailto:info@prismpublication.com?subject=Chat%20ad%20submission">info@prismpublication.com</a>
-            with the campaign name you already run.
-          </p>
+        </div>
+      </section>
+
+      <section class="aeo" id="faq">
+        <div class="container">
+          <h2>Frequently asked questions</h2>
+          <div class="grid">
+            <article class="card">
+              <h3>How much does it cost to submit or test an ad?</h3>
+              <p>
+                Nothing. Submitting a campaign and testing it against real questions in the live chat are both free, no card, no fee, no obligation. You only pay if you choose to go live.
+              </p>
+            </article>
+            <article class="card">
+              <h3>What does pay per click actually mean here?</h3>
+              <p>
+                Once approved, you set your own budget: add prepaid credit in whatever amount you choose, $5.00 minimum. Every real click on your sponsored card deducts a flat amount from that credit. A card that shows but isn't clicked costs nothing, and a turn where no card shows at all costs nothing.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Why isn't this priced per 1,000 impressions?</h3>
+              <p>
+                Impression pricing (CPM) charges you every time an ad is shown, whether or not anyone acts on it. A card here only shows when a visitor is already asking about that exact product, so a raw view count wouldn't tell you much. Pay per click charges you only when someone actually follows through, tying your cost to the outcome that matters instead of to how often the card was displayed.
+              </p>
+            </article>
+            <article class="card">
+              <h3>What happens when my credit runs out?</h3>
+              <p>
+                Your campaign stops showing automatically. Nothing goes negative, and nothing bills again on its own. Add more credit on your campaign's own page whenever you want to go live again.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Is there bidding or an auction?</h3>
+              <p>
+                No. The price per click is flat, not a bid, and you are not competing on price against other advertisers for the same click.
+              </p>
+            </article>
+          </div>
         </div>
       </section>
     </main>

@@ -1,13 +1,13 @@
 // Public endpoint: POST /api/credit/purchase
-// Buys a credit pack for an approved campaign, identified by its access
-// token (see functions/campaign/[token].js) -- no account system, no
-// login, the token is the only key. Verifies the PayPal capture amount
-// against the fixed packs in _lib/pricing.js before crediting anything;
-// the client only ever picks which pack, never sends an amount that's
-// trusted directly.
+// Adds advertiser-chosen credit to an approved campaign, identified by
+// its access token (see functions/campaign/[token].js) -- no account
+// system, no login, the token is the only key. Verifies the PayPal
+// capture amount against the min/max in _lib/pricing.js before crediting
+// anything; the client's requested amount is never trusted directly,
+// only what PayPal actually captured.
 
 import { captureOrder } from "../paypal/_shared.js";
-import { CREDIT_PACKS_CENTS } from "../_lib/pricing.js";
+import { MIN_CREDIT_PURCHASE_CENTS, MAX_CREDIT_PURCHASE_CENTS } from "../_lib/pricing.js";
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -54,13 +54,17 @@ export async function onRequestPost(context) {
   if (!capture.ok) {
     return json({ error: `Payment could not be verified: ${capture.reason}` }, 402);
   }
-  if (!CREDIT_PACKS_CENTS.includes(capture.amountCents)) {
+  if (
+    !Number.isInteger(capture.amountCents) ||
+    capture.amountCents < MIN_CREDIT_PURCHASE_CENTS ||
+    capture.amountCents > MAX_CREDIT_PURCHASE_CENTS
+  ) {
     return json({ error: `Unexpected paid amount: ${capture.amountCents} cents.` }, 402);
   }
 
   await env.DB.prepare(
     `INSERT INTO credit_ledger (ad_submission_id, kind, amount_cents, paypal_order_id, note)
-     VALUES (?, 'purchase', ?, ?, 'Credit pack purchase')`
+     VALUES (?, 'purchase', ?, ?, 'Credit purchase')`
   )
     .bind(ad.id, capture.amountCents, paypalOrderId)
     .run();

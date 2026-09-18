@@ -26,23 +26,33 @@ A separate branch/PR (`cursor/prefilled-demo-thread`, PR #12) rebuilt this homep
 
 New pages are additive — their own files. They do not touch `index.html`, `css/styles.css`, or `js/demo.js`'s existing content, beyond adding a nav/footer link to the new pages if asked (done for `blog/` in PR #15 — every page's nav and footer now links to it).
 
-## Payment (built 14 September 2026)
+## Payment (built 14 September 2026, superseded by free submission +
+advertiser-set budget, 17-18 September 2026)
 
-Submitting a campaign is a paid step: **$5.00 flat fee via PayPal**,
-verified server-side before the D1 row is ever written. Covers review +
-unlimited testing on that campaign in `/run-ads/`. PayPal Client ID and
-Secret are in Cloudflare Pages production environment variables
-(Secret-type), account dan73ros@gmail.com, currently in **Sandbox mode**
-(`PAYPAL_MODE` unset defaults to sandbox) -- no real money moves yet.
+**Submitting and testing a campaign are both free. `functions/api/
+submit.js` has zero PayPal involvement.** PayPal only enters the picture
+after approval, on the campaign's own page (`/campaign/:token`), to buy
+prepaid click credit. The advertiser types their own dollar amount there
+(no fixed packs), **$5.00 minimum**, confirmed directly by Daniel on 18
+September 2026 -- see `functions/api/_lib/pricing.js`
+(`MIN_CREDIT_PURCHASE_CENTS`, `MAX_CREDIT_PURCHASE_CENTS`) and
+`docs/pricing.md` for the full current model. `PRICE_PER_CLICK_CENTS`
+(currently $0.50) is still an explicit placeholder, unlike the $5.00
+minimum, which is real.
 
-How it works: `ad-submission/`'s form validates client-side, then shows
-PayPal Buttons (`functions/api/paypal/config.js` serves the public
-Client ID, `functions/api/paypal/create-order.js` creates a
-server-authoritative $5.00 order). On approval, `functions/api/submit.js`
-calls `captureOrder` (`functions/api/paypal/_shared.js`) to verify the
-capture actually completed at exactly $5.00 USD *before* touching D1 --
-a submission is never written on unverified payment. `paypal_order_id`
-and `amount_paid_cents` are stored per row and shown in `/admin/`.
+PayPal Client ID and Secret are in Cloudflare Pages production
+environment variables (Secret-type), account dan73ros@gmail.com,
+currently in **Sandbox mode** (`PAYPAL_MODE` unset defaults to sandbox)
+-- no real money moves yet. `functions/api/paypal/config.js` serves the
+public Client ID, `functions/api/paypal/create-order.js` creates a
+server-authoritative order for whatever amount the advertiser entered
+(re-validated against the min/max, never trusted blindly), and
+`functions/api/credit/purchase.js` calls `captureOrder`
+(`functions/api/paypal/_shared.js`) to verify the actual PayPal capture
+before crediting anything -- credit is never added on an unverified
+payment. Captured payments land directly in Daniel's own PayPal account;
+that capture *is* the revenue moment, the click-ledger afterward only
+decides when to stop showing the card, not when Daniel gets paid.
 
 **Not yet done:** switch `PAYPAL_MODE` to `live` when ready for real
 money (one Cloudflare env var, no code change) -- do this only when
